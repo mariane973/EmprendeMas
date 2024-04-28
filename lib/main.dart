@@ -1,3 +1,4 @@
+import 'package:emprende_mas/material.dart';
 import 'package:emprende_mas/splash.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: AppMaterial().mitema(),
       home: Splash(),
     );
   }

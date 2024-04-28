@@ -1,9 +1,9 @@
-import 'package:emprende_mas/vistas/register.dart';
+import 'package:emprende_mas/vistas/login.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Register extends StatelessWidget {
+  const Register({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +18,37 @@ class Login extends StatelessWidget {
               Container(
                 height: 150,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("img/tucanemp.png")
-                  )
+                    image: DecorationImage(
+                        image: AssetImage("img/tucanemp.png")
+                    )
                 ),
               ),
-              Text("INICIAR SESIÓN",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+              Text("REGISTRO",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 50),
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 35, bottom: 35),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Correo",
+                    hintText: "Ingrese su correo",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25)
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30, bottom: 35),
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: "Usuario",
                     hintText: "Ingrese su usuario",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25)
+                        borderRadius: BorderRadius.circular(25)
                     ),
                   ),
                 ),
@@ -45,45 +57,45 @@ class Login extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 child: TextFormField(
                   decoration: InputDecoration(
-                      labelText: "Contraseña",
-                      hintText: "Ingrese su contraseña",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25)
-                      ),
+                    labelText: "Contraseña",
+                    hintText: "Ingrese su contraseña",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25)
+                    ),
                   ),
                 ),
               ),
               SizedBox(
-                height: 70,
+                height: 50,
               ),
               FilledButton(
                   onPressed: (){
-              },
+                  },
                   style: FilledButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-                    backgroundColor: AppMaterial().getColorAtIndex(1)
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                      backgroundColor: AppMaterial().getColorAtIndex(1)
                   ),
-                  child: Text("Ingresar",
+                  child: Text("Registrar",
                     style: TextStyle(
-                      fontSize: 22
+                        fontSize: 22
                     ),
                   )
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 40, bottom: 15),
-                child: Text("No tienes una cuenta?",
+                child: Text("Ya tienes una cuenta?",
                   style: TextStyle(
-                    fontSize: 17
+                      fontSize: 17
                   ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Register())
+                      MaterialPageRoute(builder: (context) => Login())
                   );
                 },
-                child: Text("Registrar",
+                child: Text("Iniciar Sesión",
                   style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w500,

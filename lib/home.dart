@@ -1,4 +1,6 @@
 import 'package:emprende_mas/material.dart';
+import 'package:emprende_mas/vistas/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -8,19 +10,19 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: productos(),
+      home: Productos(),
     );
   }
 }
 
-class productos extends StatefulWidget {
-  const productos({super.key});
+class Productos extends StatefulWidget {
+  const Productos({super.key});
 
   @override
-  State<productos> createState() => _productosState();
+  State<Productos> createState() => _ProductosState();
 }
 
-class _productosState extends State<productos> {
+class _ProductosState extends State<Productos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,52 +38,67 @@ class _productosState extends State<productos> {
               ),
             ),
           ),
-          Container(
-            child: Column(
-              children: [
-              Container(
-                padding: EdgeInsets.only(top: 10,left: 15),
-                child:
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(right: 20),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Image.asset("img/tucanemp.png",height: 50,),
-                      ),
+          Column(
+            children: [
+            Container(
+              padding: EdgeInsets.only(top: 10,left: 15),
+              child:
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 20),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Image.asset("img/tucanemp.png",height: 50),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left:80),
-                      height: 40,
-                      width: 250,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: AppMaterial().getColorAtIndex(0),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left:80),
+                    height: 40,
+                    width: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppMaterial().getColorAtIndex(0),
+                    ),
+                    child: Row(
+                      children: [
+                      Text("Buscar",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25
+                        ),
                       ),
-                      child: Row(
-                        children: [
-                        Container(
-                          child: Text("Buscar",
-                          style: TextStyle(
+                        Padding(
+                          padding: const EdgeInsets.only(left: 40),
+                          child: Icon(Icons.search_rounded,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                          ),),
-                        )
-                      ],),
+                            size: 30.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login())
+                        );
+                      },
                       child: Align(
-                        child: Image.asset("img/menu.png"),
+                        child: Icon(Icons.menu_rounded,
+                          color: AppMaterial().getColorAtIndex(0),
+                          size: 45.0,
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              )
-            ],),
-          )
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],)
         ],
         ),
       ),

@@ -95,6 +95,9 @@ flutter:
      - family: merge_one
        fonts:
          - asset: fonts/MergeOne.ttf
+     - family: inter
+       fonts:
+         - asset: fonts/Inter.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
