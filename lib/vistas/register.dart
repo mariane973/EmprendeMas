@@ -23,7 +23,7 @@ class Register extends StatelessWidget {
                     )
                 ),
               ),
-              Text("REGISTRO",
+              Text("CREAR CUENTA",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
@@ -33,9 +33,15 @@ class Register extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30, top: 35, bottom: 35),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    labelText: "Correo",
-                    hintText: "Ingrese su correo",
+                    prefixIcon: Icon(
+                        Icons.person
+                    ),
+                    labelText: "Usuario",
+                    hintText: "Ingrese su usuario",
+                    filled: true,
+                    fillColor: AppMaterial().getColorAtIndex(0),
                     border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(25)
                     ),
                   ),
@@ -45,9 +51,15 @@ class Register extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30, bottom: 35),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    labelText: "Usuario",
-                    hintText: "Ingrese su usuario",
+                    prefixIcon: Icon(
+                        Icons.alternate_email_rounded
+                    ),
+                    labelText: "Correo",
+                    hintText: "Ingrese su correo",
+                    filled: true,
+                    fillColor: AppMaterial().getColorAtIndex(0),
                     border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(25)
                     ),
                   ),
@@ -57,9 +69,15 @@ class Register extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 child: TextFormField(
                   decoration: InputDecoration(
+                    prefixIcon: Icon(
+                        Icons.key
+                    ),
                     labelText: "Contraseña",
                     hintText: "Ingrese su contraseña",
+                    filled: true,
+                    fillColor: AppMaterial().getColorAtIndex(0),
                     border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(25)
                     ),
                   ),

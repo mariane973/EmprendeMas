@@ -33,10 +33,16 @@ class Login extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 50),
                 child: TextFormField(
                   decoration: InputDecoration(
+                    prefixIcon: Icon(
+                        Icons.person
+                    ),
                     labelText: "Usuario",
                     hintText: "Ingrese su usuario",
+                    filled: true,
+                    fillColor: AppMaterial().getColorAtIndex(0),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25)
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25)
                     ),
                   ),
                 ),
@@ -45,11 +51,17 @@ class Login extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 child: TextFormField(
                   decoration: InputDecoration(
-                      labelText: "Contraseña",
-                      hintText: "Ingrese su contraseña",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25)
-                      ),
+                    prefixIcon: Icon(
+                        Icons.key
+                    ),
+                    labelText: "Contraseña",
+                    hintText: "Ingrese su contraseña",
+                    filled: true,
+                    fillColor: AppMaterial().getColorAtIndex(0),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25)
+                    ),
                   ),
                 ),
               ),
@@ -83,7 +95,7 @@ class Login extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => Register())
                   );
                 },
-                child: Text("Registrar",
+                child: Text("Crea una cuenta",
                   style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w500,

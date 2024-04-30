@@ -10,12 +10,13 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-        splash: Lottie.asset('img/splash.json'),
-        nextScreen: Home(),
-        duration: 2000,
-        splashIconSize: 2000,
-        splashTransition: SplashTransition.fadeTransition,
-        animationDuration: const Duration(seconds: 3),
+      backgroundColor: Colors.black,
+      splash: Lottie.asset('img/tucann.json'
+      ),
+      nextScreen: Home(),
+      duration: 3800,
+      splashIconSize: 800,
+      splashTransition: SplashTransition.fadeTransition,
     );
   }
 }
