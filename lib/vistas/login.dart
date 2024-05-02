@@ -30,7 +30,7 @@ class Login extends StatelessWidget {
               ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 50),
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 40),
                 child: TextFormField(
                   decoration: InputDecoration(
                     prefixIcon: Icon(
@@ -66,10 +66,11 @@ class Login extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 70,
+                height: 50,
               ),
               FilledButton(
                   onPressed: (){
+
               },
                   style: FilledButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
@@ -82,10 +83,11 @@ class Login extends StatelessWidget {
                   )
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 40, bottom: 15),
-                child: Text("No tienes una cuenta?",
+                padding: const EdgeInsets.only(top: 50, bottom: 5),
+                child: Text("¿Aún no tienes una cuenta?",
                   style: TextStyle(
-                    fontSize: 17
+                    fontSize: 17,
+                        color: Colors.black45
                   ),
                 ),
               ),
@@ -97,7 +99,7 @@ class Login extends StatelessWidget {
                 },
                 child: Text("Crea una cuenta",
                   style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: AppMaterial().getColorAtIndex(2)
                   ),

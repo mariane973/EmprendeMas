@@ -100,10 +100,11 @@ class Register extends StatelessWidget {
                   )
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 40, bottom: 15),
-                child: Text("Ya tienes una cuenta?",
+                padding: const EdgeInsets.only(top: 50, bottom: 5),
+                child: Text("¿Ya tienes una cuenta?",
                   style: TextStyle(
-                      fontSize: 17
+                      fontSize: 17,
+                      color: Colors.black45
                   ),
                 ),
               ),
@@ -113,9 +114,9 @@ class Register extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Login())
                   );
                 },
-                child: Text("Iniciar Sesión",
+                child: Text("Iniciar sesión",
                   style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: AppMaterial().getColorAtIndex(2)
                   ),
