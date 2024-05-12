@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26191463420",
+    "project_id": "emprendemas-d36c5",
+    "storage_bucket": "emprendemas-d36c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26191463420:android:539e288e4161b09d632879",
+        "android_client_info": {
+          "package_name": "com.example.emprende_mas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvGS9yTOXG39LjHz4nQNzeb8J_bIYzXac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
