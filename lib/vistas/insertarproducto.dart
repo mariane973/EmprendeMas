@@ -42,25 +42,29 @@ class _FormProductoState extends State<FormProducto> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(8),
           child: Form(
             key: form,
             child: Column(
                 children: [
-                  /*Center(
-                  child: imagen != null ?
-                  Image.file(imagen!) :
-                  Image.asset(('img/tucan2.png'), height: 100),
-                ),*/
                   Center(
-                    child: imagen != null && imagen!.path.isNotEmpty ?
+                    child: imagen != null ?
                     Image.file(imagen!) :
-                    Image.asset('img/tucan2.png', height: 300, width: 300,),
+                    Image.asset(('img/tucan2.png'), height: 100),
+                ),
+                  ElevatedButton(onPressed: obtenerimagen,
+                      style: FilledButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+                          backgroundColor: AppMaterial().getColorAtIndex(1)
+                      ),
+                      child: Text("Imagen Producto",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
                   ),
 
-                  ElevatedButton(onPressed: obtenerimagen,
-                      child: Text("Imagen Producto")
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 40),
                     child: TextFormField(
@@ -115,8 +119,8 @@ class _FormProductoState extends State<FormProducto> {
                     padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
                     child: TextFormField(
                         decoration: InputDecoration(
-                          labelText: "Categoria",
-                          hintText: "Ingrese la categoria",
+                          labelText: "Categoría",
+                          hintText: "Ingrese la categoría",
                           filled: true,
                           fillColor: AppMaterial().getColorAtIndex(0),
                           border: OutlineInputBorder(
@@ -126,7 +130,7 @@ class _FormProductoState extends State<FormProducto> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Ingrese la categoriao";
+                            return "Ingrese la categoría";
                           }
                           else {
                             return null;
@@ -202,8 +206,16 @@ class _FormProductoState extends State<FormProducto> {
                       );
                     }
                   },
-
-                      child: Text("Guardar")
+                      style: FilledButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 45),
+                          backgroundColor: AppMaterial().getColorAtIndex(1)
+                      ),
+                      child: Text("Guardar",
+                        style: TextStyle(
+                            fontSize: 22,
+                          color: Colors.white,
+                        ),
+                      ),
                   ),
                 ]
             ),

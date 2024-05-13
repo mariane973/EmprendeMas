@@ -45,23 +45,27 @@ class _FormVendedorState extends State<FormVendedor> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(8),
           child: Form(
             key: form,
             child: Column(
               children: [
-                /*Center(
+                Center(
                   child: imagen != null ?
                   Image.file(imagen!) :
                   Image.asset(('img/tucan2.png'), height: 100),
-                ),*/
-              Center(
-                child: imagen != null && imagen!.path.isNotEmpty ?
-                Image.file(imagen!) :
-                Image.asset('img/tucan2.png', height: 300, width: 300,),
-              ),
+                ),
                 ElevatedButton(onPressed: obtenerimagen,
-                    child: Text("Logo Emprendimiento")
+                  style: FilledButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+                      backgroundColor: AppMaterial().getColorAtIndex(1)
+                  ),
+                  child: Text("Logo Emprendimiento",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 40),
@@ -283,8 +287,16 @@ class _FormVendedorState extends State<FormVendedor> {
                     );
                   }
                 },
-
-                    child: Text("Guardar")
+                  style: FilledButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 45),
+                      backgroundColor: AppMaterial().getColorAtIndex(1)
+                  ),
+                  child: Text("Guardar",
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ]
             ),

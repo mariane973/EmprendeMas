@@ -24,6 +24,7 @@ class Productos extends StatefulWidget {
 }
 
 class _ProductosState extends State<Productos> {
+
   final List<String> imgList = [
     'https://lh5.googleusercontent.com/proxy/Ea1O0iiPAoMosjeA48UUDRNkR6gwJGrJp36Q3FnKGPvehdWrnX7-1lluDwzEV7RaF5YU5ZspSOj074_EEo3sxzKW26tlDjZ2yn65fB_a7ahKi7LWBuqa2eZ_f_A_6HUTSuB6zyFy_qcVbiTo7JRY8YB7nVN1Q6iXzFnF',
     'https://lh5.googleusercontent.com/proxy/Ea1O0iiPAoMosjeA48UUDRNkR6gwJGrJp36Q3FnKGPvehdWrnX7-1lluDwzEV7RaF5YU5ZspSOj074_EEo3sxzKW26tlDjZ2yn65fB_a7ahKi7LWBuqa2eZ_f_A_6HUTSuB6zyFy_qcVbiTo7JRY8YB7nVN1Q6iXzFnF',
@@ -45,7 +46,7 @@ class _ProductosState extends State<Productos> {
         backgroundColor: Colors.transparent,
       //AppBar//
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppMaterial().getColorAtIndex(6),
           iconTheme: IconThemeData(color: AppMaterial().getColorAtIndex(0)),
           leading: Builder(
             builder: (BuildContext context) {
@@ -63,42 +64,24 @@ class _ProductosState extends State<Productos> {
           actions: [
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: EdgeInsets.only(left:20),
-                    height: 50,
-                    width: 260,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: AppMaterial().getColorAtIndex(0),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            style: TextStyle(color: Colors.white), // Cambia el color del texto de entrada
-                            decoration: InputDecoration(
-                              hintText: 'Buscar...',
-                              hintStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20
-                              ),
-                              border: InputBorder.none,
-                            ),
+                Container(
+                  padding: EdgeInsets.only(left:35),
+                  height: 50,
+                  width: 260,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text("EMPRENDEMAS",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: AppMaterial().getColorAtIndex(1)
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 20),
-                            child: Icon(Icons.search_rounded,
-                              color: Colors.white,
-                              size: 30.0,
-                            ),
-                        ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
-              ),
+                                ),
                 Container(
                   padding: EdgeInsets.only(right: 20, top: 5),
                   child: Align(
@@ -124,7 +107,7 @@ class _ProductosState extends State<Productos> {
                 autoPlay: true,
                 autoPlayInterval: const Duration(seconds: 4),
                 enlargeCenterPage: true,
-                enlargeFactor: 0.3,
+                enlargeFactor: 0.4,
                 onPageChanged: (value, _){
                   setState(() {
                     _currenPage = value;
