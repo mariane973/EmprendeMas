@@ -1,5 +1,6 @@
-import 'package:emprende_mas/vistas/homecliente.dart';
-import 'package:emprende_mas/vistas/homevendedor.dart';
+import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
+import 'package:emprende_mas/home.dart';
+import 'package:emprende_mas/huella/autenticacion.dart';
 import 'package:emprende_mas/vistas/register.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -13,9 +14,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final usuario = TextEditingController();
-  final contrasena = TextEditingController();
-  final form = GlobalKey<FormState>();
+  RegistroUsuario mial = RegistroUsuario();
+  final _formKey = GlobalKey<FormState>();
+  late String _emailController;
+  late String _passwordController;
 
   void mensaje(){
     Fluttertoast.showToast(
@@ -37,7 +39,7 @@ class _LoginState extends State<Login> {
         fontSize: 18
     );
   }
-
+  /*
   void validacion(){
     String usu = usuario.text;
     String contra = contrasena.text;
@@ -56,7 +58,7 @@ class _LoginState extends State<Login> {
     }else{
       mensaje2();
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class _LoginState extends State<Login> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
-            key: form,
+            key: _formKey,
             child: Column(
               children: [
                 SizedBox(
@@ -74,27 +76,26 @@ class _LoginState extends State<Login> {
                 Container(
                   height: 150,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("img/tucanemp.png")
-                    )
+                      image: DecorationImage(
+                          image: AssetImage("img/tucanemp.png")
+                      )
                   ),
                 ),
                 Text("INICIAR SESIÓN",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 40),
                   child: TextFormField(
-                    controller: usuario,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
-                          Icons.person
+                          Icons.alternate_email_rounded
                       ),
-                      labelText: "Usuario",
-                      hintText: "Ingrese su usuario",
+                      labelText: "Correo",
+                      hintText: "Ingrese su correo",
                       filled: true,
                       fillColor: AppMaterial().getColorAtIndex(0),
                       border: OutlineInputBorder(
@@ -103,11 +104,17 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     validator: (value) {
-                      if (value==null || value.isEmpty){
-                        return "Ingrese su usuario";
-                      }else{
+                      if (value == null || value.isEmpty) {
+                        return "Ingrese su correo";
+                      } else if(!value.contains("@")){
+                        return "El correo no es válido";
+                      }
+                      else {
                         return null;
                       }
+                    },
+                    onSaved: (value){
+                      _emailController = value!;
                     },
                   ),
                 ),
@@ -115,7 +122,6 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: TextFormField(
                     obscureText: true,
-                    controller: contrasena,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                           Icons.key
@@ -125,7 +131,7 @@ class _LoginState extends State<Login> {
                       filled: true,
                       fillColor: AppMaterial().getColorAtIndex(0),
                       border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
+                          borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(25)
                       ),
                     ),
@@ -136,22 +142,43 @@ class _LoginState extends State<Login> {
                         return null;
                       }
                     },
+                    onSaved: (value){
+                      _passwordController=value!;
+                    },
                   ),
                 ),
                 SizedBox(
                   height: 50,
                 ),
                 FilledButton(
-                    onPressed: (){
-                      validacion();
-                },
+                    onPressed: () async {
+                      if(_formKey.currentState!.validate()){
+                        _formKey.currentState!.save();
+                        var dato = await mial.loginUsario(_emailController, _passwordController);
+                        print("HOLA $dato");
+                        if(dato == 2){
+                          print("Datos no encontrados");
+                        }else if(dato==3){
+                          print("Se enviaron datos vacios");
+                        }else if(dato==1){
+                          bool auth = await Autenticacion.authentication();
+                          print("Puede autenticarse: $auth");
+                          if(auth){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Home())
+                            );
+                          }
+                        }else{
+                          print("MMMM");
+                        }
+                      }
+                    },
                     style: FilledButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-                      backgroundColor: AppMaterial().getColorAtIndex(1)
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                        backgroundColor: AppMaterial().getColorAtIndex(1)
                     ),
                     child: Text("Ingresar",
                       style: TextStyle(
-                        fontSize: 22
+                          fontSize: 22
                       ),
                     )
                 ),
@@ -159,15 +186,15 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.only(top: 50, bottom: 5),
                   child: Text("¿Aún no tienes una cuenta?",
                     style: TextStyle(
-                      fontSize: 17,
-                          color: Colors.black45
+                        fontSize: 17,
+                        color: Colors.black45
                     ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Register())
+                        MaterialPageRoute(builder: (context) => Register())
                     );
                   },
                   child: Text("Crea una cuenta",

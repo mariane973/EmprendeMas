@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 class DatosProductos extends StatefulWidget {
   final List<Map<String, dynamic>> productosData;
@@ -137,10 +138,14 @@ class _DatosProductosState extends State<DatosProductos> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text("PRODUCTOS",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 20),
+                child: Text("PRODUCTOS",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+
                 ),
               ),
               ListView.builder(
@@ -162,8 +167,8 @@ class _DatosProductosState extends State<DatosProductos> {
                       child: Row(
                         children: [
                           Container(
-                            width: 150,
-                            height: 150,
+                            width: 120,
+                            height: 120,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(18),
@@ -178,31 +183,39 @@ class _DatosProductosState extends State<DatosProductos> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.56,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(producto['nombre'],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                    ),
+                          SingleChildScrollView(
+                            child: Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.56,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(producto['nombre'],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                      Text(producto['descripcion'],
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Text(' \$${producto['precio']} COP',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                            color: AppMaterial().getColorAtIndex(2)
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(producto['descripcion'],
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                    ),
-                                  ),
-                                  Text('Precio: \$${producto['precio']}',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),

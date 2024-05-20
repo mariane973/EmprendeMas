@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 
 class DatosVendedores extends StatefulWidget {
   final List<Map<String, dynamic>> vendedoresData;
@@ -137,7 +138,7 @@ class _DatosVendedoresState extends State<DatosVendedores> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.only(top: 30, bottom: 20),
                 child: Text('EMPRENDIMIENTOS',
                   style: TextStyle(
                     fontSize: 28,
@@ -156,12 +157,12 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                     child: Row(
                       children: [
                         Container(
-                          width: 150,
-                          height: 150,
+                          width: 120,
+                          height: 120,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                width: 0.4,
+                                width: 0.2,
                               )
                           ),
                           child: ClipOval(
@@ -170,25 +171,27 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.56,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(vendedor['nombre_emprendimiento'],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 18),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.56,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(vendedor['nombre_emprendimiento'],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                      ),
                                     ),
-                                  ),
-                                  Text(vendedor['descripcion_emprendimiento'],
-                                    style: TextStyle(
-                                      fontSize: 17,
+                                    Text(vendedor['descripcion_emprendimiento'],
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                      ),
                                     ),
-                                  ),
-                                ]
+                                  ]
+                              ),
                             ),
                           ),
                         )

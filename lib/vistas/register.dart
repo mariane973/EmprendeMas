@@ -1,9 +1,24 @@
+import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
 import 'package:emprende_mas/vistas/login.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({super.key});
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  RegistroUsuario mial = RegistroUsuario();
+
+  final _formKey = GlobalKey<FormState>();
+
+  late String _emailController;
+
+  late String _passworController;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +27,7 @@ class Register extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 SizedBox(
@@ -32,25 +48,7 @@ class Register extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30, top: 35, bottom: 35),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                          Icons.person
-                      ),
-                      labelText: "Usuario",
-                      hintText: "Ingrese su usuario",
-                      filled: true,
-                      fillColor: AppMaterial().getColorAtIndex(0),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(25)
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30, bottom: 35),
+                  padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 40),
                   child: TextFormField(
                     decoration: InputDecoration(
                       prefixIcon: Icon(
@@ -75,6 +73,9 @@ class Register extends StatelessWidget {
                         return null;
                       }
                     },
+                    onSaved: (value){
+                      _emailController = value!;
+                    },
                   ),
                 ),
                 Padding(
@@ -94,6 +95,16 @@ class Register extends StatelessWidget {
                           borderRadius: BorderRadius.circular(25)
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Ingrese su contraseña";
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (value){
+                      _passworController = value!;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -101,6 +112,23 @@ class Register extends StatelessWidget {
                 ),
                 FilledButton(
                     onPressed: (){
+                      if(_formKey.currentState!.validate()){
+                        _formKey.currentState!.save();
+                        var dato = mial.registroUsuario(_emailController, _passworController);
+                        if(dato==1){
+                          print("Nivel de seguridad debil");
+                        }else if(dato==2){
+                          print("Email ya esta registrado");
+                        }else if(dato != null){
+                          Fluttertoast.showToast(
+                              msg: "Usuario Registrado",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.TOP,
+                              textColor: Colors.white,
+                              fontSize: 18
+                          );
+                        }
+                      }
                     },
                     style: FilledButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
