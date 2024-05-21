@@ -1,17 +1,21 @@
 import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
-import 'package:emprende_mas/vistas/login.dart';
+import 'package:emprende_mas/home.dart';
+import 'package:emprende_mas/vistas/clientes/login.dart';
+import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Register extends StatefulWidget {
-  const Register({super.key});
+
+class RegisterV extends StatefulWidget {
+  const RegisterV({super.key});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<RegisterV> createState() => _RegisterVState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterVState extends State<RegisterV> {
   RegistroUsuario mial = RegistroUsuario();
 
   final _formKey = GlobalKey<FormState>();
@@ -23,7 +27,41 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
+              child: Row(
+                children: <Widget>[
+                  FaIcon(
+                    FontAwesomeIcons.home,
+                    color: AppMaterial().getColorAtIndex(1),
+                    size: 20.0,
+                  ),
+                  SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text(
+                      "Regresar",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -45,6 +83,13 @@ class _RegisterState extends State<Register> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
+                  ),
+                ),
+                Text("Vendedor",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: AppMaterial().getColorAtIndex(3)
                   ),
                 ),
                 Padding(
@@ -152,14 +197,14 @@ class _RegisterState extends State<Register> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Login())
+                        MaterialPageRoute(builder: (context) => LoginV())
                     );
                   },
                   child: Text("Iniciar sesión",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: AppMaterial().getColorAtIndex(2)
+                        color: AppMaterial().getColorAtIndex(3)
                     ),
                   ),
                 )

@@ -1,31 +1,30 @@
 import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
 import 'package:emprende_mas/vistas/principales/productos.dart';
 import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
+import 'package:emprende_mas/vistas/clientes/slidebarcliente.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class Home extends StatelessWidget {
+class HomeCliente extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Productos(),
+      home: ProductosCliente(),
     );
   }
 }
 
-class Productos extends StatefulWidget {
-  const Productos();
+class ProductosCliente extends StatefulWidget {
+  const ProductosCliente();
   @override
-  State<Productos> createState() => _ProductosState();
+  State<ProductosCliente> createState() => _ProductosClienteState();
 }
 
-class _ProductosState extends State<Productos> {
+class _ProductosClienteState extends State<ProductosCliente> {
 
   final List<String> imgList = [
     'https://lh5.googleusercontent.com/proxy/Ea1O0iiPAoMosjeA48UUDRNkR6gwJGrJp36Q3FnKGPvehdWrnX7-1lluDwzEV7RaF5YU5ZspSOj074_EEo3sxzKW26tlDjZ2yn65fB_a7ahKi7LWBuqa2eZ_f_A_6HUTSuB6zyFy_qcVbiTo7JRY8YB7nVN1Q6iXzFnF',
@@ -46,7 +45,7 @@ class _ProductosState extends State<Productos> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-      //AppBar//
+        //AppBar//
         appBar: AppBar(
           backgroundColor: AppMaterial().getColorAtIndex(6),
           iconTheme: IconThemeData(color: AppMaterial().getColorAtIndex(0)),
@@ -67,26 +66,25 @@ class _ProductosState extends State<Productos> {
             Row(
               children: [
                 Container(
+                  padding: EdgeInsets.only(left:35),
                   height: 50,
                   width: 260,
                   child: Row(
                     children: [
                       Expanded(
-                        child: Center(
-                          child: Text("EMPRENDEMAS",
-                            style: TextStyle(
+                        child: Text("EMPRENDEMAS",
+                          style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
                               color: AppMaterial().getColorAtIndex(1)
-                            ),
                           ),
                         ),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
-                                ),
                 Container(
-                  padding: EdgeInsets.only(right: 20, top: 5, left: 10),
+                  padding: EdgeInsets.only(right: 20, top: 5),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Image.asset("img/tucanemp.png",height: 50),
@@ -96,9 +94,9 @@ class _ProductosState extends State<Productos> {
             ),
           ],
         ),
-        drawer: PrincipalDrawer(),
+        drawer: SlidebarCliente(),
 
-      //Body//
+        //Body//
         body: Column(
           children: [
             CarouselSlider(
@@ -106,16 +104,16 @@ class _ProductosState extends State<Productos> {
                 child: Image.network(e),
               )).toList(),
               options: CarouselOptions(
-                initialPage: 0,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 4),
-                enlargeCenterPage: true,
-                enlargeFactor: 0.4,
-                onPageChanged: (value, _){
-                  setState(() {
-                    _currenPage = value;
-                  });
-                }
+                  initialPage: 0,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 4),
+                  enlargeCenterPage: true,
+                  enlargeFactor: 0.4,
+                  onPageChanged: (value, _){
+                    setState(() {
+                      _currenPage = value;
+                    });
+                  }
               ),
             ),
             buildCarouselInidcator()
@@ -135,12 +133,11 @@ class _ProductosState extends State<Productos> {
             height: i== _currenPage ? 7 : 5,
             width: i== _currenPage ? 7 : 5,
             decoration: BoxDecoration(
-              color: i == _currenPage ? Colors.black : Colors.green,
-              shape: BoxShape.circle
+                color: i == _currenPage ? Colors.black : Colors.green,
+                shape: BoxShape.circle
             ),
           )
       ],
     );
   }
 }
-

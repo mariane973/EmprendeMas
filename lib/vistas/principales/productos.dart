@@ -4,6 +4,7 @@ import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
 
 class DatosProductos extends StatefulWidget {
   final List<Map<String, dynamic>> productosData;
@@ -134,7 +135,7 @@ class _DatosProductosState extends State<DatosProductos> {
               ],
             ),
           ],
-        ),
+        ),drawer: PrincipalDrawer(),
         body: SingleChildScrollView(
           child: Column(
             children: [

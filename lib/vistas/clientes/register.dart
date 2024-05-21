@@ -1,69 +1,65 @@
 import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
 import 'package:emprende_mas/home.dart';
-import 'package:emprende_mas/huella/autenticacion.dart';
-import 'package:emprende_mas/vistas/register.dart';
+import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   RegistroUsuario mial = RegistroUsuario();
-  final _formKey = GlobalKey<FormState>();
-  late String _emailController;
-  late String _passwordController;
 
-  void mensaje(){
-    Fluttertoast.showToast(
-        msg: "Ingreso Exitoso",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        textColor: Colors.white,
-        backgroundColor: AppMaterial().getColorAtIndex(1),
-        fontSize: 18
-    );
-  }
-  void mensaje2(){
-    Fluttertoast.showToast(
-        msg: "Datos Incorrectos",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        textColor: Colors.white,
-        backgroundColor: Colors.red,
-        fontSize: 18
-    );
-  }
-  /*
-  void validacion(){
-    String usu = usuario.text;
-    String contra = contrasena.text;
-    if (usu=="martin"&&contra=="123"){
-      //cliente
-      mensaje();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>HomeCliente())
-      );
-    }else if(usu=="salome"&&contra=="789"){
-      //vendedor
-      mensaje();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>HomeVendedor())
-      );
-    }else{
-      mensaje2();
-    }
-  }*/
+  final _formKey = GlobalKey<FormState>();
+
+  late String _emailController;
+
+  late String _passworController;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
+              child: Row(
+                children: <Widget>[
+                  FaIcon(
+                    FontAwesomeIcons.home,
+                    color: AppMaterial().getColorAtIndex(1),
+                    size: 20.0,
+                  ),
+                  SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text(
+                      "Regresar",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -81,10 +77,17 @@ class _LoginState extends State<Login> {
                       )
                   ),
                 ),
-                Text("INICIAR SESIÓN",
+                Text("CREAR CUENTA",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
+                  ),
+                ),
+                Text("Usuario",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: AppMaterial().getColorAtIndex(2)
                   ),
                 ),
                 Padding(
@@ -136,14 +139,14 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     validator: (value) {
-                      if (value==null || value.isEmpty){
+                      if (value == null || value.isEmpty) {
                         return "Ingrese su contraseña";
-                      }else{
+                      } else {
                         return null;
                       }
                     },
                     onSaved: (value){
-                      _passwordController=value!;
+                      _passworController = value!;
                     },
                   ),
                 ),
@@ -151,24 +154,22 @@ class _LoginState extends State<Login> {
                   height: 50,
                 ),
                 FilledButton(
-                    onPressed: () async {
+                    onPressed: (){
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
-                        var dato = await mial.loginUsario(_emailController, _passwordController);
-                        print("HOLA $dato");
-                        if(dato == 2){
-                          print("Datos no encontrados");
-                        }else if(dato==3){
-                          print("Se enviaron datos vacios");
-                        }else if(dato==1){
-                          bool auth = await Autenticacion.authentication();
-                          print("Puede autenticarse: $auth");
-                          if(auth){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Home())
-                            );
-                          }
-                        }else{
-                          print("MMMM");
+                        var dato = mial.registroUsuario(_emailController, _passworController);
+                        if(dato==1){
+                          print("Nivel de seguridad debil");
+                        }else if(dato==2){
+                          print("Email ya esta registrado");
+                        }else if(dato != null){
+                          Fluttertoast.showToast(
+                              msg: "Usuario Registrado",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.TOP,
+                              textColor: Colors.white,
+                              fontSize: 18
+                          );
                         }
                       }
                     },
@@ -176,7 +177,7 @@ class _LoginState extends State<Login> {
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
                         backgroundColor: AppMaterial().getColorAtIndex(1)
                     ),
-                    child: Text("Ingresar",
+                    child: Text("Registrar",
                       style: TextStyle(
                           fontSize: 22
                       ),
@@ -184,7 +185,7 @@ class _LoginState extends State<Login> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 50, bottom: 5),
-                  child: Text("¿Aún no tienes una cuenta?",
+                  child: Text("¿Ya tienes una cuenta?",
                     style: TextStyle(
                         fontSize: 17,
                         color: Colors.black45
@@ -194,10 +195,10 @@ class _LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Register())
+                        MaterialPageRoute(builder: (context) => Login())
                     );
                   },
-                  child: Text("Crea una cuenta",
+                  child: Text("Iniciar sesión",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
