@@ -16,7 +16,7 @@ class _FormVendedorState extends State<FormVendedor> {
   final InsertarDatosVendedor insertarDatos = InsertarDatosVendedor();
 
   final String defaultimg = 'img/tucan2.png';
-  late io.File? imagen = io.File('img/tucan2.png');
+  io.File? imagen;
   final picker = ImagePicker();
   final form = GlobalKey<FormState>();
   late String _apellido;

@@ -8,15 +8,19 @@ import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io' as io;
 
-class SlidebarCliente extends StatefulWidget {
-  const SlidebarCliente();
+class SlidebarUsuario extends StatefulWidget {
+  final String nombre;
+  final io.File imagen;
 
-  static Route<dynamic> route() {
+  const SlidebarUsuario(this.nombre, this.imagen);
+
+  static Route<dynamic> route(String nombre, io.File imagen) {
     return MaterialPageRoute(
       builder: (BuildContext context) {
         return Scaffold(
-          body: SlidebarCliente(),
+          body: SlidebarUsuario(nombre, imagen),
         );
       },
       fullscreenDialog: true,
@@ -24,10 +28,10 @@ class SlidebarCliente extends StatefulWidget {
   }
 
   @override
-  State<SlidebarCliente> createState() => _SlidebarClienteState();
+  State<SlidebarUsuario> createState() => _SlidebarUsuarioState();
 }
 
-class _SlidebarClienteState extends State<SlidebarCliente> {
+class _SlidebarUsuarioState extends State<SlidebarUsuario> {
   late Future<List<QuerySnapshot>> _futureData;
 
   @override
@@ -63,17 +67,15 @@ class _SlidebarClienteState extends State<SlidebarCliente> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Container(
-                          child: FaIcon(FontAwesomeIcons.userLarge,
-                            color: Colors.white,
-                            size: 50.0,
-                          ),
+                        padding: const EdgeInsets.only(top: 0),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: FileImage(widget.imagen),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Text('USUARIO',
+                        child: Text(widget.nombre,
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -81,7 +83,6 @@ class _SlidebarClienteState extends State<SlidebarCliente> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                   decoration: BoxDecoration(

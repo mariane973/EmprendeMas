@@ -67,40 +67,41 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-        GestureDetector(
-        onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
-      },
-      child: Row(
-        children: <Widget>[
-            FaIcon(
-            FontAwesomeIcons.home,
-            color: AppMaterial().getColorAtIndex(1),
-            size: 20.0,
-            ),
-        SizedBox(width: 10),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Text(
-            "Regresar",
-            style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            ),
-                    ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                  );
+                  },
+                  child: Row(
+                    children: <Widget>[
+                        FaIcon(
+                        FontAwesomeIcons.home,
+                        color: AppMaterial().getColorAtIndex(1),
+                        size: 20.0,
+                        ),
+                    SizedBox(width: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Text(
+                        "Regresar",
+                        style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        ),
+                        ),
+                      ),
+                  ],
+                  ),
+              ),
+            ],
           ),
-      ],
-      ),
-      ),
-      ],
-      ),),
+        ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -108,7 +109,7 @@ class _LoginState extends State<Login> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Container(
                   height: 150,
@@ -249,7 +250,21 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-
+                SizedBox(height: 30),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Register())
+                    );
+                  },
+                  child: Text("¿Olvidaste tu contraseña?",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: AppMaterial().getColorAtIndex(2)
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

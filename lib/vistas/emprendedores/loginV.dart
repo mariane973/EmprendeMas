@@ -107,7 +107,7 @@ class _LoginVState extends State<LoginV> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Container(
                   height: 150,
@@ -247,7 +247,22 @@ class _LoginVState extends State<LoginV> {
                         color: AppMaterial().getColorAtIndex(4)
                     ),
                   ),
-                )
+                ),
+                SizedBox(height: 35),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => RegisterV())
+                    );
+                  },
+                  child: Text("¿Olvidaste tu contraseña?",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: AppMaterial().getColorAtIndex(4)
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
