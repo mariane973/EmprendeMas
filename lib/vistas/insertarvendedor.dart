@@ -1,4 +1,6 @@
 import 'package:emprende_mas/vistas/dataVendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/emprendimientosVendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -52,8 +54,8 @@ class _FormVendedorState extends State<FormVendedor> {
               children: [
                 Center(
                   child: imagen != null ?
-                  Image.file(imagen!) :
-                  Image.asset(('img/tucan2.png'), height: 100),
+                  Image.file(imagen!, height: 300) :
+                  Image.asset(('img/tucanemp.png'), height: 100),
                 ),
                 ElevatedButton(onPressed: obtenerimagen,
                   style: FilledButton.styleFrom(
@@ -285,7 +287,7 @@ class _FormVendedorState extends State<FormVendedor> {
                         emprendimiento: _emprendimiento,
                         telefono: _telefono
                     );
-                  }
+                  }Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVendedor()));
                 },
                   style: FilledButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 45),

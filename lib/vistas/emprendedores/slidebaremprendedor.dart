@@ -1,13 +1,13 @@
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/material.dart';
+import 'package:emprende_mas/vistas/emprendedores/emprendimientosVendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
+import 'package:emprende_mas/vistas/emprendedores/productosVendedor.dart';
 import 'package:emprende_mas/vistas/principales/productos.dart';
-import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class SlidebarVendedor extends StatefulWidget {
   const SlidebarVendedor();
@@ -125,7 +125,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                     ),
                     onTap: () {
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DatosVendedores(vendedoresData: vendedoresData),
+                        MaterialPageRoute(builder: (context) => EmprendimientosV(vendedoresData: vendedoresData),
                         ),
                       );
                     },
@@ -147,7 +147,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                       ),
                       onTap: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => DatosProductos(productosData: productosData),
+                          MaterialPageRoute(builder: (context) => ProductosV(productosData: productosData)
                           ),
                         );
                       }

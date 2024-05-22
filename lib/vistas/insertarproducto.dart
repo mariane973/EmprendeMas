@@ -1,5 +1,6 @@
 import 'package:emprende_mas/vistas/dataProducto.dart';
 import 'package:emprende_mas/vistas/dataVendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +17,7 @@ class _FormProductoState extends State<FormProducto> {
   final InsertarDatosProducto insertarDatos = InsertarDatosProducto();
 
   final String defaultimg = 'img/tucan2.png';
-  late io.File? imagen = io.File('img/tucan2.png');
+  io.File? imagen;
   final picker = ImagePicker();
   final form = GlobalKey<FormState>();
   late String _categoria;
@@ -49,9 +50,9 @@ class _FormProductoState extends State<FormProducto> {
                 children: [
                   Center(
                     child: imagen != null ?
-                    Image.file(imagen!) :
-                    Image.asset(('img/tucan2.png'), height: 100),
-                ),
+                    Image.file(imagen!, height: 300) :
+                    Image.asset(('img/tucanemp.png'), height: 100),
+                  ),
                   ElevatedButton(onPressed: obtenerimagen,
                       style: FilledButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
@@ -204,7 +205,7 @@ class _FormProductoState extends State<FormProducto> {
                           precio: _precio,
                           stock: _stock
                       );
-                    }
+                    }Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVendedor()));
                   },
                       style: FilledButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 45),

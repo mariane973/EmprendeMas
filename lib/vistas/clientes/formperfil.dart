@@ -14,10 +14,11 @@ class FormPerfil extends StatefulWidget {
 
 class _FormPerfilState extends State<FormPerfil> {
   final InsertarDatosPerfil insertarDatos = InsertarDatosPerfil();
+
   final String defaultimg = 'img/tucanemp.png';
+  io.File? imagen;
   final picker = ImagePicker();
   final form = GlobalKey<FormState>();
-  io.File? imagen;
   late String _nombre;
   late String _direccion;
   late int _telefono;
