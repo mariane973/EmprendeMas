@@ -3,11 +3,11 @@ import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
 import 'package:emprende_mas/vistas/principales/productos.dart';
 import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
-import 'package:emprende_mas/vistas/clientes/slidebarcliente.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:emprende_mas/home.dart';
 
 class HomeVendedor extends StatelessWidget {
   @override
@@ -98,27 +98,31 @@ class _ProductosVendedorState extends State<ProductosVendedor> {
         drawer: SlidebarVendedor(),
 
         //Body//
-        body: Column(
-          children: [
-            CarouselSlider(
-              items: imgList.map((e) => Center(
-                child: Image.network(e),
-              )).toList(),
-              options: CarouselOptions(
-                  initialPage: 0,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 4),
-                  enlargeCenterPage: true,
-                  enlargeFactor: 0.4,
-                  onPageChanged: (value, _){
-                    setState(() {
-                      _currenPage = value;
-                    });
-                  }
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              CarouselSlider(
+                items: imgList.map((e) => Center(
+                  child: Image.network(e),
+                )).toList(),
+                options: CarouselOptions(
+                    initialPage: 0,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 4),
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.4,
+                    onPageChanged: (value, _){
+                      setState(() {
+                        _currenPage = value;
+                      });
+                    }
+                ),
               ),
-            ),
-            buildCarouselInidcator()
-          ],
+              buildCarouselInidcator(),
+              Categorias(),
+              Ofertas()
+            ],
+          ),
         ),
       ),
     );

@@ -9,6 +9,7 @@ class InsertarDatosPerfil {
   void guardarDatos({
     required io.File imagen,
     required String nombre,
+    required String apellido,
     required String direccion,
     required int telefono,
   }) async {
@@ -21,6 +22,7 @@ class InsertarDatosPerfil {
       'imgusuario': img,
       'direccion': direccion,
       'telefono': telefono,
+      'apellido' : apellido,
     }).then((value){
       Fluttertoast.showToast(
           msg: "Datos Guardados",

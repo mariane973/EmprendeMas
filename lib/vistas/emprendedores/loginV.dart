@@ -126,9 +126,9 @@ class _LoginVState extends State<LoginV> {
                 ),
                 Text("Vendedor",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: AppMaterial().getColorAtIndex(3)
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: AppMaterial().getColorAtIndex(3)
                   ),
                 ),
                 Padding(

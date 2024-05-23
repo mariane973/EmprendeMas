@@ -104,7 +104,7 @@ class _ProductosVState extends State<ProductosV> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Container(
                     padding: EdgeInsets.only(left:10),
-                    height: 50,
+                    height: 45,
                     width: 260,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),

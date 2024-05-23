@@ -2,7 +2,7 @@ import 'package:emprende_mas/material.dart';
 import 'package:emprende_mas/vistas/principales/productos.dart';
 import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
-import 'package:emprende_mas/vistas/clientes/slidebarcliente.dart';
+import 'package:emprende_mas/vistas/clientes/slidebarcliente.txt';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

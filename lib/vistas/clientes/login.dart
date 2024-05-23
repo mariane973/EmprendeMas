@@ -1,7 +1,8 @@
 import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/huella/autenticacion.dart';
-import 'package:emprende_mas/vistas/clientes/homecliente.dart';
+import 'package:emprende_mas/vistas/clientes/formperfil.dart';
+import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:emprende_mas/vistas/clientes/register.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -67,42 +68,42 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
-                  },
-                  child: Row(
-                    children: <Widget>[
-                        FaIcon(
-                        FontAwesomeIcons.home,
-                        color: AppMaterial().getColorAtIndex(1),
-                        size: 20.0,
-                        ),
-                    SizedBox(width: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text(
-                        "Regresar",
-                        style: TextStyle(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
+              child: Row(
+                children: <Widget>[
+                  FaIcon(
+                    FontAwesomeIcons.home,
+                    color: AppMaterial().getColorAtIndex(1),
+                    size: 20.0,
+                  ),
+                  SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text(
+                      "Regresar",
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        ),
-                        ),
                       ),
-                  ],
+                    ),
                   ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -210,7 +211,7 @@ class _LoginState extends State<Login> {
                           bool auth = await Autenticacion.authentication();
                           print("Puede autenticarse: $auth");
                           if(auth){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeCliente())
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>FormPerfil())
                             );
                           }
                         }else{

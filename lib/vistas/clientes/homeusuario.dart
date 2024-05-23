@@ -2,19 +2,21 @@ import 'package:emprende_mas/material.dart';
 import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:emprende_mas/home.dart';
 import 'dart:io' as io;
 
 class HomeUsario extends StatelessWidget {
   final String nombre;
   final io.File imagen;
+  final String apellido;
 
-  HomeUsario({required this.nombre, required this.imagen});
+  HomeUsario({required this.nombre, required this.imagen, required this.apellido});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ProductosCliente(nombre: nombre, imagen: imagen)
+      home: ProductosCliente(nombre: nombre, imagen: imagen, apellido: apellido)
     );
   }
 }
@@ -22,8 +24,9 @@ class HomeUsario extends StatelessWidget {
 class ProductosCliente extends StatefulWidget {
   final String nombre;
   final io.File imagen;
+  final String apellido;
 
-  const ProductosCliente({required this.nombre, required this.imagen});
+  const ProductosCliente({required this.nombre, required this.imagen, required this.apellido});
 
   @override
   State<ProductosCliente> createState() => _ProductosClienteState();
@@ -72,7 +75,7 @@ class _ProductosClienteState extends State<ProductosCliente> {
               children: [
                 Container(
                   padding: EdgeInsets.only(left:35),
-                  height: 50,
+                  height: 45,
                   width: 260,
                   child: Row(
                     children: [
@@ -99,30 +102,34 @@ class _ProductosClienteState extends State<ProductosCliente> {
             ),
           ],
         ),
-        drawer: SlidebarUsuario(widget.nombre, widget.imagen),
+        drawer: SlidebarUsuario(widget.nombre, widget.imagen, widget.apellido),
 
         //Body//
-        body: Column(
-          children: [
-            CarouselSlider(
-              items: imgList.map((e) => Center(
-                child: Image.network(e),
-              )).toList(),
-              options: CarouselOptions(
-                  initialPage: 0,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 4),
-                  enlargeCenterPage: true,
-                  enlargeFactor: 0.4,
-                  onPageChanged: (value, _){
-                    setState(() {
-                      _currenPage = value;
-                    });
-                  }
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              CarouselSlider(
+                items: imgList.map((e) => Center(
+                  child: Image.network(e),
+                )).toList(),
+                options: CarouselOptions(
+                    initialPage: 0,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 4),
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.4,
+                    onPageChanged: (value, _){
+                      setState(() {
+                        _currenPage = value;
+                      });
+                    }
+                ),
               ),
-            ),
-            buildCarouselInidcator()
-          ],
+              buildCarouselInidcator(),
+              Categorias(),
+              Ofertas()
+            ],
+          ),
         ),
       ),
     );

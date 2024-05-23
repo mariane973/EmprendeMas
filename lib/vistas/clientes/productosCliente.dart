@@ -1,21 +1,27 @@
+import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
 import 'package:emprende_mas/vistas/detalleProducto.dart';
+import 'package:emprende_mas/vistas/insertarproducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
+import 'dart:io' as io;
 
-class DatosProductos extends StatefulWidget {
+class ProductosC extends StatefulWidget {
   final List<Map<String, dynamic>> productosData;
+  final String nombre;
+  final io.File imagen;
+  final String apellido;
 
-  DatosProductos({required this.productosData});
+  ProductosC({required this.productosData, required this.nombre, required this.imagen, required this.apellido});
 
   @override
-  State<DatosProductos> createState() => _DatosProductosState();
+  State<ProductosC> createState() => _ProductosCState();
 }
 
-class _DatosProductosState extends State<DatosProductos> {
+class _ProductosCState extends State<ProductosC> {
   List _resultados = [];
   List _resultadosList = [];
   final TextEditingController _searchController = TextEditingController();
@@ -72,16 +78,12 @@ class _DatosProductosState extends State<DatosProductos> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+          color: Colors.white,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          backgroundColor: AppMaterial().getColorAtIndex(6),
+          backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: AppMaterial().getColorAtIndex(0)),
           leading: Builder(
             builder: (BuildContext context) {
@@ -103,7 +105,7 @@ class _DatosProductosState extends State<DatosProductos> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Container(
                     padding: EdgeInsets.only(left:10),
-                    height: 50,
+                    height: 45,
                     width: 260,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
@@ -135,7 +137,7 @@ class _DatosProductosState extends State<DatosProductos> {
               ],
             ),
           ],
-        ),drawer: PrincipalDrawer(),
+        ),drawer: SlidebarUsuario(widget.nombre, widget.imagen, widget.apellido),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -149,6 +151,7 @@ class _DatosProductosState extends State<DatosProductos> {
 
                 ),
               ),
+
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -180,7 +183,7 @@ class _DatosProductosState extends State<DatosProductos> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
                               child: Image.network(producto['imagen'],
-                              fit: BoxFit.cover,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -210,7 +213,7 @@ class _DatosProductosState extends State<DatosProductos> {
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
-                                            color: AppMaterial().getColorAtIndex(2)
+                                              color: AppMaterial().getColorAtIndex(2)
                                           ),
                                         ),
                                       ),
@@ -233,4 +236,3 @@ class _DatosProductosState extends State<DatosProductos> {
     );
   }
 }
-

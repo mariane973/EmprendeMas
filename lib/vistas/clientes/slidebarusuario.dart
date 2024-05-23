@@ -1,6 +1,8 @@
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:emprende_mas/vistas/clientes/formperfil.dart';
+import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
+import 'package:emprende_mas/vistas/clientes/productosCliente.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
 import 'package:emprende_mas/vistas/principales/productos.dart';
 import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
@@ -13,14 +15,15 @@ import 'dart:io' as io;
 class SlidebarUsuario extends StatefulWidget {
   final String nombre;
   final io.File imagen;
+  final String apellido;
 
-  const SlidebarUsuario(this.nombre, this.imagen);
+  const SlidebarUsuario(this.nombre, this.imagen, this.apellido);
 
-  static Route<dynamic> route(String nombre, io.File imagen) {
+  static Route<dynamic> route(String nombre, io.File imagen, String apellido) {
     return MaterialPageRoute(
       builder: (BuildContext context) {
         return Scaffold(
-          body: SlidebarUsuario(nombre, imagen),
+          body: SlidebarUsuario(nombre, imagen, apellido),
         );
       },
       fullscreenDialog: true,
@@ -74,12 +77,28 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Text(widget.nombre,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Expanded(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(widget.nombre,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+                                  ),
+                                ),
+                              ),
+                              Text(widget.apellido,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -90,13 +109,35 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only( top: 20,left: 20),
+                  padding: const EdgeInsets.only(left: 20,top: 20),
+                  child: ListTile(
+                    title: Text("Principal",
+                      style:TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    leading: FaIcon(FontAwesomeIcons.home,
+                      color: AppMaterial().getColorAtIndex(2),
+                      size: 30.0,
+                    ),
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeUsario(nombre: widget.nombre, imagen: widget.imagen, apellido: widget.apellido),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only( top: 10,left: 20),
                   child: ListTile(
                       title: Text("Perfil",
                         style:TextStyle(
                             color: Colors.black,
                             fontSize: 18,
-                            fontWeight: FontWeight.bold
+
                         ),
                       ),
                       leading: Icon(
@@ -149,7 +190,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                       ),
                       onTap: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => DatosProductos(productosData: productosData),
+                          MaterialPageRoute(builder: (context) => ProductosC(productosData: productosData, nombre: widget.nombre, imagen: widget.imagen, apellido: widget.apellido),
                           ),
                         );
                       }
@@ -242,7 +283,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                   ),
                 ),
                 SizedBox(
-                  height: 120,
+                  height: 70,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 25, top: 15),

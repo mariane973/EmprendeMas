@@ -5,6 +5,7 @@ import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EmprendimientosV extends StatefulWidget {
   final List<Map<String, dynamic>> vendedoresData;
@@ -103,7 +104,7 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Container(
                     padding: EdgeInsets.only(left:10),
-                    height: 50,
+                    height: 45,
                     width: 260,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
@@ -142,26 +143,55 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text('EMPRENDIMIENTOS',
+                child: Text('ADMINISTRAR  EMPRENDIMIENTOS',
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(top: 20, bottom: 30),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => FormVendedor())
+                        MaterialPageRoute(builder: (context) => FormVendedor()),
                     );
                   },
-                  child: Text("Ingresar Emprendimiento",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: AppMaterial().getColorAtIndex(4)
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 70),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: AppMaterial().getColorAtIndex(4),
+                      ),
+
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10, left: 20),
+                            child: FaIcon(
+                              FontAwesomeIcons.plusCircle,
+                              color: Colors.white,
+                              size: 20.0,
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "Agregar Emprendimiento",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
