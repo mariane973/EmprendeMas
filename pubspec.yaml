@@ -36,8 +36,9 @@ dependencies:
   flutter_launcher_icons: "^0.13.1"
 
   fluttertoast:
-  firebase_core: ^2.31.0
+  firebase_core: ^2.31.1
   cloud_firestore: ^4.17.3
+  firebase_database: ^10.5.6
 
 flutter_launcher_icons:
   android: "launcher_icon"

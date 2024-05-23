@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:emprende_mas/vistas/emprendedores/PasswordReset.dart';
 
 class LoginV extends StatefulWidget {
   const LoginV({super.key});
@@ -252,7 +253,7 @@ class _LoginVState extends State<LoginV> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => RegisterV())
+                        MaterialPageRoute(builder: (context) => PasswordReset())
                     );
                   },
                   child: Text("¿Olvidaste tu contraseña?",
