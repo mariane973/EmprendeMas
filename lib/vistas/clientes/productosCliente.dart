@@ -1,12 +1,10 @@
 import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
 import 'package:emprende_mas/vistas/detalleProducto.dart';
-import 'package:emprende_mas/vistas/insertarproducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
 import 'dart:io' as io;
 
 class ProductosC extends StatefulWidget {

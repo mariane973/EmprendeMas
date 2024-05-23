@@ -1,14 +1,8 @@
 import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
-import 'package:emprende_mas/vistas/principales/productos.dart';
-import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
-import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 

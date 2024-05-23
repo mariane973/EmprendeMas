@@ -3,7 +3,6 @@ import 'package:emprende_mas/material.dart';
 import 'package:emprende_mas/vistas/emprendedores/emprendimientosVendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
 import 'package:emprende_mas/vistas/emprendedores/productosVendedor.dart';
-import 'package:emprende_mas/vistas/principales/productos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

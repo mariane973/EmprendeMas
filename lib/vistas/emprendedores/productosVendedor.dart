@@ -1,11 +1,12 @@
 import 'package:emprende_mas/vistas/detalleProducto.dart';
+import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
 import 'package:emprende_mas/vistas/insertarproducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProductosV extends StatefulWidget {
   final List<Map<String, dynamic>> productosData;
@@ -136,33 +137,61 @@ class _ProductosVState extends State<ProductosV> {
               ],
             ),
           ],
-        ),drawer: PrincipalDrawer(),
+        ),drawer: SlidebarVendedor(),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text("PRODUCTOS",
+                child: Text("ADMINISTRAR PRODUCTOS",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
 
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(9),
+                padding: const EdgeInsets.only(top: 20, bottom: 30),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => FormProducto())
+                      MaterialPageRoute(builder: (context) => FormProducto()),
                     );
                   },
-                  child: Text("Ingresar Producto",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: AppMaterial().getColorAtIndex(1)
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 95),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: AppMaterial().getColorAtIndex(4),
+                      ),
+
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10, left: 20),
+                            child: FaIcon(
+                              FontAwesomeIcons.plusCircle,
+                              color: Colors.white,
+                              size: 20.0,
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "Agregar Producto",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

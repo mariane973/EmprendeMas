@@ -1,5 +1,4 @@
 import 'package:emprende_mas/vistas/dataVendedor.dart';
-import 'package:emprende_mas/vistas/emprendedores/emprendimientosVendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

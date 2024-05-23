@@ -1,10 +1,10 @@
+import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
 import 'package:emprende_mas/vistas/insertarvendedor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EmprendimientosV extends StatefulWidget {
@@ -137,15 +137,15 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
             ),
           ],
         ),
-        drawer: PrincipalDrawer(),
+        drawer: SlidebarVendedor(),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text('ADMINISTRAR  EMPRENDIMIENTOS',
+                child: Text('ADMINISTRAR EMPRENDIMIENTOS',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -185,7 +185,6 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
-
                                 ),
                               ),
                             ),

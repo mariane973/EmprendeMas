@@ -1,7 +1,7 @@
 import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
 import 'package:emprende_mas/home.dart';
-import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,9 +19,14 @@ class _RegisterVState extends State<RegisterV> {
   RegistroUsuario mial = RegistroUsuario();
 
   final _formKey = GlobalKey<FormState>();
-  late String _emailController;
-  late String _passworController;
-  late String _confirmPasswordController;
+
+  late String _email;
+  late String _password;
+  late String _confirmPassword;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +99,7 @@ class _RegisterVState extends State<RegisterV> {
                 Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 40),
                   child: TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                           Icons.alternate_email_rounded
@@ -112,20 +118,20 @@ class _RegisterVState extends State<RegisterV> {
                         return "Ingrese su correo";
                       } else if(!value.contains("@")){
                         return "El correo no es válido";
-                      }
-                      else {
+                      } else {
                         return null;
                       }
                     },
-                    onSaved: (value){
-                      _emailController = value!;
+                    onSaved: (value) {
+                      _email = value!;
                     },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: TextFormField(
-                    obscureText: false,
+                    controller: _passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                           Icons.key
@@ -146,8 +152,8 @@ class _RegisterVState extends State<RegisterV> {
                         return null;
                       }
                     },
-                    onSaved: (value){
-                      _passworController = value!;
+                    onSaved: (value) {
+                      _password = value!;
                     },
                   ),
                 ),
@@ -157,7 +163,8 @@ class _RegisterVState extends State<RegisterV> {
                 Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: TextFormField(
-                    obscureText: false,
+                    controller: _confirmPasswordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.key),
                       labelText: "Confirmar contraseña",
@@ -172,14 +179,14 @@ class _RegisterVState extends State<RegisterV> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Ingrese la confirmación de su contraseña";
-                      } else if (value != _passworController) {
+                      } else if(_passwordController.text != _confirmPasswordController.text){
                         return "Las contraseñas no coinciden";
                       } else {
                         return null;
                       }
                     },
-                    onSaved: (value){
-                      _confirmPasswordController = value!;
+                    onSaved: (value) {
+                      _confirmPassword = value!;
                     },
                   ),
                 ),
@@ -190,7 +197,7 @@ class _RegisterVState extends State<RegisterV> {
                     onPressed: (){
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
-                        var dato = mial.registroUsuario(_emailController, _confirmPasswordController);
+                        var dato = mial.registroUsuario(_email, _password);
                         if(dato==1){
                           print("Nivel de seguridad debil");
                         }else if(dato==2){
@@ -201,6 +208,7 @@ class _RegisterVState extends State<RegisterV> {
                               toastLength: Toast.LENGTH_LONG,
                               gravity: ToastGravity.TOP,
                               textColor: Colors.white,
+                              backgroundColor: AppMaterial().getColorAtIndex(0),
                               fontSize: 18
                           );
                         }

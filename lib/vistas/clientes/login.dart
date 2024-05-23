@@ -2,7 +2,6 @@ import 'package:emprende_mas/authlogin/crearRegistroUsulogin.dart';
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/huella/autenticacion.dart';
 import 'package:emprende_mas/vistas/clientes/formperfil.dart';
-import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:emprende_mas/vistas/clientes/register.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';

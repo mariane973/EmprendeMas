@@ -29,7 +29,7 @@ class InsertarDatosPerfil {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           textColor: Colors.white,
-          backgroundColor: Colors.lightBlueAccent,
+          backgroundColor: Colors.green,
           fontSize: 18
       );
     }).catchError((error) {

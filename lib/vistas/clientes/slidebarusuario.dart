@@ -4,7 +4,6 @@ import 'package:emprende_mas/vistas/clientes/formperfil.dart';
 import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:emprende_mas/vistas/clientes/productosCliente.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
-import 'package:emprende_mas/vistas/principales/productos.dart';
 import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
@@ -76,19 +75,17 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                           backgroundImage: FileImage(widget.imagen),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: Expanded(
+                      Expanded(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*1,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Text(widget.nombre,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white
-                                  ),
+                              Text(widget.nombre,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white
                                 ),
                               ),
                               Text(widget.apellido,
