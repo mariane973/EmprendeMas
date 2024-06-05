@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-
 //Slidebar//
 class PrincipalDrawer extends StatefulWidget {
   const PrincipalDrawer();
@@ -39,8 +37,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
   }
 
   Future<List<QuerySnapshot>> getData(List<String> collections) async {
-    return Future.wait(collections.map((collection) => FirebaseFirestore.instance.collection(collection).get(),
-    ),
+    return Future.wait(collections.map((collection) => FirebaseFirestore.instance.collection(collection).get(),),
     );
   }
 

@@ -8,7 +8,8 @@ import 'dart:io' as io;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FormPerfil extends StatefulWidget {
-  const FormPerfil({super.key});
+  final String dato;
+  const FormPerfil({Key? key, required this.dato}) : super(key:key);
 
   @override
   State<FormPerfil> createState() => _FormPerfilState();
@@ -301,7 +302,8 @@ class _FormPerfilState extends State<FormPerfil> {
                         direccion: _direccion,
                         nombre: _nombre,
                         telefono: _telefono,
-                        apellido: _apellido
+                        apellido: _apellido,
+                        id: widget.dato
                     );
                     Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HomeUsario(nombre: _nombre, imagen: imagen!, apellido: _apellido,))

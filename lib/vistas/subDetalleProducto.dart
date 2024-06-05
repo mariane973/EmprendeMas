@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DetalleProducto extends StatelessWidget {
+class SubDetalleProducto extends StatelessWidget {
   final Map<String, dynamic> producto;
 
-  DetalleProducto ({required this.producto});
+  SubDetalleProducto ({required this.producto});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DetalleProducto extends StatelessWidget {
         appBar: AppBar(
           title: Text(producto['nombre'],
             style: TextStyle(
-              fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500
             ),
           ),
           backgroundColor: AppMaterial().getColorAtIndex(0),
@@ -37,8 +37,7 @@ class DetalleProducto extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(producto['imagen'],
-                    width: 200, height: 200)
-                ),
+                      width: 200, height: 200,)),
               ),
               RichText(
                 text: TextSpan(
@@ -79,9 +78,9 @@ class DetalleProducto extends StatelessWidget {
                     textAlign: TextAlign.left,
                     text: TextSpan(
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
                         ),
                         children: <TextSpan>[
                           TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
@@ -118,45 +117,45 @@ class DetalleProducto extends StatelessWidget {
                   ),
                 ],
               ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                              onPressed: (){},
-                              child: Text(
-                                "Agregar al carrito",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              )
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                                onPressed: (){},
+                                child: Text(
+                                  "Agregar al carrito",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                )
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                              onPressed: (){},
-                              child: Text(
-                                "Ver emprendedor",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              )
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                                onPressed: (){},
+                                child: Text(
+                                  "Ver emprendedor",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                )
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             ],
           ),
         ),

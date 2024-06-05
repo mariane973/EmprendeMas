@@ -42,26 +42,6 @@ class _LoginVState extends State<LoginV> {
         fontSize: 18
     );
   }
-  /*
-  void validacion(){
-    String usu = usuario.text;
-    String contra = contrasena.text;
-    if (usu=="martin"&&contra=="123"){
-      //cliente
-      mensaje();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>HomeCliente())
-      );
-    }else if(usu=="salome"&&contra=="789"){
-      //vendedor
-      mensaje();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>HomeVendedor())
-      );
-    }else{
-      mensaje2();
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -200,11 +180,11 @@ class _LoginVState extends State<LoginV> {
                         _formKey.currentState!.save();
                         var dato = await mial.loginVendedor(_emailController, _passwordController);
                         print("HOLA $dato");
-                        if(dato == 2){
+                        if(dato == "1"){
                           print("Datos no encontrados");
-                        }else if(dato==3){
+                        }else if(dato=="2"){
                           print("Se enviaron datos vacios");
-                        }else if(dato==1){
+                        }else if(dato!=""){
                           bool auth = await Autenticacion.authentication();
                           print("Puede autenticarse: $auth");
                           if(auth){

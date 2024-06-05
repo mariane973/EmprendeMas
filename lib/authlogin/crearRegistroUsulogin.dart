@@ -27,20 +27,20 @@ class RegistroUsuario {
         final u = uc.user;
 
         if(u != null){
-          return 1;
+          return u.uid;
         }
       }
       on FirebaseAuthException catch (e) {
         print("Error de autenticación: ${e.code}");
         if(e.code == 'user-not-found' || e.code == 'wrong-password'){
-          return 2;
+          return "1";
         }
       } catch (e) {
         print("Error: $e");
       }
     } else {
       print("Correo y contraseña no pueden estar vacios");
-      return 3;
+      return "1";
     }
   }
 }

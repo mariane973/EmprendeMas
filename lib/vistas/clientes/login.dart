@@ -9,7 +9,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:emprende_mas/vistas/clientes/PasswordReset.dart';
 
-
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -43,26 +42,6 @@ class _LoginState extends State<Login> {
         fontSize: 18
     );
   }
-  /*
-  void validacion(){
-    String usu = usuario.text;
-    String contra = contrasena.text;
-    if (usu=="martin"&&contra=="123"){
-      //cliente
-      mensaje();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>HomeCliente())
-      );
-    }else if(usu=="salome"&&contra=="789"){
-      //vendedor
-      mensaje();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>HomeVendedor())
-      );
-    }else{
-      mensaje2();
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -200,18 +179,17 @@ class _LoginState extends State<Login> {
                     onPressed: () async {
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
-                        var dato = await mial.loginUsario(_emailController, _passwordController);
+                        String dato = await mial.loginUsario(_emailController, _passwordController);
                         print("HOLA $dato");
-                        if(dato == 2){
+                        if(dato == "1"){
                           print("Datos no encontrados");
-                        }else if(dato==3){
+                        }else if(dato=="2"){
                           print("Se enviaron datos vacios");
-                        }else if(dato==1){
+                        }else if(dato!=""){
                           bool auth = await Autenticacion.authentication();
                           print("Puede autenticarse: $auth");
                           if(auth){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>FormPerfil())
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>FormPerfil(dato: dato)));
                           }
                         }else{
                           print("MMMM");

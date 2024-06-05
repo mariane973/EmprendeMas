@@ -43,8 +43,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
   }
 
   Future<List<QuerySnapshot>> getData(List<String> collections) async {
-    return Future.wait(collections.map((collection) => FirebaseFirestore.instance.collection(collection).get(),
-    ),
+    return Future.wait(collections.map((collection) => FirebaseFirestore.instance.collection(collection).get(),),
     );
   }
 
@@ -142,11 +141,11 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         color: AppMaterial().getColorAtIndex(2),
                         size: 40.0,
                       ),
-                      onTap: () {
+                      /*onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => FormPerfil())
+                            MaterialPageRoute(builder: (context) => FormField(builder: dato))
                         );
-                      }
+                      }*/
                   ),
                 ),
                 Padding(

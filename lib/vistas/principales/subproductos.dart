@@ -1,4 +1,5 @@
 import 'package:emprende_mas/vistas/detalleProducto.dart';
+import 'package:emprende_mas/vistas/subDetalleProducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,23 +7,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
 
-class DatosProductos extends StatefulWidget {
-  final List<Map<String, dynamic>> productosData;
+class SubProductos extends StatefulWidget {
+  final List<Map<String, dynamic>> data;
 
-  DatosProductos({required this.productosData});
+  SubProductos({required this.data});
 
   @override
-  State<DatosProductos> createState() => _DatosProductosState();
+  State<SubProductos> createState() => _SubProductosState();
 }
 
-class _DatosProductosState extends State<DatosProductos> {
-  List _resultados = [];
-  List _resultadosList = [];
+class _SubProductosState extends State<SubProductos> {
+  List<Map<String, dynamic>> _resultadosList = [];
   final TextEditingController _searchController = TextEditingController();
 
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    _resultadosList = widget.data;
   }
 
   @override
@@ -37,41 +38,21 @@ class _DatosProductosState extends State<DatosProductos> {
     searchResultList();
   }
 
-  searchResultList(){
-    var showResults = [];
-    if(_searchController.text != ""){
-      for(var productoShapshot in _resultados){
-        var nombre = productoShapshot['nombre'].toString().toLowerCase();
-        if(nombre.contains(_searchController.text.toLowerCase())){
-          showResults.add(productoShapshot);
+  void searchResultList() {
+    List<Map<String, dynamic>> showResults = [];
+    if (_searchController.text != "") {
+      for (var productoSnapshot in widget.data) {
+        var nombre = productoSnapshot['nombre'].toString().toLowerCase();
+        if (nombre.contains(_searchController.text.toLowerCase())) {
+          showResults.add(productoSnapshot);
         }
       }
     } else {
-      showResults = List.from(_resultados);
+      showResults = List.from(widget.data);
     }
     setState(() {
       _resultadosList = showResults;
     });
-  }
-
-  getProdcutoStream() async {
-    var vendedoresData = await FirebaseFirestore.instance.collection('vendedores').get();
-
-    List<DocumentSnapshot> allProductos = [];
-    for (var vendedorSnapshot in vendedoresData.docs) {
-      var productosSnapshot = await vendedorSnapshot.reference.collection('productos').orderBy('nombre').get();
-      allProductos.addAll(productosSnapshot.docs);
-    }
-    setState(() {
-      _resultados = allProductos;
-    });
-    searchResultList();
-  }
-
-  @override
-  void didChangeDependencies() {
-    getProdcutoStream();
-    super.didChangeDependencies();
   }
 
   @override
@@ -121,7 +102,6 @@ class _DatosProductosState extends State<DatosProductos> {
                       placeholder: 'Buscar',
                       placeholderStyle: TextStyle(
                         color: Colors.white,
-
                       ),
                       style: TextStyle(color: Colors.white),
                       suffixIcon: Icon(Icons.cancel),
@@ -152,7 +132,6 @@ class _DatosProductosState extends State<DatosProductos> {
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
-
                 ),
               ),
               ListView.builder(
@@ -160,12 +139,11 @@ class _DatosProductosState extends State<DatosProductos> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: _resultadosList.length,
                 itemBuilder: (context, index) {
-                  final productoSnapshot = _resultadosList[index];
-                  final productoData = productoSnapshot.data() as Map<String, dynamic>;
+                  final producto = _resultadosList[index];
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetalleProducto(producto: productoData)
+                        MaterialPageRoute(builder: (context) => SubDetalleProducto(producto: producto)
                         ),
                       );
                     },
@@ -185,8 +163,9 @@ class _DatosProductosState extends State<DatosProductos> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
-                              child: Image.network(productoData['imagen'],
-                              fit: BoxFit.cover,
+                              child: Image.network(
+                                producto['imagen'],
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -199,24 +178,24 @@ class _DatosProductosState extends State<DatosProductos> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(productoData['nombre'],
+                                      Text(producto['nombre'],
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 22,
                                         ),
                                       ),
-                                      Text(productoData['descripcion'],
+                                      Text(producto['descripcion'],
                                         style: TextStyle(
                                           fontSize: 17,
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 18),
-                                        child: Text(' \$${productoData['precio']} COP',
+                                        child: Text(' \$${producto['precio']} COP',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
-                                            color: AppMaterial().getColorAtIndex(2)
+                                              color: AppMaterial().getColorAtIndex(2)
                                           ),
                                         ),
                                       ),

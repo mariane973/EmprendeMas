@@ -1,3 +1,4 @@
+import 'package:emprende_mas/vistas/principales/subproductos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -53,17 +54,19 @@ class _DatosVendedoresState extends State<DatosVendedores> {
     });
   }
 
-  getVendedorStream() async {
+  Future<List<DocumentSnapshot>> getVendedorStream() async {
     var data = await FirebaseFirestore.instance.collection('vendedores').orderBy('nombre_emprendimiento').get();
     setState(() {
       _resultados = data.docs;
     });
     searchResultList();
+    return data.docs;
   }
 
   @override
-  void didChangeDependencies() {
-    getVendedorStream();
+  void didChangeDependencies() async {
+    _resultados = await getVendedorStream();
+    searchResultList();
     super.didChangeDependencies();
   }
 
@@ -113,7 +116,7 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                       controller: _searchController,
                       placeholder: 'Buscar',
                       placeholderStyle: TextStyle(
-                          color: Colors.white,
+                        color: Colors.white,
 
                       ),
                       style: TextStyle(color: Colors.white),
@@ -154,50 +157,62 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                 itemCount: _resultadosList.length,
                 itemBuilder: (context, index) {
                   final vendedor = _resultadosList[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                width: 0.2,
-                              )
-                          ),
-                          child: ClipOval(
-                            child: Image.network(vendedor['logo_emprendimiento'],
-                              fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () async {
+                      DocumentSnapshot emprendedorSnapshot = _resultadosList[index];
+                      DocumentReference emprendedorRef = emprendedorSnapshot.reference;
+                      CollectionReference subcoleccionRef = emprendedorRef.collection('productos');
+                      QuerySnapshot subcoleccionSnapshot = await subcoleccionRef.get();
+                      List<Map<String, dynamic>> subcoleccionData = subcoleccionSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context)=> SubProductos(data: subcoleccionData)),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 0.2,
+                                )
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 18),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.56,
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(vendedor['nombre_emprendimiento'],
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22,
-                                      ),
-                                    ),
-                                    Text(vendedor['descripcion_emprendimiento'],
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                  ]
+                            child: ClipOval(
+                              child: Image.network(vendedor['logo_emprendimiento'],
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                        )
-                      ],
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.56,
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(vendedor['nombre_emprendimiento'],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                      Text(vendedor['descripcion_emprendimiento'],
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
