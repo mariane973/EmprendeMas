@@ -1,19 +1,16 @@
-import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
-import 'package:emprende_mas/vistas/detalleProducto.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emprende_mas/vistas/detalleProducto.dart';
+import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
+import 'package:emprende_mas/material.dart';
 import 'dart:io' as io;
 
 class ProductosC extends StatefulWidget {
   final List<Map<String, dynamic>> productosData;
-  final String nombre;
-  final io.File imagen;
-  final String apellido;
+  final String correo;
 
-  ProductosC({required this.productosData, required this.nombre, required this.imagen, required this.apellido});
+  const ProductosC({required this.correo, required this.productosData});
 
   @override
   State<ProductosC> createState() => _ProductosCState();
@@ -59,13 +56,18 @@ class _ProductosCState extends State<ProductosC> {
   }
 
   getProdcutoStream() async {
-    var data = await FirebaseFirestore.instance.collection('productos').orderBy('nombre').get();
+    var vendedoresData = await FirebaseFirestore.instance.collection('vendedores').get();
+
+    List<DocumentSnapshot> allProductos = [];
+    for (var vendedorSnapshot in vendedoresData.docs) {
+      var productosSnapshot = await vendedorSnapshot.reference.collection('productos').orderBy('nombre').get();
+      allProductos.addAll(productosSnapshot.docs);
+    }
     setState(() {
-      _resultados = data.docs;
+      _resultados = allProductos;
     });
     searchResultList();
   }
-
   @override
   void didChangeDependencies() {
     getProdcutoStream();
@@ -76,13 +78,14 @@ class _ProductosCState extends State<ProductosC> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+        color: Colors.white,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: AppMaterial().getColorAtIndex(0)),
+          iconTheme:
+          IconThemeData(color: AppMaterial().getColorAtIndex(0)),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -102,7 +105,7 @@ class _ProductosCState extends State<ProductosC> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Container(
-                    padding: EdgeInsets.only(left:10),
+                    padding: EdgeInsets.only(left: 10),
                     height: 45,
                     width: 260,
                     decoration: BoxDecoration(
@@ -115,12 +118,11 @@ class _ProductosCState extends State<ProductosC> {
                       placeholder: 'Buscar',
                       placeholderStyle: TextStyle(
                         color: Colors.white,
-
                       ),
                       style: TextStyle(color: Colors.white),
                       suffixIcon: Icon(Icons.cancel),
                       prefixIcon: Icon(Icons.search),
-                      itemColor:Colors.white,
+                      itemColor: Colors.white,
                       itemSize: 23,
                     ),
                   ),
@@ -129,43 +131,49 @@ class _ProductosCState extends State<ProductosC> {
                   padding: EdgeInsets.only(right: 20, top: 5),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Image.asset("img/tucanemp.png",height: 50),
+                    child: Image.asset("img/tucanemp.png", height: 50),
                   ),
                 ),
               ],
             ),
           ],
-        ),drawer: SlidebarUsuario(widget.nombre, widget.imagen, widget.apellido),
+        ),
+        drawer: SlidebarUsuario(correo: widget.correo),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text("PRODUCTOS",
+                child: Text(
+                  "PRODUCTOS",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
-
                 ),
               ),
-
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: _resultadosList.length,
                 itemBuilder: (context, index) {
                   final producto = _resultadosList[index];
-                  final productoData = producto.data() as Map<String, dynamic>;
+                  final productoData =
+                  producto.data() as Map<String, dynamic>;
                   return GestureDetector(
-                    onTap: (){
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetalleProducto(producto: productoData)
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetalleProducto(
+                            producto: productoData,
+                          ),
                         ),
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
+                      padding: const EdgeInsets.only(
+                          left: 20, bottom: 18, top: 15),
                       child: Row(
                         children: [
                           Container(
@@ -180,9 +188,12 @@ class _ProductosCState extends State<ProductosC> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
-                              child: Image.network(producto['imagen'],
+                              child: productoData['imagen'] != null
+                                  ? Image.network(
+                                productoData['imagen'],
                                 fit: BoxFit.cover,
-                              ),
+                              )
+                                  : Placeholder(),
                             ),
                           ),
                           SingleChildScrollView(
@@ -190,28 +201,35 @@ class _ProductosCState extends State<ProductosC> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 18),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.56,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.56,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: [
-                                      Text(producto['nombre'],
+                                      Text(
+                                        productoData['nombre'],
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 22,
                                         ),
                                       ),
-                                      Text(producto['descripcion'],
+                                      Text(
+                                        productoData['descripcion'],
                                         style: TextStyle(
                                           fontSize: 17,
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 18),
-                                        child: Text(' \$${producto['precio']} COP',
+                                        padding:
+                                        const EdgeInsets.only(top: 18),
+                                        child: Text(
+                                          ' \$${productoData['precio']} COP',
                                           style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppMaterial().getColorAtIndex(2)
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppMaterial()
+                                                .getColorAtIndex(2),
                                           ),
                                         ),
                                       ),

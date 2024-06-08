@@ -1,36 +1,49 @@
 import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:emprende_mas/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
 import 'dart:io' as io;
 
-class HomeUsario extends StatelessWidget {
-  final String nombre;
-  final io.File imagen;
-  final String apellido;
+class HomeUsuario extends StatelessWidget {
+  final String correo;
 
-  HomeUsario({required this.nombre, required this.imagen, required this.apellido});
+  const HomeUsuario({required this.correo});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ProductosCliente(nombre: nombre, imagen: imagen, apellido: apellido)
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance.collection('usuarios').doc(correo).get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+        final nombre = data['nombre'];
+        final imagenUrl = data['imagen'];
+        final apellido = data['apellido'];
+        return ProductosCliente(nombre: nombre, imagenUrl: imagenUrl, apellido: apellido, correo: correo,);
+      },
     );
   }
 }
-
 class ProductosCliente extends StatefulWidget {
   final String nombre;
-  final io.File imagen;
+  final String imagenUrl;
   final String apellido;
+  final String correo;
 
-  const ProductosCliente({required this.nombre, required this.imagen, required this.apellido});
+
+  const ProductosCliente({required this.nombre, required this.imagenUrl, required this.apellido, required this.correo});
 
   @override
   State<ProductosCliente> createState() => _ProductosClienteState();
 }
+
 
 class _ProductosClienteState extends State<ProductosCliente> {
 
@@ -102,8 +115,7 @@ class _ProductosClienteState extends State<ProductosCliente> {
             ),
           ],
         ),
-        drawer: SlidebarUsuario(widget.nombre, widget.imagen, widget.apellido),
-
+        drawer: SlidebarUsuario(correo: widget.correo),
         //Body//
         body: SingleChildScrollView(
           child: Column(

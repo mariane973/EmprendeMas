@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -198,10 +199,12 @@ class _RegisterState extends State<Register> {
                         _formKey.currentState!.save();
                         var dato = mial.registroUsuario(_email, _password);
                         if(dato==1){
-                          print("Nivel de seguridad debil");
-                        }else if(dato==2){
-                          print("Email ya esta registrado");
-                        }else if(dato != null){
+                          print("Nivel de seguridad débil");
+                        } else if(dato==2){
+                          print("Email ya está registrado");
+                        } else if(dato != null){
+                          // Guardar el correo
+                          guardarCorreoEnFirestore(_email);
                           Fluttertoast.showToast(
                               msg: "Usuario Registrado",
                               toastLength: Toast.LENGTH_LONG,
@@ -223,6 +226,7 @@ class _RegisterState extends State<Register> {
                       ),
                     )
                 ),
+
                 Padding(
                   padding: const EdgeInsets.only(top: 50, bottom: 5),
                   child: Text("¿Ya tienes una cuenta?",
@@ -252,5 +256,16 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
+  }
+}
+
+void guardarCorreoEnFirestore(String correo) async {
+  try {
+    await FirebaseFirestore.instance.collection('usuarios').doc(correo).set({
+      'correo': correo,
+    });
+    print('Correo guardado exitosamente en Firestore');
+  } catch (error) {
+    print('Error al guardar el correo en Firestore: $error');
   }
 }

@@ -13,6 +13,7 @@ class InsertarDatosPerfil {
     required String direccion,
     required int telefono,
     required String id,
+    required String rol,
   }) async {
     Reference ref = _storage.ref().child('imgusuarios/${DateTime.now().toString()}');
     UploadTask uploadTask = ref.putFile(imagen);
@@ -25,6 +26,7 @@ class InsertarDatosPerfil {
       'telefono': telefono,
       'apellido' : apellido,
       'id' : id,
+      'rol': 'cliente',
     }).then((value){
       Fluttertoast.showToast(
           msg: "Datos Guardados",
