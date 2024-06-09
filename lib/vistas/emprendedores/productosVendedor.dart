@@ -137,7 +137,7 @@ class _ProductosVState extends State<ProductosV> {
               ],
             ),
           ],
-        ),drawer: SlidebarVendedor(),
+        ),/*drawer: SlidebarVendedor(),*/
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -1,46 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:emprende_mas/material.dart';
 
-class FormPerfil extends StatefulWidget {
-  final String dato;
+class EditarPerfilCliente extends StatefulWidget {
+  final String correo;
 
-  const FormPerfil({Key? key, required this.dato}) : super(key: key);
+  EditarPerfilCliente({required this.correo});
 
   @override
-  State<FormPerfil> createState() => _FormPerfilState();
+  State<EditarPerfilCliente> createState() => _EditarPerfilClienteState();
 }
 
-class _FormPerfilState extends State<FormPerfil> {
-  final InsertarDatosPerfil insertarDatos = InsertarDatosPerfil();
+class _EditarPerfilClienteState extends State<EditarPerfilCliente> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late TextEditingController _nombreController;
+  late TextEditingController _apellidoController;
+  late TextEditingController _correoController;
+  late TextEditingController _direccionController;
+  late TextEditingController _telefonoController;
+  late String _docId;
   io.File? imagen;
+  String? imageUrl;
   final picker = ImagePicker();
-  final form = GlobalKey<FormState>();
-  late String _nombre;
-  late String _direccion;
-  late int _telefono;
-  late String _apellido;
-  late String _correo = '';
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _obtenerCorreo();
+    _nombreController = TextEditingController();
+    _apellidoController = TextEditingController();
+    _correoController = TextEditingController();
+    _direccionController = TextEditingController();
+    _telefonoController = TextEditingController();
+    _cargarDatosCliente();
   }
 
-  Future<void> _obtenerCorreo() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        _correo = user.email ?? '';
-      });
-    } else {
-      print('No hay usuario autenticado.');
+  Future<void> _cargarDatosCliente() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .where('correo', isEqualTo: widget.correo)
+          .limit(1)
+          .get();
+      if(querySnapshot.docs.isNotEmpty){
+        DocumentSnapshot clienteSnapshot = querySnapshot.docs.first;
+        _docId = clienteSnapshot.id;
+        Map<String, dynamic>? datosCliente = clienteSnapshot.data() as Map<String, dynamic>?;
+
+        if(datosCliente != null){
+          setState(() {
+            _nombreController.text = datosCliente['nombre'] ?? '';
+            _apellidoController.text = datosCliente['apellido'] ?? '';
+            _direccionController.text = datosCliente['direccion'] ?? '';
+            _telefonoController.text = datosCliente['telefono'] ?? '';
+            imageUrl = datosCliente['imagen'];
+          });
+        }else{
+          print('No se encontraron datos en el correo del cliente.');
+        }
+      } else{
+        print('El cliente con el correo ${widget.correo} no existe');
+      }
+    } catch(error) {
+      print('Error al cargar los datos del cliente: $error');
     }
   }
 
@@ -138,43 +164,80 @@ class _FormPerfilState extends State<FormPerfil> {
     );
   }
 
+  Future<void> actualizarCliente() async {
+    if(_formKey.currentState!.validate()) {
+      try {
+        String? newImageUrl;
+        if (imagen != null) {
+          String imagePath = 'perfil/${widget.correo}/${DateTime.now().toString()}.jpg';
+          TaskSnapshot uploadTask = await FirebaseStorage.instance.ref(imagePath).putFile(imagen!);
+          newImageUrl = await uploadTask.ref.getDownloadURL();
+        }
+
+        await FirebaseFirestore.instance.collection('usuarios').doc(_docId).update({
+          'nombre': _nombreController.text.trim(),
+          'apellido': _apellidoController.text.trim(),
+          'telefono': _telefonoController.text.trim(),
+          'direccion': _direccionController.text.trim(),
+          if (newImageUrl != null) 'imagen': newImageUrl,
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Cliente actualizado'),
+              backgroundColor: AppMaterial().getColorAtIndex(2)),
+        );
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => HomeUsuario(correo: widget.correo)),
+        );
+      } catch (error) {
+        print('Error al actualizar el cliente: $error');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al actualizar el cliente')));
+      }
+    }
+  }
+
+  @override
+  void dispose(){
+    _nombreController.dispose();
+    _apellidoController.dispose();
+    _telefonoController.dispose();
+    _direccionController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Registro de datos",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      appBar: AppBar(title: Text('Editar Perfil'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Form(
-            key: form,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 Center(
                   child: imagen != null
                       ? Image.file(imagen!, height: 300)
+                      : imageUrl != null
+                      ? Image.network(imageUrl!, height: 300)
                       : Image.asset('img/tucanemp.png', height: 100),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 60),
                   child: ElevatedButton(
                     onPressed: () {
                       opciones(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                       backgroundColor: Colors.green,
                     ),
                     child: Row(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.only(right: 25),
                           child: FaIcon(
                             FontAwesomeIcons.cameraAlt,
                             color: Colors.white,
@@ -182,10 +245,9 @@ class _FormPerfilState extends State<FormPerfil> {
                           ),
                         ),
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                          child: Center(
                             child: Text(
-                              "Seleccionar Imagen de Perfil",
+                              "Editar imagen de perfil",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -212,10 +274,10 @@ class _FormPerfilState extends State<FormPerfil> {
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, top: 40, bottom: 30),
                   child: TextFormField(
+                    controller: _nombreController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person),
                       labelText: "Nombre",
-                      hintText: "Ingrese su nombre",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
@@ -224,13 +286,10 @@ class _FormPerfilState extends State<FormPerfil> {
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Ingrese su(s) nombre(s)";
+                      if (value==null||value.isEmpty) {
+                        return 'Por favor, introduce un nombre';
                       }
                       return null;
-                    },
-                    onSaved: (value) {
-                      _nombre = value!;
                     },
                   ),
                 ),
@@ -238,10 +297,10 @@ class _FormPerfilState extends State<FormPerfil> {
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, top: 5, bottom: 40),
                   child: TextFormField(
+                    controller: _apellidoController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person),
                       labelText: "Apellido",
-                      hintText: "Ingrese su(s) apellido(s)",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
@@ -250,13 +309,10 @@ class _FormPerfilState extends State<FormPerfil> {
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Ingrese su apellido";
+                      if (value==null||value.isEmpty) {
+                        return 'Por favor, introduce un apellido';
                       }
                       return null;
-                    },
-                    onSaved: (value) {
-                      _apellido = value!;
                     },
                   ),
                 ),
@@ -264,10 +320,10 @@ class _FormPerfilState extends State<FormPerfil> {
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, bottom: 40),
                   child: TextFormField(
+                    controller: _direccionController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.home_sharp),
                       labelText: "Dirección",
-                      hintText: "Ingrese su dirección",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
@@ -276,13 +332,10 @@ class _FormPerfilState extends State<FormPerfil> {
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Ingrese su dirección";
+                      if (value==null||value.isEmpty) {
+                        return 'Por favor, introduce una dirección';
                       }
                       return null;
-                    },
-                    onSaved: (value) {
-                      _direccion = value!;
                     },
                   ),
                 ),
@@ -290,11 +343,11 @@ class _FormPerfilState extends State<FormPerfil> {
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, bottom: 40),
                   child: TextFormField(
+                    controller: _telefonoController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.phone_android),
                       labelText: "Teléfono",
-                      hintText: "Ingrese su teléfono",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
@@ -303,72 +356,34 @@ class _FormPerfilState extends State<FormPerfil> {
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Ingrese su teléfono";
+                      if (value==null||value.isEmpty) {
+                        return 'Por favor, introduce un telefono';
                       }
                       return null;
-                    },
-                    onSaved: (value) {
-                      _telefono = int.parse(value!);
                     },
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    if (form.currentState!.validate()) {
-                      form.currentState!.save();
-                      await insertarDatos.insertarDatos(_nombre, _direccion, _telefono, _apellido, _correo, imagen);
-                      Navigator.of(context).pop();
-                    }
-                  },
+                  onPressed: actualizarCliente,
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
                       backgroundColor: AppMaterial().getColorAtIndex(1)
                   ),
-                  child: Text("Registrar",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white),),
+                  child: Text("Actualizar Perfil",
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white
+                    ),
+                  ),
                 ),
+                SizedBox(
+                  height: 80,
+                )
               ],
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-class InsertarDatosPerfil {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-
-  Future<void> insertarDatos(
-      String nombre,
-      String direccion,
-      int telefono,
-      String apellido,
-      String correo,
-      io.File? imagen,
-      ) async {
-    try {
-      String? imageUrl;
-      if (imagen != null) {
-        String imagePath = 'perfil/$correo/${DateTime.now().toString()}.jpg';
-        TaskSnapshot uploadTask = await _storage.ref(imagePath).putFile(imagen);
-        imageUrl = await uploadTask.ref.getDownloadURL();
-      }
-
-      await _firestore.collection('usuarios').doc(correo).set({
-        'nombre': nombre,
-        'direccion': direccion,
-        'telefono': telefono,
-        'apellido': apellido,
-        'correo': correo,
-        'imagen': imageUrl,
-      });
-    } catch (e) {
-      print('Error al insertar los datos: $e');
-    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:emprende_mas/authlogin/crearRegistroVenlogin.dart';
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/huella/autenticacion.dart';
+import 'package:emprende_mas/vistas/emprendedores/formperfil.dart';
 import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/register.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:emprende_mas/vistas/emprendedores/PasswordReset.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io' as io;
 
 class LoginV extends StatefulWidget {
   const LoginV({super.key});
@@ -32,6 +35,7 @@ class _LoginVState extends State<LoginV> {
         fontSize: 18
     );
   }
+
   void mensaje2(){
     Fluttertoast.showToast(
         msg: "Datos Incorrectos",
@@ -178,22 +182,63 @@ class _LoginVState extends State<LoginV> {
                     onPressed: () async {
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
-                        var dato = await mial.loginVendedor(_emailController, _passwordController);
+                        String dato = await mial.loginVendedor(_emailController, _passwordController);
                         print("HOLA $dato");
                         if(dato == "1"){
                           print("Datos no encontrados");
+                          mensaje2();
                         }else if(dato=="2"){
                           print("Se enviaron datos vacios");
+                          mensaje2();
                         }else if(dato!=""){
                           bool auth = await Autenticacion.authentication();
                           print("Puede autenticarse: $auth");
-                          if(auth){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVendedor())
-                            );
+                          if (auth) {
+                            QuerySnapshot userDocs = await FirebaseFirestore.instance.collection('vendedores').where('correo', isEqualTo: _emailController).get();
+                            if (userDocs.docs.isNotEmpty) {
+                              DocumentSnapshot userDoc = userDocs.docs.first;
+                              Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+                              if (userData != null) {
+                                if (userData.containsKey('nombre') && userData.containsKey('apellido')) {
+                                  String nombre = userData['nombre'];
+                                  String apellido = userData['apellido'];
+                                  String imagenUrl = userData['logo_emprendimiento'] ?? '';
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeVendedor(correo: _emailController),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FormPerfilV(dato: dato)
+                                    ),
+                                  );
+                                }
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FormPerfilV(dato: dato),
+                                  ),
+                                );
+                              }
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FormPerfilV(dato: dato),
+                                ),
+                              );
+                            }
                           }
                         }else{
                           mensaje2();
                         }
+                      } else {
+                        mensaje2();
                       }
                     },
                     style: FilledButton.styleFrom(

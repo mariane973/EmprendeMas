@@ -7,24 +7,27 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:emprende_mas/material.dart';
 
-class FormPerfil extends StatefulWidget {
+class FormPerfilV extends StatefulWidget {
   final String dato;
 
-  const FormPerfil({Key? key, required this.dato}) : super(key: key);
+  const FormPerfilV({Key? key, required this.dato}) : super(key: key);
 
   @override
-  State<FormPerfil> createState() => _FormPerfilState();
+  State<FormPerfilV> createState() => _FormPerfilVState();
 }
 
-class _FormPerfilState extends State<FormPerfil> {
+class _FormPerfilVState extends State<FormPerfilV> {
   final InsertarDatosPerfil insertarDatos = InsertarDatosPerfil();
   io.File? imagen;
   final picker = ImagePicker();
   final form = GlobalKey<FormState>();
   late String _nombre;
-  late String _direccion;
-  late int _telefono;
   late String _apellido;
+  late String _direccion;
+  late String _ciudad;
+  late String _descripcion;
+  late String _emprendimiento;
+  late int _telefono;
   late String _correo = '';
 
   @override
@@ -174,7 +177,7 @@ class _FormPerfilState extends State<FormPerfil> {
                     child: Row(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.only(right: 30),
                           child: FaIcon(
                             FontAwesomeIcons.cameraAlt,
                             color: Colors.white,
@@ -183,9 +186,9 @@ class _FormPerfilState extends State<FormPerfil> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 30),
                             child: Text(
-                              "Seleccionar Imagen de Perfil",
+                              "Seleccionar Logo Emprendimiento",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -200,7 +203,7 @@ class _FormPerfilState extends State<FormPerfil> {
                 Padding(
                   padding: const EdgeInsets.only(top: 40),
                   child: Text(
-                    'Información personal',
+                    'Información',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -264,6 +267,84 @@ class _FormPerfilState extends State<FormPerfil> {
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, bottom: 40),
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.phone_android),
+                      labelText: "Teléfono",
+                      hintText: "Ingrese su teléfono",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Ingrese su teléfono";
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (value) {
+                      _telefono = int.parse(value!);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 40),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.business),
+                      labelText: "Nombre Emprendimiento",
+                      hintText: "Ingrese el nombre del emprendimiento",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(25)
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Ingrese el nombre del emprendimiento";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _emprendimiento = value!;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 40),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.description_rounded),
+                      labelText: "Descripción Emprendimiento",
+                      hintText: "Ingrese la descripción del emprendimiento",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(25)
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Ingrese la descripcion del emprendimiento";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _descripcion = value!;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, bottom: 40),
+                  child: TextFormField(
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.home_sharp),
                       labelText: "Dirección",
@@ -287,29 +368,27 @@ class _FormPerfilState extends State<FormPerfil> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, bottom: 40),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 40),
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone_android),
-                      labelText: "Teléfono",
-                      hintText: "Ingrese su teléfono",
+                      prefixIcon: Icon(Icons.location_city_rounded),
+                      labelText: "Ciudad",
+                      hintText: "Ingrese ciudad de residencia",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(25)
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Ingrese su teléfono";
+                        return "Ingrese la ciudad";
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      _telefono = int.parse(value!);
+                      _ciudad = value!;
                     },
                   ),
                 ),
@@ -317,7 +396,7 @@ class _FormPerfilState extends State<FormPerfil> {
                   onPressed: () async {
                     if (form.currentState!.validate()) {
                       form.currentState!.save();
-                      await insertarDatos.insertarDatos(_nombre, _direccion, _telefono, _apellido, _correo, imagen);
+                      await insertarDatos.insertarDatos(_nombre, _direccion, _ciudad, _emprendimiento, _descripcion, _telefono, _apellido, _correo, imagen);
                       Navigator.of(context).pop();
                     }
                   },
@@ -326,10 +405,13 @@ class _FormPerfilState extends State<FormPerfil> {
                       backgroundColor: AppMaterial().getColorAtIndex(1)
                   ),
                   child: Text("Registrar",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white),),
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white),),
                 ),
+                SizedBox(
+                  height: 50,
+                )
               ],
             ),
           ),
@@ -346,6 +428,9 @@ class InsertarDatosPerfil {
   Future<void> insertarDatos(
       String nombre,
       String direccion,
+      String ciudad,
+      String emprendimiento,
+      String descripcion,
       int telefono,
       String apellido,
       String correo,
@@ -354,18 +439,21 @@ class InsertarDatosPerfil {
     try {
       String? imageUrl;
       if (imagen != null) {
-        String imagePath = 'perfil/$correo/${DateTime.now().toString()}.jpg';
+        String imagePath = 'imgvendedores/$correo/${DateTime.now().toString()}.jpg';
         TaskSnapshot uploadTask = await _storage.ref(imagePath).putFile(imagen);
         imageUrl = await uploadTask.ref.getDownloadURL();
       }
 
-      await _firestore.collection('usuarios').doc(correo).set({
+      await _firestore.collection('vendedores').doc(correo).set({
         'nombre': nombre,
         'direccion': direccion,
         'telefono': telefono,
         'apellido': apellido,
         'correo': correo,
-        'imagen': imageUrl,
+        'ciudad': ciudad,
+        'nombre_emprendimiento': emprendimiento,
+        'descripcion_emprendimiento': emprendimiento,
+        'logo_emprendimiento': imageUrl,
       });
     } catch (e) {
       print('Error al insertar los datos: $e');

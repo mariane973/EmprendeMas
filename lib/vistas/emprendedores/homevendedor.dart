@@ -3,19 +3,41 @@ import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:emprende_mas/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io' as io;
 
 class HomeVendedor extends StatelessWidget {
+  final String correo;
+
+  const HomeVendedor({required this.correo});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ProductosVendedor(),
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance.collection('vendedores').doc(correo).get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+        final emprendimiento = data['nombre_emprendimiento'];
+        final imagenUrl = data['logo_emprendimiento'];
+        return ProductosVendedor(emprendimiento: emprendimiento, imagenUrl: imagenUrl, correo: correo);
+      },
     );
   }
 }
 
 class ProductosVendedor extends StatefulWidget {
-  const ProductosVendedor();
+  final String emprendimiento;
+  final String imagenUrl;
+  final String correo;
+
+  const ProductosVendedor({required this.emprendimiento, required this.imagenUrl, required this.correo});
+
   @override
   State<ProductosVendedor> createState() => _ProductosVendedorState();
 }
@@ -90,7 +112,7 @@ class _ProductosVendedorState extends State<ProductosVendedor> {
             ),
           ],
         ),
-        drawer: SlidebarVendedor(),
+        drawer: SlidebarVendedor(correo: widget.correo),
 
         //Body//
         body: SingleChildScrollView(

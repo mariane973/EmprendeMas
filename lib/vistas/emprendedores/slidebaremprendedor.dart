@@ -1,21 +1,25 @@
-import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/material.dart';
+import 'package:emprende_mas/vistas/clientes/actualizarperfil.dart';
+import 'package:emprende_mas/vistas/emprendedores/actualizarperfil.dart';
 import 'package:emprende_mas/vistas/emprendedores/emprendimientosVendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
-import 'package:emprende_mas/vistas/emprendedores/productosVendedor.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io' as io;
 
 class SlidebarVendedor extends StatefulWidget {
-  const SlidebarVendedor();
+  final String correo;
 
-  static Route<dynamic> route() {
+  const SlidebarVendedor({required this.correo});
+
+  static Route<dynamic> route(String correo) {
     return MaterialPageRoute(
       builder: (BuildContext context) {
         return Scaffold(
-          body: SlidebarVendedor(),
+          body: SlidebarVendedor(correo: correo),
         );
       },
       fullscreenDialog: true,
@@ -27,17 +31,21 @@ class SlidebarVendedor extends StatefulWidget {
 }
 
 class _SlidebarVendedorState extends State<SlidebarVendedor> {
-  late Future<List<QuerySnapshot>> _futureData;
+  late Stream<DocumentSnapshot> _userDataStream;
+  late Stream<List<QuerySnapshot>> _dataStream;
 
   @override
   void initState() {
     super.initState();
-    _futureData = getData(['vendedores', 'productos']);
+    _userDataStream = FirebaseFirestore.instance.collection('vendedores').doc(widget.correo).snapshots();
+    _dataStream = Stream.periodic(Duration(seconds: 1)).asyncMap((_) =>
+        Future.wait([FirebaseFirestore.instance.collection('vendedores').get(), FirebaseFirestore.instance.collection('productos').get()])
+    );
   }
 
   Future<List<QuerySnapshot>> getData(List<String> collections) async {
-    return Future.wait(collections.map((collection) => FirebaseFirestore.instance.collection(collection).get(),
-    ),
+    return Future.wait(
+      collections.map((collection) => FirebaseFirestore.instance.collection(collection).get()),
     );
   }
 
@@ -45,201 +53,237 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.white,
-      child: FutureBuilder(
-        future: _futureData,
-        builder: (context, AsyncSnapshot<List<QuerySnapshot>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      child: StreamBuilder(
+        stream: _userDataStream,
+        builder: (context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else{
-            final vendedoresData = snapshot.data![0].docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-            final productosData = snapshot.data![1].docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-            return ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Container(
-                          child: FaIcon(FontAwesomeIcons.sellsy,
-                            color: Colors.white,
-                            size: 60.0,
-                          ),
+          } else if (userSnapshot.hasError) {
+            return Center(child: Text('Error: ${userSnapshot.error}'));
+          } else {
+            Map<String, dynamic> userData = userSnapshot.data!.data() as Map<String, dynamic>;
+
+            return StreamBuilder(
+              stream: _dataStream,
+              builder: (context, AsyncSnapshot<List<QuerySnapshot>> dataSnapshot) {
+                if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (dataSnapshot.hasError) {
+                  return Center(child: Text('Error: ${dataSnapshot.error}'));
+                } else {
+                  final vendedoresData = dataSnapshot.data![0].docs.map((doc) =>
+                  doc.data() as Map<String, dynamic>).toList();
+                  final productosData = dataSnapshot.data![1].docs.map((doc) =>
+                  doc.data() as Map<String, dynamic>).toList();
+
+                  return ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      DrawerHeader(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 0),
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundImage: userData.containsKey('logo_emprendimiento') &&
+                                    userData['logo_emprendimiento'] != null
+                                    ? NetworkImage(userData['logo_emprendimiento'])
+                                    : AssetImage(
+                                    'img/tucanemp.png') as ImageProvider,
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 5),
+                                      child: Text(userData['nombre_emprendimiento'],
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppMaterial().getColorAtIndex(2),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20,bottom: 10),
-                        child: Text('EMPRENDEDOR',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
+                        padding: const EdgeInsets.only(left: 20, top: 20),
+                        child: ListTile(
+                          title: Text("Principal",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
+                          leading: FaIcon(FontAwesomeIcons.home,
+                            color: AppMaterial().getColorAtIndex(2),
+                            size: 30.0,
+                          ),
+                          onTap: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) =>
+                                  HomeVendedor(correo: widget.correo)),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 20),
+                        child: ListTile(
+                            title: Text("Editar Perfil",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            leading: Icon(
+                              Icons.manage_accounts,
+                              color: AppMaterial().getColorAtIndex(2),
+                              size: 40.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => EditarPerfilVendedor(correo: widget.correo)),
+                              );
+                            }
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 10),
+                        child: ListTile(
+                          title: Text("Emprendimientos",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                            ),
+                          ),
+                          leading: FaIcon(FontAwesomeIcons.users,
+                            color: AppMaterial().getColorAtIndex(2),
+                            size: 30.0,
+                          ),
+                          onTap: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) =>
+                                  EmprendimientosV(vendedoresData: vendedoresData),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 15),
+                        child: ListTile(
+                            title: Text("Administrar Productos",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.layerGroup,
+                              color: AppMaterial().getColorAtIndex(2),
+                              size: 30.0,
+                            ),
+                            onTap: () {
+                              /*
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) =>
+                                    ProductosC(
+                                        productosData: productosData,
+                                        correo: widget.correo),
+                                ),
+                              );*/
+                            }
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 15),
+                        child: ListTile(
+                          title: Text("Pedidos",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                            ),
+                          ),
+                          leading: FaIcon(FontAwesomeIcons.cartShopping,
+                            color: AppMaterial().getColorAtIndex(2),
+                            size: 30.0,
+                          ),
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => Login())
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 15),
+                        child: ListTile(
+                            title: Text("Clientes",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.moneyBillWave,
+                              color: AppMaterial().getColorAtIndex(2),
+                              size: 30.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => LoginV())
+                              );
+                            }
+                        ),
+                      ),
+                      SizedBox(
+                        height: 200,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 15),
+                        child: ListTile(
+                            title: Text("Cerrar sesión",
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.shareFromSquare,
+                              color: AppMaterial().getColorAtIndex(2),
+                              size: 30.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => HomeVendedor(correo: widget.correo))
+                              );
+                            }
                         ),
                       ),
                     ],
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppMaterial().getColorAtIndex(3),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only( top: 20,left: 20),
-                  child: ListTile(
-                      title: Text("Perfil",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      leading: Icon(
-                        Icons.manage_accounts,
-                        color: AppMaterial().getColorAtIndex(3),
-                        size: 40.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => LoginV())
-                        );
-                      }
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: ListTile(
-                    title: Text("Administrar Emprendimientos",
-                      style:TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400
-                      ),
-                    ),
-                    leading: FaIcon(FontAwesomeIcons.businessTime,
-                      color: AppMaterial().getColorAtIndex(3),
-                      size: 30.0,
-                    ),
-                    onTap: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EmprendimientosV(vendedoresData: vendedoresData),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: ListTile(
-                      title: Text("Administrar productos",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      leading: FaIcon(FontAwesomeIcons.shirt,
-                        color: AppMaterial().getColorAtIndex(3),
-                        size: 30.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ProductosV(productosData: productosData)
-                          ),
-                        );
-                      }
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, top: 15),
-                  child: ListTile(
-                    title: Text("Pedidos",
-                      style:TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400
-                      ),
-                    ),
-                    leading: FaIcon(FontAwesomeIcons.bagShopping,
-                      color: AppMaterial().getColorAtIndex(3),
-                      size: 35.0,
-                    ),
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login())
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: ListTile(
-                      title: Text("Clientes",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      leading: FaIcon(FontAwesomeIcons.handshake,
-                        color: AppMaterial().getColorAtIndex(3),
-                        size: 30.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login())
-                        );
-                      }
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, top: 15),
-                  child: ListTile(
-                      title: Text("En tu zona",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      leading: FaIcon(FontAwesomeIcons.locationDot,
-                        color: AppMaterial().getColorAtIndex(3),
-                        size: 34.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login())
-                        );
-                      }
-                  ),
-                ),
-                SizedBox(
-                  height: 160,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, top: 15),
-                  child: ListTile(
-                      title: Text("Cerrar sesión",
-                        style:TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      leading: FaIcon(FontAwesomeIcons.shareFromSquare,
-                        color: AppMaterial().getColorAtIndex(3),
-                        size: 30.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Home())
-                        );
-                      }
-                  ),
-                ),
-              ],
+                  );
+                }
+              },
             );
           }
         },

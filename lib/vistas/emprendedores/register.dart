@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterV extends StatefulWidget {
   const RegisterV({super.key});
@@ -203,6 +203,7 @@ class _RegisterVState extends State<RegisterV> {
                         }else if(dato==2){
                           print("Email ya esta registrado");
                         }else if(dato != null){
+                          guardarCorreoEnFirestore(_email);
                           Fluttertoast.showToast(
                               msg: "Usuario Registrado",
                               toastLength: Toast.LENGTH_LONG,
@@ -253,5 +254,18 @@ class _RegisterVState extends State<RegisterV> {
         ),
       ),
     );
+  }
+}
+
+void guardarCorreoEnFirestore(String correo) async {
+  try {
+    await FirebaseFirestore.instance.collection('vendedores').doc(correo).set({
+      'correo': correo,
+    });
+    await FirebaseFirestore.instance.collection('vendedores').doc(correo).collection('productos').doc().set({
+    });
+    print('Correo guardado exitosamente en Firestore');
+  } catch (error) {
+    print('Error al guardar el correo en Firestore: $error');
   }
 }

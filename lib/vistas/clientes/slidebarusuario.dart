@@ -1,6 +1,6 @@
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/clientes/formperfil.dart';
+import 'package:emprende_mas/vistas/clientes/actualizarperfil.dart';
 import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:emprende_mas/vistas/clientes/productosCliente.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
@@ -57,12 +57,12 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
         child: StreamBuilder(
         stream: _userDataStream,
         builder: (context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
-      if (userSnapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      } else if (userSnapshot.hasError) {
-        return Center(child: Text('Error: ${userSnapshot.error}'));
-      } else {
-        Map<String, dynamic> userData = userSnapshot.data!.data() as Map<String, dynamic>;
+        if (userSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (userSnapshot.hasError) {
+          return Center(child: Text('Error: ${userSnapshot.error}'));
+        } else {
+          Map<String, dynamic> userData = userSnapshot.data!.data() as Map<String, dynamic>;
 
         return StreamBuilder(
           stream: _dataStream,
@@ -155,11 +155,10 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, left: 20),
                     child: ListTile(
-                      title: Text("Perfil",
+                      title: Text("Editar Perfil",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
-
                         ),
                       ),
                       leading: Icon(
@@ -167,11 +166,11 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         color: AppMaterial().getColorAtIndex(2),
                         size: 40.0,
                       ),
-                      /*onTap: () {
+                      onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => FormField(builder: dato))
+                            MaterialPageRoute(builder: (context) => EditarPerfilCliente(correo: widget.correo)),
                         );
-                      }*/
+                      }
                     ),
                   ),
                   Padding(
@@ -216,7 +215,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                             MaterialPageRoute(builder: (context) =>
                                 ProductosC(
                                   productosData: productosData,
-                                  correo: widget.correo,),
+                                  correo: widget.correo),
                             ),
                           );
                         }
@@ -285,8 +284,6 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         }
                     ),
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.only(left: 25, top: 8),
                     child: ListTile(

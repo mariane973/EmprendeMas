@@ -204,7 +204,7 @@ class _FormProductoState extends State<FormProducto> {
                           precio: _precio,
                           stock: _stock
                       );
-                    }Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVendedor()));
+                    }/*Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVendedor()));*/
                   },
                       style: FilledButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 45),

@@ -1,5 +1,4 @@
 import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
-import 'package:emprende_mas/vistas/insertarvendedor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -137,7 +136,7 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
             ),
           ],
         ),
-        drawer: SlidebarVendedor(),
+        /*drawer: SlidebarVendedor(correo: correo),*/
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -153,11 +152,11 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 30),
                 child: GestureDetector(
-                  onTap: () {
+                  /*onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => FormVendedor()),
                     );
-                  },
+                  },*/
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 70),
                     child: Container(

@@ -37,7 +37,6 @@ class ProductosCliente extends StatefulWidget {
   final String apellido;
   final String correo;
 
-
   const ProductosCliente({required this.nombre, required this.imagenUrl, required this.apellido, required this.correo});
 
   @override
