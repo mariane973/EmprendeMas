@@ -9,9 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProductosV extends StatefulWidget {
-  final List<Map<String, dynamic>> productosData;
-
-  ProductosV({required this.productosData});
+  final String correo;
+  ProductosV({required this.correo});
 
   @override
   State<ProductosV> createState() => _ProductosVState();
@@ -25,6 +24,7 @@ class _ProductosVState extends State<ProductosV> {
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    getProdcutoStream();
   }
 
   @override
@@ -35,7 +35,6 @@ class _ProductosVState extends State<ProductosV> {
   }
 
   _onSearchChanged(){
-    print(_searchController.text);
     searchResultList();
   }
 
@@ -57,17 +56,17 @@ class _ProductosVState extends State<ProductosV> {
   }
 
   getProdcutoStream() async {
-    var data = await FirebaseFirestore.instance.collection('productos').orderBy('nombre').get();
-    setState(() {
-      _resultados = data.docs;
-    });
-    searchResultList();
-  }
+      var data = await FirebaseFirestore.instance
+          .collection('vendedores')
+          .doc(widget.correo)
+          .collection('productos')
+          .orderBy('nombre')
+          .get();
 
-  @override
-  void didChangeDependencies() {
-    getProdcutoStream();
-    super.didChangeDependencies();
+      setState(() {
+        _resultados = data.docs;
+        _resultadosList = data.docs;
+      });
   }
 
   @override
@@ -117,7 +116,6 @@ class _ProductosVState extends State<ProductosV> {
                       placeholder: 'Buscar',
                       placeholderStyle: TextStyle(
                         color: Colors.white,
-
                       ),
                       style: TextStyle(color: Colors.white),
                       suffixIcon: Icon(Icons.cancel),
@@ -137,7 +135,8 @@ class _ProductosVState extends State<ProductosV> {
               ],
             ),
           ],
-        ),/*drawer: SlidebarVendedor(),*/
+        ),
+        drawer: SlidebarVendedor(correo: widget.correo),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -148,7 +147,6 @@ class _ProductosVState extends State<ProductosV> {
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
-
                 ),
               ),
               Padding(
@@ -167,7 +165,6 @@ class _ProductosVState extends State<ProductosV> {
                         borderRadius: BorderRadius.circular(25),
                         color: AppMaterial().getColorAtIndex(4),
                       ),
-
                       child: Row(
                         children: <Widget>[
                           Padding(
@@ -206,7 +203,8 @@ class _ProductosVState extends State<ProductosV> {
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetalleProducto(producto: productoData)
+                        MaterialPageRoute(
+                            builder: (context) => DetalleProducto(producto: productoData)
                         ),
                       );
                     },

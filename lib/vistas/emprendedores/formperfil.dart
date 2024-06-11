@@ -1,3 +1,4 @@
+import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -397,7 +398,10 @@ class _FormPerfilVState extends State<FormPerfilV> {
                     if (form.currentState!.validate()) {
                       form.currentState!.save();
                       await insertarDatos.insertarDatos(_nombre, _direccion, _ciudad, _emprendimiento, _descripcion, _telefono, _apellido, _correo, imagen);
-                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeVendedor(correo: _correo)),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -407,7 +411,8 @@ class _FormPerfilVState extends State<FormPerfilV> {
                   child: Text("Registrar",
                     style: TextStyle(
                         fontSize: 22,
-                        color: Colors.white),),
+                        color: Colors.white),
+                  ),
                 ),
                 SizedBox(
                   height: 50,

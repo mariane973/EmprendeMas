@@ -1,3 +1,4 @@
+import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -318,7 +319,10 @@ class _FormPerfilState extends State<FormPerfil> {
                     if (form.currentState!.validate()) {
                       form.currentState!.save();
                       await insertarDatos.insertarDatos(_nombre, _direccion, _telefono, _apellido, _correo, imagen);
-                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeUsuario(correo: _correo)),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

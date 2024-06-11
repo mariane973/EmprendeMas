@@ -1,10 +1,11 @@
+import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/clientes/actualizarperfil.dart';
 import 'package:emprende_mas/vistas/emprendedores/actualizarperfil.dart';
 import 'package:emprende_mas/vistas/emprendedores/emprendimientosVendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
+import 'package:emprende_mas/vistas/emprendedores/productosVendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +40,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
     super.initState();
     _userDataStream = FirebaseFirestore.instance.collection('vendedores').doc(widget.correo).snapshots();
     _dataStream = Stream.periodic(Duration(seconds: 1)).asyncMap((_) =>
-        Future.wait([FirebaseFirestore.instance.collection('vendedores').get(), FirebaseFirestore.instance.collection('productos').get()])
+        Future.wait([FirebaseFirestore.instance.collection('vendedores').get()])
     );
   }
 
@@ -72,8 +73,6 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                   return Center(child: Text('Error: ${dataSnapshot.error}'));
                 } else {
                   final vendedoresData = dataSnapshot.data![0].docs.map((doc) =>
-                  doc.data() as Map<String, dynamic>).toList();
-                  final productosData = dataSnapshot.data![1].docs.map((doc) =>
                   doc.data() as Map<String, dynamic>).toList();
 
                   return ListView(
@@ -203,14 +202,11 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                               size: 30.0,
                             ),
                             onTap: () {
-                              /*
                               Navigator.push(context,
                                 MaterialPageRoute(builder: (context) =>
-                                    ProductosC(
-                                        productosData: productosData,
-                                        correo: widget.correo),
+                                    ProductosV(correo: widget.correo)
                                 ),
-                              );*/
+                              );
                             }
                         ),
                       ),
@@ -275,7 +271,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                             ),
                             onTap: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => HomeVendedor(correo: widget.correo))
+                                  MaterialPageRoute(builder: (context) => Home())
                               );
                             }
                         ),
