@@ -6,6 +6,7 @@ import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:emprende_mas/vistas/emprendedores/productosVendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/serviciosVendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -167,7 +168,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20, top: 10),
                         child: ListTile(
-                          title: Text("Emprendimientos",
+                          title: Text("Mi Emprendimiento",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
@@ -181,7 +182,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                           onTap: () {
                             Navigator.push(context,
                               MaterialPageRoute(builder: (context) =>
-                                  EmprendimientosV(vendedoresData: vendedoresData),
+                                  EmprendimientosV(correo: widget.correo)
                               ),
                             );
                           },
@@ -205,6 +206,29 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                               Navigator.push(context,
                                 MaterialPageRoute(builder: (context) =>
                                     ProductosV(correo: widget.correo)
+                                ),
+                              );
+                            }
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 15),
+                        child: ListTile(
+                            title: Text("Administrar Servicios",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.layerGroup,
+                              color: AppMaterial().getColorAtIndex(2),
+                              size: 30.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) =>
+                                    ServiciosV(correo: widget.correo)
                                 ),
                               );
                             }
@@ -253,7 +277,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                         ),
                       ),
                       SizedBox(
-                        height: 200,
+                        height: 140,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 25, top: 15),

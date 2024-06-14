@@ -1,6 +1,6 @@
-import 'package:emprende_mas/vistas/emprendedores/detalleProductoV.dart';
+import 'package:emprende_mas/vistas/emprendedores/detalleServicioV.dart';
+import 'package:emprende_mas/vistas/emprendedores/insertarServicio.dart';
 import 'package:emprende_mas/vistas/emprendedores/slidebarEmprendedor.dart';
-import 'package:emprende_mas/vistas/emprendedores/insertarProducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,16 +8,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ProductosV extends StatefulWidget {
+class ServiciosV extends StatefulWidget {
   final String correo;
-  
-  ProductosV({required this.correo});
+
+  ServiciosV({required this.correo});
 
   @override
-  State<ProductosV> createState() => _ProductosVState();
+  State<ServiciosV> createState() => _ServiciosVState();
 }
 
-class _ProductosVState extends State<ProductosV> {
+class _ServiciosVState extends State<ServiciosV> {
   List _resultados = [];
   List _resultadosList = [];
   final TextEditingController _searchController = TextEditingController();
@@ -42,10 +42,10 @@ class _ProductosVState extends State<ProductosV> {
   searchResultList(){
     var showResults = [];
     if(_searchController.text != ""){
-      for(var productoShapshot in _resultados){
-        var nombre = productoShapshot['nombre'].toString().toLowerCase();
+      for(var servicioShapshot in _resultados){
+        var nombre = servicioShapshot['nombre'].toString().toLowerCase();
         if(nombre.contains(_searchController.text.toLowerCase())){
-          showResults.add(productoShapshot);
+          showResults.add(servicioShapshot);
         }
       }
     } else {
@@ -57,17 +57,17 @@ class _ProductosVState extends State<ProductosV> {
   }
 
   getProdcutoStream() async {
-      var data = await FirebaseFirestore.instance
-          .collection('vendedores')
-          .doc(widget.correo)
-          .collection('productos')
-          .orderBy('nombre')
-          .get();
+    var data = await FirebaseFirestore.instance
+        .collection('vendedores')
+        .doc(widget.correo)
+        .collection('servicios')
+        .orderBy('nombre')
+        .get();
 
-      setState(() {
-        _resultados = data.docs;
-        _resultadosList = data.docs;
-      });
+    setState(() {
+      _resultados = data.docs;
+      _resultadosList = data.docs;
+    });
   }
 
   @override
@@ -143,7 +143,7 @@ class _ProductosVState extends State<ProductosV> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text("ADMINISTRAR PRODUCTOS",
+                child: Text("ADMINISTRAR SERVICIOS",
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ class _ProductosVState extends State<ProductosV> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FormProducto(correo: widget.correo))
+                        MaterialPageRoute(builder: (context) => FormServicio(correo: widget.correo))
                     );
                   },
                   child: Padding(
@@ -177,9 +177,9 @@ class _ProductosVState extends State<ProductosV> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 5),
+                            padding: const EdgeInsets.only(left: 18),
                             child: Text(
-                              "Agregar Producto",
+                              "Agregar Servicio",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -197,14 +197,14 @@ class _ProductosVState extends State<ProductosV> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: _resultadosList.length,
                 itemBuilder: (context, index) {
-                  final producto = _resultadosList[index];
-                  final productoData = producto.data() as Map<String, dynamic>;
-                  final uidProducto = producto.id;
+                  final servicio = _resultadosList[index]; 
+                  final servicioData = servicio.data() as Map<String, dynamic>;
+                  final uidServicio = servicio.id;
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
                         MaterialPageRoute(
-                            builder: (context) => DetalleProductoV(producto: productoData, uidProducto: uidProducto, correo: widget.correo)
+                            builder: (context) => DetalleServicioV(servicio: servicioData, uidServicio: uidServicio, correo: widget.correo)
                         ),
                       );
                     },
@@ -224,43 +224,41 @@ class _ProductosVState extends State<ProductosV> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
-                              child: Image.network(producto['imagen'],
+                              child: Image.network(servicio['imagen'],
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ),
                           SingleChildScrollView(
-                            child: Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 18),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.56,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(producto['nombre'],
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.56,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(servicio['nombre'],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                    Text(servicio['descripcion'],
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 18),
+                                      child: Text(' \$${servicio['precio']} COP',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppMaterial().getColorAtIndex(2)
                                         ),
                                       ),
-                                      Text(producto['descripcion'],
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 18),
-                                        child: Text(' \$${producto['precio']} COP',
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppMaterial().getColorAtIndex(2)
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

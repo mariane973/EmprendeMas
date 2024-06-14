@@ -58,7 +58,7 @@ class _ProductosClienteState extends State<ProductosCliente> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
+          colors: [Colors.white,   AppMaterial().getColorAtIndex(0)],
           begin: Alignment.topRight,
           end: Alignment.bottomRight,
         ),
@@ -120,16 +120,29 @@ class _ProductosClienteState extends State<ProductosCliente> {
           child: Column(
             children: [
               CarouselSlider(
-                items: imgList.map((e) => Center(
-                  child: Image.network(e),
-                )).toList(),
+                items: imgList.map((e) =>
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          e,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                      ),
+                    )).toList(),
                 options: CarouselOptions(
                     initialPage: 0,
                     autoPlay: true,
                     autoPlayInterval: const Duration(seconds: 4),
                     enlargeCenterPage: true,
                     enlargeFactor: 0.4,
-                    onPageChanged: (value, _){
+                    onPageChanged: (value, _) {
                       setState(() {
                         _currenPage = value;
                       });

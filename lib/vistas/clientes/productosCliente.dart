@@ -1,3 +1,5 @@
+import 'package:emprende_mas/vistas/clientes/detalleProductoV.dart';
+import 'package:emprende_mas/vistas/emprendedores/detalleProductoV.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,14 +80,17 @@ class _ProductosCState extends State<ProductosC> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        gradient: LinearGradient(
+          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
+          begin: Alignment.topRight,
+          end: Alignment.bottomRight,
+        ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme:
-          IconThemeData(color: AppMaterial().getColorAtIndex(0)),
+          backgroundColor: AppMaterial().getColorAtIndex(6),
+          iconTheme: IconThemeData(color: AppMaterial().getColorAtIndex(0)),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -165,10 +170,7 @@ class _ProductosCState extends State<ProductosC> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetalleProducto(
-                            producto: productoData,
-                          ),
-                        ),
+                          builder: (context) => DetalleProductoC(producto: productoData, correo: widget.correo)),
                       );
                     },
                     child: Padding(

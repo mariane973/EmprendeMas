@@ -1,4 +1,4 @@
-import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/serviciosVendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,73 +7,69 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:emprende_mas/material.dart';
 
-class EditarPerfilVendedor extends StatefulWidget {
+class EditarServicioVendedor extends StatefulWidget {
   final String correo;
+  final String uidServicio;
 
-  EditarPerfilVendedor({required this.correo});
+  EditarServicioVendedor({required this.uidServicio, required this.correo});
 
   @override
-  State<EditarPerfilVendedor> createState() => _EditarPerfilVendedorState();
+  State<EditarServicioVendedor> createState() => _EditarServicioVendedorState();
 }
 
-class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
+class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nombreController;
-  late TextEditingController _apellidoController;
   late TextEditingController _descripcionController;
-  late TextEditingController _emprendimientoController;
-  late TextEditingController _ciudadController;
-  late TextEditingController _direccionController;
-  late TextEditingController _telefonoController;
-  late String _docId;
+  late TextEditingController _categoriaController;
+  late TextEditingController _precioController;
   io.File? imagen;
   String? imageUrl;
   final picker = ImagePicker();
+
+  String? categoriaElegida;
+  List<String> listCategoria = [
+    "Accesorios", "Comida", "Ropa", "Manualidades", "Plantas", "Cuidado Personal", "Servicios", "Venta de Garaje"
+  ];
 
   @override
   void initState(){
     super.initState();
     _nombreController = TextEditingController();
-    _apellidoController = TextEditingController();
     _descripcionController = TextEditingController();
-    _emprendimientoController = TextEditingController();
-    _ciudadController = TextEditingController();
-    _direccionController = TextEditingController();
-    _telefonoController = TextEditingController();
-    _cargarDatosVendedor();
+    _categoriaController = TextEditingController();
+    _precioController = TextEditingController();
+    _cargarDatosProductoV();
   }
 
-  Future<void> _cargarDatosVendedor() async {
+  Future<void> _cargarDatosProductoV() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      DocumentSnapshot productoSnapshot = await FirebaseFirestore.instance
           .collection('vendedores')
-          .where('correo', isEqualTo: widget.correo)
-          .limit(1)
+          .doc(widget.correo)
+          .collection('servicios')
+          .doc(widget.uidServicio)
           .get();
-      if(querySnapshot.docs.isNotEmpty){
-        DocumentSnapshot vendedorSnapshot = querySnapshot.docs.first;
-        _docId = vendedorSnapshot.id;
-        Map<String, dynamic>? datosVendedor = vendedorSnapshot.data() as Map<String, dynamic>?;
+      if(productoSnapshot.exists){
+        Map<String, dynamic>? datosServicioV = productoSnapshot.data() as Map<String, dynamic>?;
 
-        if(datosVendedor != null){
+        if(datosServicioV != null){
           setState(() {
-            _nombreController.text = datosVendedor['nombre'] ?? '';
-            _apellidoController.text = datosVendedor['apellido'] ?? '';
-            _descripcionController.text = datosVendedor['descripcion_emprendimiento'] ?? '';
-            _emprendimientoController.text = datosVendedor['nombre_emprendimiento'] ?? '';
-            _ciudadController.text = datosVendedor['ciudad'] ?? '';
-            _direccionController.text = datosVendedor['direccion'] ?? '';
-            _telefonoController.text = (datosVendedor['telefono'] != null) ? datosVendedor['telefono'].toString() : '';
-            imageUrl = datosVendedor['logo_emprendimiento'];
+            _nombreController.text = datosServicioV['nombre'] ?? '';
+            _descripcionController.text = datosServicioV['descripcion'] ?? '';
+            _categoriaController.text = datosServicioV['categoria'] ?? '';
+            categoriaElegida = datosServicioV['categoria'] ?? '';
+            _precioController.text = (datosServicioV['precio'] != null) ? datosServicioV['precio'].toString() : '';
+            imageUrl = datosServicioV['imagen'];
           });
         }else{
-          print('No se encontraron datos en el correo del cliente.');
+          print('No se encontraron datos para el servicio con el UID: ${widget.uidServicio}');
         }
       } else{
-        print('El cliente con el correo ${widget.correo} no existe');
+        print('El servico con el UID ${widget.uidServicio} no existe');
       }
     } catch(error) {
-      print('Error al cargar los datos del cliente: $error');
+      print('Error al cargar los datos del servicio: $error');
     }
   }
 
@@ -176,32 +172,34 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
       try {
         String? newImageUrl;
         if (imagen != null) {
-          String imagePath = 'imgvendedores/${widget.correo}/${DateTime.now().toString()}.jpg';
+          String imagePath = 'imgservicios/${widget.uidServicio}/${DateTime.now().toString()}.jpg';
           TaskSnapshot uploadTask = await FirebaseStorage.instance.ref(imagePath).putFile(imagen!);
           newImageUrl = await uploadTask.ref.getDownloadURL();
         }
 
-        await FirebaseFirestore.instance.collection('vendedores').doc(_docId).update({
+        await FirebaseFirestore.instance
+            .collection('vendedores')
+            .doc(widget.correo)
+            .collection('servicios')
+            .doc(widget.uidServicio)
+            .update({
           'nombre': _nombreController.text.trim(),
-          'apellido': _apellidoController.text.trim(),
-          'descripcion_emprendimiento': _descripcionController.text.trim(),
-          'nombre_emprendimiento': _emprendimientoController.text.trim(),
-          'ciudad': _ciudadController.text.trim(),
-          'telefono': _telefonoController.text.trim(),
-          'direccion': _direccionController.text.trim(),
-          if (newImageUrl != null) 'logo_emprendimiento': newImageUrl,
+          'descripcion': _descripcionController.text.trim(),
+          'categoria': categoriaElegida,
+          'precio': _precioController.text.trim(),
+          if (newImageUrl != null) 'imagen': newImageUrl,
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Vendedor actualizado'),
+          SnackBar(content: Text('Servicio actualizado'),
               backgroundColor: AppMaterial().getColorAtIndex(2)),
         );
         Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomeVendedor(correo: widget.correo)),
+          MaterialPageRoute(builder: (context) => ServiciosV(correo: widget.correo)),
         );
       } catch (error) {
-        print('Error al actualizar el vendedor: $error');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al actualizar el vendedor')));
+        print('Error al actualizar el Servicio: $error');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al actualizar el Servicio')));
       }
     }
   }
@@ -209,19 +207,16 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
   @override
   void dispose(){
     _nombreController.dispose();
-    _apellidoController.dispose();
-    _telefonoController.dispose();
-    _direccionController.dispose();
     _descripcionController.dispose();
-    _emprendimientoController.dispose();
-    _ciudadController.dispose();
+    _categoriaController.dispose();
+    _precioController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Editar Perfil'),
+      appBar: AppBar(title: Text('Editar Servicio'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -260,7 +255,7 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                         Expanded(
                           child: Center(
                             child: Text(
-                              "Editar Logo Emprendimiento",
+                              "Editar Imagen Servicio",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -289,7 +284,7 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                   child: TextFormField(
                     controller: _nombreController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: Icon(Icons.inventory_2_outlined),
                       labelText: "Nombre",
                       filled: true,
                       fillColor: Colors.grey[200],
@@ -308,83 +303,12 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 5, bottom: 40),
-                  child: TextFormField(
-                    controller: _apellidoController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      labelText: "Apellido",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value==null||value.isEmpty) {
-                        return 'Por favor, introduce un apellido';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, bottom: 40),
-                  child: TextFormField(
-                    controller: _telefonoController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone_android),
-                      labelText: "Teléfono",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value==null||value.isEmpty) {
-                        return 'Por favor, introduce un telefono';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, bottom: 40),
-                  child: TextFormField(
-                    controller: _emprendimientoController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.store),
-                      labelText: "Nombre Emprendimiento",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value==null || value.isEmpty){
-                        return "Por favor, introduce el nombre del emprendimiento";
-                      }else{
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
                       left: 20, right: 20, bottom: 40),
                   child: TextFormField(
                     controller: _descripcionController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.description_rounded),
-                      labelText: "Descripción Emprendimiento",
+                      prefixIcon: Icon(Icons.description_outlined),
+                      labelText: "Descripción",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
@@ -394,7 +318,7 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                     ),
                     validator: (value) {
                       if (value==null || value.isEmpty){
-                        return "Por favor, introduce la descripción del emprendimiento";
+                        return "Por favor, introduce la descripción del producto";
                       }else{
                         return null;
                       }
@@ -402,13 +326,48 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, bottom: 40),
-                  child: TextFormField(
-                    controller: _direccionController,
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                  child: DropdownButtonFormField<String>(
+                    value: categoriaElegida,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.location_on),
-                      labelText: "Dirección",
+                      prefixIcon: Icon(Icons.category),
+                      labelText: "Categoría",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    dropdownColor: Colors.grey[200],
+                    items: listCategoria.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        categoriaElegida = newValue;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, selecciona una categoría';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 5, bottom: 40),
+                  child: TextFormField(
+                    controller: _precioController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.attach_money_outlined),
+                      labelText: "Precio",
                       filled: true,
                       fillColor: Colors.grey[200],
                       border: OutlineInputBorder(
@@ -418,33 +377,9 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                     ),
                     validator: (value) {
                       if (value==null||value.isEmpty) {
-                        return 'Por favor, introduce una dirección';
+                        return 'Por favor, introduce un precio';
                       }
                       return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, bottom: 40),
-                  child: TextFormField(
-                    controller: _ciudadController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.location_city),
-                      labelText: "Ciudad",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value==null || value.isEmpty){
-                        return "Por favor, introduce su ciudad";
-                      }else{
-                        return null;
-                      }
                     },
                   ),
                 ),
@@ -454,7 +389,7 @@ class _EditarPerfilVendedorState extends State<EditarPerfilVendedor> {
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
                       backgroundColor: AppMaterial().getColorAtIndex(1)
                   ),
-                  child: Text("Actualizar Perfil",
+                  child: Text("Actualizar Servicio",
                     style: TextStyle(
                         fontSize: 22,
                         color: Colors.white

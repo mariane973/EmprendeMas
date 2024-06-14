@@ -254,28 +254,6 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                       }
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, top: 8),
-                  child: ListTile(
-                      title: Text("En tu zona",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      leading: FaIcon(FontAwesomeIcons.locationDot,
-                        color: AppMaterial().getColorAtIndex(1),
-                        size: 34.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login())
-                        );
-                      }
-                  ),
-                ),
-
               ],
             );
           }

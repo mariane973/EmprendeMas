@@ -1,5 +1,5 @@
 import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/slidebarEmprendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:emprende_mas/home.dart';

@@ -1,10 +1,11 @@
 import 'package:emprende_mas/home.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:emprende_mas/vistas/clientes/actualizarperfil.dart';
+import 'package:emprende_mas/vistas/clientes/carrito.dart';
+import 'package:emprende_mas/vistas/clientes/emprendimientosCliente.dart';
 import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
 import 'package:emprende_mas/vistas/clientes/productosCliente.dart';
 import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
-import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
 import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,6 +35,7 @@ class SlidebarUsuario extends StatefulWidget {
 class _SlidebarUsuarioState extends State<SlidebarUsuario> {
   late Stream<DocumentSnapshot> _userDataStream;
   late Stream<List<QuerySnapshot>> _dataStream;
+  int _cartItemCount = 0;
 
   @override
   void initState() {
@@ -42,12 +44,21 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
     _dataStream = Stream.periodic(Duration(seconds: 1)).asyncMap((_) =>
         Future.wait([FirebaseFirestore.instance.collection('vendedores').get(), FirebaseFirestore.instance.collection('productos').get()])
     );
+    _initializeCartItemCount();
   }
 
   Future<List<QuerySnapshot>> getData(List<String> collections) async {
     return Future.wait(
       collections.map((collection) => FirebaseFirestore.instance.collection(collection).get()),
     );
+  }
+  Future<void> _initializeCartItemCount() async {
+    var cartSnapshot = await FirebaseFirestore.instance.collection('carrito').doc(widget.correo).get();
+    if (cartSnapshot.exists) {
+      setState(() {
+        _cartItemCount = (cartSnapshot.data()!['productos'] as List).length;
+      });
+    }
   }
 
   @override
@@ -190,7 +201,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                       onTap: () {
                         Navigator.push(context,
                           MaterialPageRoute(builder: (context) =>
-                              DatosVendedores(vendedoresData: vendedoresData),
+                              EmprendimientosC(vendedoresData: vendedoresData, correo: widget.correo)
                           ),
                         );
                       },
@@ -231,57 +242,41 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                             fontWeight: FontWeight.w400
                         ),
                       ),
-                      leading: FaIcon(FontAwesomeIcons.cartShopping,
-                        color: AppMaterial().getColorAtIndex(2),
-                        size: 30.0,
+                      leading: Stack(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.cartShopping,
+                            color: AppMaterial().getColorAtIndex(2),
+                            size: 30.0,
+                          ),
+                          if (_cartItemCount > 0)
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                padding: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 18,
+                                  minHeight: 18,
+                                ),
+                                child: Text(
+                                  '$_cartItemCount',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login())
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductosCarrito(correo: widget.correo)));
                       },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 15),
-                    child: ListTile(
-                        title: Text("Ofertas",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400
-                          ),
-                        ),
-                        leading: FaIcon(FontAwesomeIcons.moneyBillWave,
-                          color: AppMaterial().getColorAtIndex(2),
-                          size: 30.0,
-                        ),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Login())
-                          );
-                        }
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25, top: 10),
-                    child: ListTile(
-                        title: Text("En tu zona",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400
-                          ),
-                        ),
-                        leading: FaIcon(FontAwesomeIcons.locationDot,
-                          color: AppMaterial().getColorAtIndex(2),
-                          size: 34.0,
-                        ),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Login())
-                          );
-                        }
                     ),
                   ),
                   Padding(
@@ -306,7 +301,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                     ),
                   ),
                   SizedBox(
-                    height: 70,
+                    height: 190,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, top: 15),

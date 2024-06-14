@@ -1,12 +1,13 @@
 import 'package:emprende_mas/vistas/dataProducto.dart';
-import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 
 class FormProducto extends StatefulWidget {
-  const FormProducto({super.key});
+  final String correo;
+
+  const FormProducto({required this.correo});
 
   @override
   State<FormProducto> createState() => _FormProductoState();
@@ -15,7 +16,12 @@ class FormProducto extends StatefulWidget {
 class _FormProductoState extends State<FormProducto> {
   final InsertarDatosProducto insertarDatos = InsertarDatosProducto();
 
-  final String defaultimg = 'img/tucan2.png';
+  String? categoriaElegida;
+
+  List<String> listCategoria = [
+    "Accesorios", "Comida", "Ropa", "Manualidades", "Plantas", "Cuidado Personal", "Servicios", "Venta de Garaje"
+  ];
+
   io.File? imagen;
   final picker = ImagePicker();
   final form = GlobalKey<FormState>();
@@ -25,13 +31,98 @@ class _FormProductoState extends State<FormProducto> {
   late int _precio;
   late int _stock;
 
-  Future<void> obtenerimagen() async {
-    final imgurl = await picker.pickImage(source: ImageSource.gallery);
-    if (imgurl != null) {
-      setState(() {
-        imagen = io.File(imgurl!.path);
-      });
-    }
+  Future<void> selImagen(int op) async {
+    final pickedFile = await picker.getImage(
+      source: op == 1 ? ImageSource.camera : ImageSource.gallery,
+    );
+
+    setState(() {
+      if (pickedFile != null) {
+        imagen = io.File(pickedFile.path);
+      } else {
+        print('No seleccionaste ninguna foto');
+      }
+    });
+  }
+
+  void opciones(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    selImagen(1);
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text('Tomar una foto')),
+                        Icon(Icons.camera_alt, color: Colors.green),
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    selImagen(2);
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text('Seleccionar Foto')),
+                        Icon(Icons.image, color: Colors.green),
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(width: 1, color: Colors.grey),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Cancelar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -48,11 +139,14 @@ class _FormProductoState extends State<FormProducto> {
             child: Column(
                 children: [
                   Center(
-                    child: imagen != null ?
-                    Image.file(imagen!, height: 300) :
-                    Image.asset(('img/tucanemp.png'), height: 100),
+                    child: imagen != null
+                        ? Image.file(imagen!, height: 300)
+                        : Image.asset('img/tucanemp.png', height: 100),
                   ),
-                  ElevatedButton(onPressed: obtenerimagen,
+                  ElevatedButton(
+                    onPressed: () {
+                      opciones(context);
+                    },
                       style: FilledButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
                           backgroundColor: AppMaterial().getColorAtIndex(1)
@@ -64,15 +158,15 @@ class _FormProductoState extends State<FormProducto> {
                         ),
                       ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 40),
                     child: TextFormField(
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.inventory_2_outlined),
                         labelText: "Nombre",
                         hintText: "Ingrese el nombre",
                         filled: true,
-                        fillColor: AppMaterial().getColorAtIndex(0),
+                        fillColor: Colors.grey[200],
                         border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(25)
@@ -91,13 +185,14 @@ class _FormProductoState extends State<FormProducto> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
                     child: TextFormField(
                         decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.description_outlined),
                           labelText: "Descripción",
                           hintText: "Ingrese la descripción",
                           filled: true,
-                          fillColor: AppMaterial().getColorAtIndex(0),
+                          fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(25)
@@ -116,29 +211,45 @@ class _FormProductoState extends State<FormProducto> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
-                    child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Categoría",
-                          hintText: "Ingrese la categoría",
-                          filled: true,
-                          fillColor: AppMaterial().getColorAtIndex(0),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(25)
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    child: Container(
+                      padding: EdgeInsets.only(right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        hint: Text("Selecciona una Categoría: "),
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 30,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.label_outlined),
                           ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Ingrese la categoría";
-                          }
-                          else {
+                          dropdownColor: Colors.grey[200],
+                          value: categoriaElegida,
+                          onChanged: (newValue) {
+                            setState(() {
+                              categoriaElegida = newValue;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Seleccione una categoría';
+                            }
                             return null;
-                          }
-                        },
-                        onSaved: (value){
-                          _categoria=value!;
-                        }
+                          },
+                          onSaved: (value) {
+                            _categoria = value!;
+                          },
+                          items: listCategoria.map((valueItem) {
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                      ),
                     ),
                   ),
                   Padding(
@@ -146,10 +257,11 @@ class _FormProductoState extends State<FormProducto> {
                     child: TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.attach_money_outlined),
                           labelText: "Precio",
                           hintText: "Ingrese el precio",
                           filled: true,
-                          fillColor: AppMaterial().getColorAtIndex(0),
+                          fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(25)
@@ -172,10 +284,11 @@ class _FormProductoState extends State<FormProducto> {
                     child: TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.shopping_bag_outlined),
                           labelText: "Stock",
                           hintText: "Ingrese el stock",
                           filled: true,
-                          fillColor: AppMaterial().getColorAtIndex(0),
+                          fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(25)
@@ -202,9 +315,11 @@ class _FormProductoState extends State<FormProducto> {
                           descripcion: _descripcion,
                           nombre: _nombre,
                           precio: _precio,
-                          stock: _stock
+                          stock: _stock,
+                          correo: widget.correo,
+                          context: context
                       );
-                    }/*Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVendedor()));*/
+                    }
                   },
                       style: FilledButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 45),

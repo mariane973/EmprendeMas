@@ -1,31 +1,28 @@
-import 'package:emprende_mas/vistas/emprendedores/detalleProductoV.dart';
-import 'package:emprende_mas/vistas/emprendedores/slidebarEmprendedor.dart';
-import 'package:emprende_mas/vistas/emprendedores/insertarProducto.dart';
+import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
+import 'package:emprende_mas/vistas/subDetalleProducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ProductosV extends StatefulWidget {
+class SubProductosC extends StatefulWidget {
   final String correo;
-  
-  ProductosV({required this.correo});
+  final List<Map<String, dynamic>> data;
+
+  SubProductosC({required this.data, required this.correo});
 
   @override
-  State<ProductosV> createState() => _ProductosVState();
+  State<SubProductosC> createState() => _SubProductosCState();
 }
 
-class _ProductosVState extends State<ProductosV> {
-  List _resultados = [];
-  List _resultadosList = [];
+class _SubProductosCState extends State<SubProductosC> {
+  List<Map<String, dynamic>> _resultadosList = [];
   final TextEditingController _searchController = TextEditingController();
 
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    getProdcutoStream();
+    _resultadosList = widget.data;
   }
 
   @override
@@ -36,38 +33,25 @@ class _ProductosVState extends State<ProductosV> {
   }
 
   _onSearchChanged(){
+    print(_searchController.text);
     searchResultList();
   }
 
-  searchResultList(){
-    var showResults = [];
-    if(_searchController.text != ""){
-      for(var productoShapshot in _resultados){
-        var nombre = productoShapshot['nombre'].toString().toLowerCase();
-        if(nombre.contains(_searchController.text.toLowerCase())){
-          showResults.add(productoShapshot);
+  void searchResultList() {
+    List<Map<String, dynamic>> showResults = [];
+    if (_searchController.text != "") {
+      for (var productoSnapshot in widget.data) {
+        var nombre = productoSnapshot['nombre'].toString().toLowerCase();
+        if (nombre.contains(_searchController.text.toLowerCase())) {
+          showResults.add(productoSnapshot);
         }
       }
     } else {
-      showResults = List.from(_resultados);
+      showResults = List.from(widget.data);
     }
     setState(() {
       _resultadosList = showResults;
     });
-  }
-
-  getProdcutoStream() async {
-      var data = await FirebaseFirestore.instance
-          .collection('vendedores')
-          .doc(widget.correo)
-          .collection('productos')
-          .orderBy('nombre')
-          .get();
-
-      setState(() {
-        _resultados = data.docs;
-        _resultadosList = data.docs;
-      });
   }
 
   @override
@@ -105,7 +89,7 @@ class _ProductosVState extends State<ProductosV> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Container(
                     padding: EdgeInsets.only(left:10),
-                    height: 45,
+                    height: 50,
                     width: 260,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
@@ -136,59 +120,16 @@ class _ProductosVState extends State<ProductosV> {
               ],
             ),
           ],
-        ),
-        drawer: SlidebarVendedor(correo: widget.correo),
+        ),drawer: SlidebarUsuario(correo: widget.correo),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text("ADMINISTRAR PRODUCTOS",
+                child: Text("PRODUCTOS",
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 30),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FormProducto(correo: widget.correo))
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 95),
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: AppMaterial().getColorAtIndex(4),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10, left: 20),
-                            child: FaIcon(
-                              FontAwesomeIcons.plusCircle,
-                              color: Colors.white,
-                              size: 20.0,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "Agregar Producto",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -198,13 +139,10 @@ class _ProductosVState extends State<ProductosV> {
                 itemCount: _resultadosList.length,
                 itemBuilder: (context, index) {
                   final producto = _resultadosList[index];
-                  final productoData = producto.data() as Map<String, dynamic>;
-                  final uidProducto = producto.id;
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) => DetalleProductoV(producto: productoData, uidProducto: uidProducto, correo: widget.correo)
+                        MaterialPageRoute(builder: (context) => SubDetalleProducto(producto: producto)
                         ),
                       );
                     },
@@ -224,7 +162,8 @@ class _ProductosVState extends State<ProductosV> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
-                              child: Image.network(producto['imagen'],
+                              child: Image.network(
+                                producto['imagen'],
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -278,3 +217,4 @@ class _ProductosVState extends State<ProductosV> {
     );
   }
 }
+

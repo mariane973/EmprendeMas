@@ -262,8 +262,6 @@ void guardarCorreoEnFirestore(String correo) async {
     await FirebaseFirestore.instance.collection('vendedores').doc(correo).set({
       'correo': correo,
     });
-    await FirebaseFirestore.instance.collection('vendedores').doc(correo).collection('productos').doc().set({
-    });
     print('Correo guardado exitosamente en Firestore');
   } catch (error) {
     print('Error al guardar el correo en Firestore: $error');

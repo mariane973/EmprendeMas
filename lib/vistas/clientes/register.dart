@@ -24,6 +24,7 @@ class _RegisterState extends State<Register> {
   late String _password;
   late String _confirmPassword;
 
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -258,14 +259,16 @@ class _RegisterState extends State<Register> {
     );
   }
 }
-
 void guardarCorreoEnFirestore(String correo) async {
   try {
     await FirebaseFirestore.instance.collection('usuarios').doc(correo).set({
       'correo': correo,
     });
-    print('Correo guardado exitosamente en Firestore');
+
+    await FirebaseFirestore.instance.collection('usuarios').doc(correo).collection('carrito').doc('info').delete();
+
+    print('Correo y carrito guardados exitosamente en Firestore');
   } catch (error) {
-    print('Error al guardar el correo en Firestore: $error');
+    print('Error al guardar el correo y carrito en Firestore: $error');
   }
 }

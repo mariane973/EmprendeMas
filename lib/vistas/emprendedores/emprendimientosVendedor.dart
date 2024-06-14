@@ -1,4 +1,4 @@
-import 'package:emprende_mas/vistas/emprendedores/slidebaremprendedor.dart';
+import 'package:emprende_mas/vistas/emprendedores/slidebarEmprendedor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -7,9 +7,9 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EmprendimientosV extends StatefulWidget {
-  final List<Map<String, dynamic>> vendedoresData;
+  final String correo;
 
-  EmprendimientosV({required this.vendedoresData});
+  EmprendimientosV({required this.correo});
 
   @override
   State<EmprendimientosV> createState() => _EmprendimientosVState();
@@ -55,10 +55,14 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
   }
 
   getVendedorStream() async {
-    var data = await FirebaseFirestore.instance.collection('vendedores').orderBy('nombre_emprendimiento').get();
+    var data = await FirebaseFirestore.instance.collection('vendedores')
+        .where('correo', isEqualTo:  widget.correo)
+        .get();
+
     setState(() {
       _resultados = data.docs;
     });
+
     searchResultList();
   }
 
@@ -136,27 +140,28 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
             ),
           ],
         ),
-        /*drawer: SlidebarVendedor(correo: correo),*/
+        drawer: SlidebarVendedor(correo: widget.correo),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text('ADMINISTRAR EMPRENDIMIENTOS',
+                child: Text('MI EMPRENDIMIENTO',
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+              /*
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 30),
                 child: GestureDetector(
-                  /*onTap: () {
+                  onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => FormVendedor()),
                     );
-                  },*/
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 70),
                     child: Container(
@@ -193,7 +198,7 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
