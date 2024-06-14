@@ -1,15 +1,78 @@
-import 'package:emprende_mas/vistas/clientes/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DetalleProducto extends StatelessWidget {
+class SubDetalleProductoC extends StatelessWidget {
+  final String correo;
   final Map<String, dynamic> producto;
 
-  DetalleProducto ({required this.producto});
+  SubDetalleProductoC ({required this.producto, required this.correo});
 
+  void agregarAlCarrito(BuildContext context) async {
+    try {
+      String userEmail = correo;
+
+      var carritoSnapshot = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(userEmail)
+          .collection('carrito')
+          .where('nombre', isEqualTo: producto['nombre'])
+          .get();
+
+      if (carritoSnapshot.docs.isEmpty) {
+
+        await FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(userEmail)
+            .collection('carrito')
+            .add({
+          'nombre': producto['nombre'],
+          'imagen': producto['imagen'],
+          'precio': producto['precio'],
+          'descripcion': producto['descripcion'],
+          'categoria': producto['categoria'],
+          'cantidad': 1,
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('¡Producto agregado al carrito!',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+              ),),
+          ),
+          duration: Duration(seconds: 2),
+          backgroundColor: AppMaterial().getColorAtIndex(2),
+        ));
+      } else {
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('¡Este producto ya está en tu carrito!',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                )),
+          ),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ));
+      }
+    } catch (error) {
+      print('Error al agregar producto al carrito: $error');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error al agregar producto al carrito'),
+        duration: Duration(seconds: 2),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +86,9 @@ class DetalleProducto extends StatelessWidget {
           title: Text(producto['nombre'],
             style: TextStyle(
                 fontWeight: FontWeight.w500,
-                color: Colors.white
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(0),
+          backgroundColor: AppMaterial().getColorAtIndex(1),
         ),
         body: Column(
           children: [
@@ -37,7 +99,7 @@ class DetalleProducto extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(0),
+                            color: AppMaterial().getColorAtIndex(1),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
@@ -53,7 +115,7 @@ class DetalleProducto extends StatelessWidget {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(0),
+                              .getColorAtIndex(1),
                           size: 17,
                         ),
                         onPressed: () {
@@ -65,12 +127,11 @@ class DetalleProducto extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only( left: 10, right: 10, bottom: 10, top: 10),
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 20),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.network(producto['imagen'],
-                      width: 200, height: 200)
-              ),
+                    width: 200, height: 200,)),
             ),
             RichText(
               text: TextSpan(
@@ -111,56 +172,56 @@ class DetalleProducto extends StatelessWidget {
                 height: 20,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 150),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
 
-                  RichText(
-                    textAlign: TextAlign.left,
-                    text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                          TextSpan(text: '${producto['descripcion']}'),
-                        ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(text: 'Categoría: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
-                          TextSpan(text: '${producto['categoria']}'),
-                        ]
-                    ),
-                  ),
+      Padding(
+        padding: const EdgeInsets.only(right: 150),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-                  RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(text: 'Stock: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
-                          TextSpan(text: '${producto['stock']}'),
-                        ]
-                    ),
+            RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 17,
+                    fontWeight: FontWeight.normal,
                   ),
-                ],
+                  children: <TextSpan>[
+                    TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                    TextSpan(text: '${producto['descripcion']}'),
+                  ]
               ),
             ),
+            RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontWeight: FontWeight.normal
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Categoría: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                    TextSpan(text: '${producto['categoria']}'),
+                  ]
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontWeight: FontWeight.normal
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Stock: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                    TextSpan(text: '${producto['stock']}'),
+                  ]
+              ),
+            ),
+          ],
+        ),
+      ),
             Column(
               children: [
                 Padding(
@@ -172,11 +233,11 @@ class DetalleProducto extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: ElevatedButton(
                               onPressed: (){
-                                Login();
+                                agregarAlCarrito(context);
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<
-                                    Color>(AppMaterial().getColorAtIndex(0)),
+                                    Color>(AppMaterial().getColorAtIndex(1)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -218,7 +279,7 @@ class DetalleProducto extends StatelessWidget {
                             onPressed: (){},
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<
-                                  Color>(AppMaterial().getColorAtIndex(4)),
+                                  Color>(AppMaterial().getColorAtIndex(3)),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -267,7 +328,7 @@ class DetalleProducto extends StatelessWidget {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(0),
+                          color: AppMaterial().getColorAtIndex(1),
                         ),
                         child: SingleChildScrollView(
                           child: Column(
@@ -433,6 +494,7 @@ class DetalleProducto extends StatelessWidget {
                 ))
           ],
         ),
+
       ),
     );
   }

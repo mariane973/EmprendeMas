@@ -83,7 +83,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                     ],
                   ),
                   decoration: BoxDecoration(
-                    color: AppMaterial().getColorAtIndex(1),
+                    color: AppMaterial().getColorAtIndex(0),
                   ),
                 ),
                 Padding(
@@ -97,7 +97,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                       ),
                     ),
                     leading: FaIcon(FontAwesomeIcons.home,
-                      color: AppMaterial().getColorAtIndex(1),
+                      color: AppMaterial().getColorAtIndex(0),
                       size: 30.0,
                     ),
                     onTap: () {
@@ -121,7 +121,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                       ),
                       leading: Icon(
                         Icons.account_circle,
-                        color: AppMaterial().getColorAtIndex(1),
+                        color: AppMaterial().getColorAtIndex(0),
                         size: 40.0,
                       ),
                       children: <Widget>[
@@ -131,10 +131,10 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                             title: Text('Iniciar como cliente',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppMaterial().getColorAtIndex(2)),
+                                  color: AppMaterial().getColorAtIndex(1)),
                             ),
                             leading: FaIcon(FontAwesomeIcons.userLarge,
-                              color: AppMaterial().getColorAtIndex(2),
+                              color: AppMaterial().getColorAtIndex(1),
                               size: 25.0,
                             ),
                             onTap: () {
@@ -151,10 +151,10 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                             title: Text('Convertirte en vendedor',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppMaterial().getColorAtIndex(3)),
+                                  color: AppMaterial().getColorAtIndex(2)),
                             ),
                             leading: FaIcon(FontAwesomeIcons.cashRegister,
-                              color: AppMaterial().getColorAtIndex(3),
+                              color: AppMaterial().getColorAtIndex(2),
                               size: 25.0,
                             ),
                             onTap: () {
@@ -179,7 +179,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                       ),
                     ),
                     leading: FaIcon(FontAwesomeIcons.users,
-                      color: AppMaterial().getColorAtIndex(1),
+                      color: AppMaterial().getColorAtIndex(0),
                       size: 30.0,
                     ),
                     onTap: () {
@@ -201,7 +201,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                         ),
                       ),
                       leading: FaIcon(FontAwesomeIcons.layerGroup,
-                        color: AppMaterial().getColorAtIndex(1),
+                        color: AppMaterial().getColorAtIndex(0),
                         size: 30.0,
                       ),
                       onTap: () {
@@ -223,7 +223,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                       ),
                     ),
                     leading: FaIcon(FontAwesomeIcons.cartShopping,
-                      color: AppMaterial().getColorAtIndex(1),
+                      color: AppMaterial().getColorAtIndex(0),
                       size: 30.0,
                     ),
                     onTap: () {
@@ -244,7 +244,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                         ),
                       ),
                       leading: FaIcon(FontAwesomeIcons.moneyBillWave,
-                        color: AppMaterial().getColorAtIndex(1),
+                        color: AppMaterial().getColorAtIndex(0),
                         size: 30.0,
                       ),
                       onTap: () {

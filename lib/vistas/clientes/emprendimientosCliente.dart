@@ -76,11 +76,7 @@ class _EmprendimientosCState extends State<EmprendimientosC> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+        color: AppMaterial().getColorAtIndex(6)
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -179,9 +175,15 @@ class _EmprendimientosCState extends State<EmprendimientosC> {
                             height: 120,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 0.2,
-                                )
+
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: ClipOval(
                               child: Image.network(vendedor['logo_emprendimiento'],
@@ -217,6 +219,7 @@ class _EmprendimientosCState extends State<EmprendimientosC> {
                                           allowHalfRating: false,
                                           itemCount: 5,
                                           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                          itemSize: 28.0,
                                           itemBuilder: (context, _) => Icon(
                                             Icons.star,
                                             color: Colors.amber,

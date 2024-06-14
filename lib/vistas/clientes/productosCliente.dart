@@ -80,11 +80,7 @@ class _ProductosCState extends State<ProductosC> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+        color: AppMaterial().getColorAtIndex(6)
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -184,9 +180,14 @@ class _ProductosCState extends State<ProductosC> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(18),
-                              border: Border.all(
-                                width: 0.2,
-                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),

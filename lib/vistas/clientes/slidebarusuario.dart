@@ -138,7 +138,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                       ],
                     ),
                     decoration: BoxDecoration(
-                      color: AppMaterial().getColorAtIndex(2),
+                      color: AppMaterial().getColorAtIndex(1),
                     ),
                   ),
                   Padding(
@@ -152,7 +152,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         ),
                       ),
                       leading: FaIcon(FontAwesomeIcons.home,
-                        color: AppMaterial().getColorAtIndex(2),
+                        color: AppMaterial().getColorAtIndex(1),
                         size: 30.0,
                       ),
                       onTap: () {
@@ -174,7 +174,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                       ),
                       leading: Icon(
                         Icons.manage_accounts,
-                        color: AppMaterial().getColorAtIndex(2),
+                        color: AppMaterial().getColorAtIndex(1),
                         size: 40.0,
                       ),
                       onTap: () {
@@ -195,13 +195,13 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         ),
                       ),
                       leading: FaIcon(FontAwesomeIcons.users,
-                        color: AppMaterial().getColorAtIndex(2),
+                        color: AppMaterial().getColorAtIndex(1),
                         size: 30.0,
                       ),
                       onTap: () {
                         Navigator.push(context,
                           MaterialPageRoute(builder: (context) =>
-                              EmprendimientosC(vendedoresData: vendedoresData, correo: widget.correo)
+                              EmprendimientosC(vendedoresData: vendedoresData, correo: widget.correo),
                           ),
                         );
                       },
@@ -218,7 +218,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                           ),
                         ),
                         leading: FaIcon(FontAwesomeIcons.layerGroup,
-                          color: AppMaterial().getColorAtIndex(2),
+                          color: AppMaterial().getColorAtIndex(1),
                           size: 30.0,
                         ),
                         onTap: () {
@@ -246,7 +246,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         children: [
                           FaIcon(
                             FontAwesomeIcons.cartShopping,
-                            color: AppMaterial().getColorAtIndex(2),
+                            color: AppMaterial().getColorAtIndex(1),
                             size: 30.0,
                           ),
                           if (_cartItemCount > 0)
@@ -280,6 +280,27 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 15),
+                    child: ListTile(
+                        title: Text("Ofertas",
+                          style:TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400
+                          ),
+                        ),
+                        leading: FaIcon(FontAwesomeIcons.moneyBillWave,
+                          color: AppMaterial().getColorAtIndex(1),
+                          size: 30.0,
+                        ),
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Login())
+                          );
+                        }
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(left: 25, top: 8),
                     child: ListTile(
                         title: Text("¿Quieres ser vendedor?",
@@ -290,7 +311,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                           ),
                         ),
                         leading: FaIcon(FontAwesomeIcons.cashRegister,
-                          color: AppMaterial().getColorAtIndex(2),
+                          color: AppMaterial().getColorAtIndex(1),
                           size: 28.0,
                         ),
                         onTap: () {
@@ -301,7 +322,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                     ),
                   ),
                   SizedBox(
-                    height: 190,
+                    height: 150,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, top: 15),
@@ -310,11 +331,11 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                           style: TextStyle(
                               color: Colors.red,
                               fontSize: 18,
-                              fontWeight: FontWeight.w400
+                              fontWeight: FontWeight.bold
                           ),
                         ),
                         leading: FaIcon(FontAwesomeIcons.shareFromSquare,
-                          color: AppMaterial().getColorAtIndex(2),
+                          color: AppMaterial().getColorAtIndex(1),
                           size: 30.0,
                         ),
                         onTap: () {

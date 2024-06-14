@@ -76,11 +76,7 @@ class _EmprendimientosVState extends State<EmprendimientosV> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+        color: AppMaterial().getColorAtIndex(6)
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,

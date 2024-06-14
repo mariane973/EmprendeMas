@@ -1,4 +1,6 @@
 import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
+import 'package:emprende_mas/vistas/clientes/subDetalleProdC.dart';
+import 'package:emprende_mas/vistas/clientes/subDetalleProdC.dart';
 import 'package:emprende_mas/vistas/subDetalleProducto.dart';
 import 'package:flutter/material.dart';
 import 'package:emprende_mas/material.dart';
@@ -58,11 +60,7 @@ class _SubProductosCState extends State<SubProductosC> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+        color: AppMaterial().getColorAtIndex(6)
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -142,7 +140,7 @@ class _SubProductosCState extends State<SubProductosC> {
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SubDetalleProducto(producto: producto)
+                        MaterialPageRoute(builder: (context) => SubDetalleProductoC(producto: producto, correo: widget.correo,)
                         ),
                       );
                     },
@@ -156,9 +154,14 @@ class _SubProductosCState extends State<SubProductosC> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(18),
-                              border: Border.all(
-                                width: 0.2,
-                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),

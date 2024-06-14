@@ -166,7 +166,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 10),
+                        padding: const EdgeInsets.only(left: 25, top: 10),
                         child: ListTile(
                           title: Text("Mi Emprendimiento",
                             style: TextStyle(
@@ -175,7 +175,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                                 fontWeight: FontWeight.w400
                             ),
                           ),
-                          leading: FaIcon(FontAwesomeIcons.users,
+                          leading: FaIcon(FontAwesomeIcons.bagShopping,
                             color: AppMaterial().getColorAtIndex(2),
                             size: 30.0,
                           ),
@@ -189,9 +189,9 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 15),
-                        child: ListTile(
-                            title: Text("Administrar Productos",
+                        padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+                        child: ExpansionTile(
+                            title: Text("Administrar Emprendimiento",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
@@ -202,36 +202,50 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                               color: AppMaterial().getColorAtIndex(2),
                               size: 30.0,
                             ),
-                            onTap: () {
-                              Navigator.push(context,
-                                MaterialPageRoute(builder: (context) =>
-                                    ProductosV(correo: widget.correo)
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: ListTile(
+                                  title: Text('Productos',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppMaterial().getColorAtIndex(2)),
+                                  ),
+                                  leading: FaIcon(FontAwesomeIcons.shirt,
+                                    color: AppMaterial().getColorAtIndex(2),
+                                    size: 25.0,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) =>
+                                          ProductosV(correo: widget.correo)
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            }
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 15),
-                        child: ListTile(
-                            title: Text("Administrar Servicios",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400
                               ),
-                            ),
-                            leading: FaIcon(FontAwesomeIcons.layerGroup,
-                              color: AppMaterial().getColorAtIndex(2),
-                              size: 30.0,
-                            ),
-                            onTap: () {
-                              Navigator.push(context,
-                                MaterialPageRoute(builder: (context) =>
-                                    ServiciosV(correo: widget.correo)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 35),
+                                child: ListTile(
+                                    title: Text("Servicios",
+                                      style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppMaterial().getColorAtIndex(2)),
+                                      ),
+                                    leading: FaIcon(FontAwesomeIcons.birthdayCake,
+                                      color: AppMaterial().getColorAtIndex(2),
+                                      size: 25.0,
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) =>
+                                            ServiciosV(correo: widget.correo)
+                                        ),
+                                      );
+                                    }
                                 ),
-                              );
-                            }
+                              ),
+                            ],
                         ),
                       ),
                       Padding(
@@ -244,7 +258,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                                 fontWeight: FontWeight.w400
                             ),
                           ),
-                          leading: FaIcon(FontAwesomeIcons.cartShopping,
+                          leading: FaIcon(FontAwesomeIcons.moneyBillWave,
                             color: AppMaterial().getColorAtIndex(2),
                             size: 30.0,
                           ),
@@ -265,7 +279,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                                   fontWeight: FontWeight.w400
                               ),
                             ),
-                            leading: FaIcon(FontAwesomeIcons.moneyBillWave,
+                            leading: FaIcon(FontAwesomeIcons.users,
                               color: AppMaterial().getColorAtIndex(2),
                               size: 30.0,
                             ),
@@ -277,16 +291,16 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                         ),
                       ),
                       SizedBox(
-                        height: 140,
+                        height: 180,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 15),
+                        padding: const EdgeInsets.only(left: 25, top:20),
                         child: ListTile(
                             title: Text("Cerrar sesión",
                               style: TextStyle(
                                   color: Colors.red,
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w400
+                                  fontWeight: FontWeight.bold
                               ),
                             ),
                             leading: FaIcon(FontAwesomeIcons.shareFromSquare,
