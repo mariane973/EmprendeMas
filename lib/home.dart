@@ -1,7 +1,7 @@
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
+import 'package:EmprendeMas/vistas/principales/slideprincipal.dart';
 import 'package:flutter/widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 

@@ -1,5 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:emprende_mas/home.dart';
+import 'package:EmprendeMas/home.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

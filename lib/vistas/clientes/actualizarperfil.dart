@@ -4,8 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:emprende_mas/vistas/clientes/homeusuario.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/vistas/clientes/homeusuario.dart';
+import 'package:EmprendeMas/material.dart';
 
 class EditarPerfilCliente extends StatefulWidget {
   final String correo;

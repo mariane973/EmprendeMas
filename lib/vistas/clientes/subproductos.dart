@@ -1,9 +1,9 @@
-import 'package:emprende_mas/vistas/clientes/slidebarusuario.dart';
-import 'package:emprende_mas/vistas/clientes/subDetalleProdC.dart';
-import 'package:emprende_mas/vistas/clientes/subDetalleProdC.dart';
-import 'package:emprende_mas/vistas/subDetalleProducto.dart';
+import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
+import 'package:EmprendeMas/vistas/clientes/subDetalleProdC.dart';
+import 'package:EmprendeMas/vistas/clientes/subDetalleProdC.dart';
+import 'package:EmprendeMas/vistas/subDetalleProducto.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 

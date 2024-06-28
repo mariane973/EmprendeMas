@@ -1,6 +1,6 @@
-import 'package:emprende_mas/vistas/dataProducto.dart';
+import 'package:EmprendeMas/vistas/dataProducto.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 

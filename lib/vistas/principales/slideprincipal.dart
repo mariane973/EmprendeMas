@@ -1,9 +1,9 @@
-import 'package:emprende_mas/home.dart';
-import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/emprendedores/loginV.dart';
-import 'package:emprende_mas/vistas/principales/productos.dart';
-import 'package:emprende_mas/vistas/principales/emprendimientos.dart';
-import 'package:emprende_mas/vistas/clientes/login.dart';
+import 'package:EmprendeMas/home.dart';
+import 'package:EmprendeMas/material.dart';
+import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
+import 'package:EmprendeMas/vistas/principales/productos.dart';
+import 'package:EmprendeMas/vistas/principales/emprendimientos.dart';
+import 'package:EmprendeMas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -1,8 +1,8 @@
-import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/vistas/emprendedores/slidebarEmprendedor.dart';
+import 'package:EmprendeMas/material.dart';
+import 'package:EmprendeMas/vistas/emprendedores/slidebarEmprendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:emprende_mas/home.dart';
+import 'package:EmprendeMas/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io' as io;
 

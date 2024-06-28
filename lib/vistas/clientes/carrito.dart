@@ -1,9 +1,9 @@
-import 'package:emprende_mas/home.dart';
-import 'package:emprende_mas/vistas/clientes/productosCliente.dart';
+import 'package:EmprendeMas/home.dart';
+import 'package:EmprendeMas/vistas/clientes/productosCliente.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductosCarrito extends StatefulWidget {

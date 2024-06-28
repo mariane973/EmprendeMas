@@ -1,8 +1,8 @@
-import 'package:emprende_mas/vistas/clientes/login.dart';
+import 'package:EmprendeMas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:emprende_mas/auth_service.dart';
+import 'package:EmprendeMas/auth_service.dart';
 
 class PasswordReset extends StatefulWidget {
   const PasswordReset({super.key});

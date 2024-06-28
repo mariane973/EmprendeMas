@@ -1,8 +1,8 @@
-import 'package:emprende_mas/vistas/emprendedores/detalleProductoV.dart';
-import 'package:emprende_mas/vistas/emprendedores/slidebarEmprendedor.dart';
-import 'package:emprende_mas/vistas/emprendedores/insertarProducto.dart';
+import 'package:EmprendeMas/vistas/emprendedores/detalleProductoV.dart';
+import 'package:EmprendeMas/vistas/emprendedores/slidebarEmprendedor.dart';
+import 'package:EmprendeMas/vistas/emprendedores/insertarProducto.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';

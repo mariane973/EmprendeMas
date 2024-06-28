@@ -1,11 +1,11 @@
-import 'package:emprende_mas/vistas/emprendedores/productosVendedor.dart';
+import 'package:EmprendeMas/vistas/emprendedores/productosVendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 
 class EditarProductoVendedor extends StatefulWidget {
   final String correo;

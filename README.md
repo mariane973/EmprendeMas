@@ -1,4 +1,4 @@
-# emprende_mas
+# EmprendeMas
 
 A new Flutter project.
 

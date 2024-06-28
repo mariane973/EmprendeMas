@@ -1,5 +1,5 @@
-import 'package:emprende_mas/material.dart';
-import 'package:emprende_mas/splash.dart';
+import 'package:EmprendeMas/material.dart';
+import 'package:EmprendeMas/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 

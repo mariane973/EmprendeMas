@@ -1,10 +1,10 @@
-import 'package:emprende_mas/vistas/principales/subproductos.dart';
+import 'package:EmprendeMas/vistas/principales/subproductos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:emprende_mas/vistas/principales/slideprincipal.dart';
+import 'package:EmprendeMas/vistas/principales/slideprincipal.dart';
 
 class DatosVendedores extends StatefulWidget {
   final List<Map<String, dynamic>> vendedoresData;

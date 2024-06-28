@@ -1,7 +1,7 @@
-import 'package:emprende_mas/vistas/emprendedores/actualizarServicio.dart';
-import 'package:emprende_mas/vistas/emprendedores/serviciosVendedor.dart';
+import 'package:EmprendeMas/vistas/emprendedores/actualizarServicio.dart';
+import 'package:EmprendeMas/vistas/emprendedores/serviciosVendedor.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickalert/quickalert.dart';
 

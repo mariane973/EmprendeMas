@@ -1,14 +1,14 @@
-import 'package:emprende_mas/authlogin/crearRegistroVenlogin.dart';
-import 'package:emprende_mas/home.dart';
-import 'package:emprende_mas/huella/autenticacion.dart';
-import 'package:emprende_mas/vistas/emprendedores/formperfil.dart';
-import 'package:emprende_mas/vistas/emprendedores/homevendedor.dart';
-import 'package:emprende_mas/vistas/emprendedores/register.dart';
+import 'package:EmprendeMas/authlogin/crearRegistroVenlogin.dart';
+import 'package:EmprendeMas/home.dart';
+import 'package:EmprendeMas/huella/autenticacion.dart';
+import 'package:EmprendeMas/vistas/emprendedores/formperfil.dart';
+import 'package:EmprendeMas/vistas/emprendedores/homevendedor.dart';
+import 'package:EmprendeMas/vistas/emprendedores/register.dart';
 import 'package:flutter/material.dart';
-import 'package:emprende_mas/material.dart';
+import 'package:EmprendeMas/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:emprende_mas/vistas/emprendedores/PasswordReset.dart';
+import 'package:EmprendeMas/vistas/emprendedores/PasswordReset.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io' as io;
 
