@@ -5,6 +5,7 @@ import 'package:EmprendeMas/vistas/clientes/carrito.dart';
 import 'package:EmprendeMas/vistas/clientes/emprendimientosCliente.dart';
 import 'package:EmprendeMas/vistas/clientes/homeusuario.dart';
 import 'package:EmprendeMas/vistas/clientes/productosCliente.dart';
+import 'package:EmprendeMas/vistas/clientes/serviciosCliente.dart';
 import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
 import 'package:EmprendeMas/vistas/clientes/login.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
     super.initState();
     _userDataStream = FirebaseFirestore.instance.collection('usuarios').doc(widget.correo).snapshots();
     _dataStream = Stream.periodic(Duration(seconds: 1)).asyncMap((_) =>
-        Future.wait([FirebaseFirestore.instance.collection('vendedores').get(), FirebaseFirestore.instance.collection('productos').get()])
+        Future.wait([FirebaseFirestore.instance.collection('vendedores').get(), FirebaseFirestore.instance.collection('productos').get(), FirebaseFirestore.instance.collection('servicios').get()])
     );
     _initializeCartItemCount();
   }
@@ -87,7 +88,9 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
               doc.data() as Map<String, dynamic>).toList();
               final productosData = dataSnapshot.data![1].docs.map((doc) =>
               doc.data() as Map<String, dynamic>).toList();
-
+              final serviciosData = dataSnapshot.data![2].docs.map((doc) =>
+              doc.data() as Map<String, dynamic>).toList();
+              
               return ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
@@ -224,9 +227,30 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                         onTap: () {
                           Navigator.push(context,
                             MaterialPageRoute(builder: (context) =>
-                                ProductosC(
-                                  productosData: productosData,
-                                  correo: widget.correo),
+                               ProductosC(correo: widget.correo, productosData: productosData)
+                            ),
+                          );
+                        }
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 15),
+                    child: ListTile(
+                        title: Text("Servicios",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400
+                          ),
+                        ),
+                        leading: FaIcon(FontAwesomeIcons.layerGroup,
+                          color: AppMaterial().getColorAtIndex(1),
+                          size: 30.0,
+                        ),
+                        onTap: () {
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context) =>
+                                ServiciosC(correo: widget.correo, serviciosData: serviciosData)
                             ),
                           );
                         }
@@ -322,7 +346,7 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                     ),
                   ),
                   SizedBox(
-                    height: 150,
+                    height: 100,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, top: 15),

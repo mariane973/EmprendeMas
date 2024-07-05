@@ -1,4 +1,5 @@
 import 'package:EmprendeMas/vistas/detalleProducto.dart';
+import 'package:EmprendeMas/vistas/detalleServicio.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,16 +7,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:EmprendeMas/vistas/principales/slideprincipal.dart';
 
-class DatosProductos extends StatefulWidget {
-  final List<Map<String, dynamic>> productosData;
+class DatosServicios extends StatefulWidget {
+  final List<Map<String, dynamic>> serviciosData;
 
-  DatosProductos({required this.productosData});
+  DatosServicios({required this.serviciosData});
 
   @override
-  State<DatosProductos> createState() => _DatosProductosState();
+  State<DatosServicios> createState() => _DatosServiciosState();
 }
 
-class _DatosProductosState extends State<DatosProductos> {
+class _DatosServiciosState extends State<DatosServicios> {
   List _resultados = [];
   List _resultadosList = [];
   final TextEditingController _searchController = TextEditingController();
@@ -40,10 +41,10 @@ class _DatosProductosState extends State<DatosProductos> {
   searchResultList(){
     var showResults = [];
     if(_searchController.text != ""){
-      for(var productoShapshot in _resultados){
-        var nombre = productoShapshot['nombre'].toString().toLowerCase();
+      for(var servicioShapshot in _resultados){
+        var nombre = servicioShapshot['nombre'].toString().toLowerCase();
         if(nombre.contains(_searchController.text.toLowerCase())){
-          showResults.add(productoShapshot);
+          showResults.add(servicioShapshot);
         }
       }
     } else {
@@ -54,23 +55,23 @@ class _DatosProductosState extends State<DatosProductos> {
     });
   }
 
-  getProductoStream() async {
+  getServicioStream() async {
     var vendedoresData = await FirebaseFirestore.instance.collection('vendedores').get();
 
-    List<DocumentSnapshot> allProductos = [];
+    List<DocumentSnapshot> allServicios = [];
     for (var vendedorSnapshot in vendedoresData.docs) {
-      var productosSnapshot = await vendedorSnapshot.reference.collection('productos').orderBy('nombre').get();
-      allProductos.addAll(productosSnapshot.docs);
+      var serviciosSnapshot = await vendedorSnapshot.reference.collection('servicios').orderBy('nombre').get();
+      allServicios.addAll(serviciosSnapshot.docs);
     }
     setState(() {
-      _resultados = allProductos;
+      _resultados = allServicios;
     });
     searchResultList();
   }
 
   @override
   void didChangeDependencies() {
-    getProductoStream();
+    getServicioStream();
     super.didChangeDependencies();
   }
 
@@ -78,7 +79,7 @@ class _DatosProductosState extends State<DatosProductos> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppMaterial().getColorAtIndex(6)
+          color: AppMaterial().getColorAtIndex(6)
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -143,12 +144,11 @@ class _DatosProductosState extends State<DatosProductos> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text("PRODUCTOS",
+                child: Text("SERVICIOS",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
-
                 ),
               ),
               _resultadosList.isEmpty
@@ -157,7 +157,7 @@ class _DatosProductosState extends State<DatosProductos> {
                       child: Center(
                         child: Text(
                           _searchController.text.isEmpty
-                              ? "No se encuentran productos."
+                              ? "No se encuentran servicios."
                               : "No se encontraron coincidencias.",
                           style: TextStyle(
                             fontSize: 23,
@@ -167,88 +167,89 @@ class _DatosProductosState extends State<DatosProductos> {
                         ),
                       ),
                   )
-              : ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _resultadosList.length,
-                itemBuilder: (context, index) {
-                  final productoSnapshot = _resultadosList[index];
-                  final productoData = productoSnapshot.data() as Map<String, dynamic>;
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetalleProducto(producto: productoData)
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3),
+                  : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _resultadosList.length,
+                    itemBuilder: (context, index) {
+                      final servicioSnapshot = _resultadosList[index];
+                      final servicioData = servicioSnapshot.data() as Map<String, dynamic>;
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => DetalleServicio(servicio: servicioData)
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      spreadRadius: 4,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(18),
-                              child: Image.network(productoData['imagen'],
-                              fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          SingleChildScrollView(
-                            child: Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 18),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.56,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(productoData['nombre'],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22,
-                                        ),
-                                      ),
-                                      Text(productoData['descripcion'],
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 18),
-                                        child: Text(' \$${productoData['precioTotal']} COP',
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                            color: AppMaterial().getColorAtIndex(2)
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
+                                  child: Image.network(servicioData['imagen'],
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                            ),
+                              SingleChildScrollView(
+                                child: Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 18),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width * 0.56,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(servicioData['nombre'],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                          Text(servicioData['descripcion'],
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 18),
+                                            child: Text(' \$${servicioData['precio']} COP',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppMaterial().getColorAtIndex(2)
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+                        ),
+                      );
+                    },
+                  ),
             ],
           ),
         ),
@@ -256,4 +257,3 @@ class _DatosProductosState extends State<DatosProductos> {
     );
   }
 }
-

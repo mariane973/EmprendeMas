@@ -25,7 +25,7 @@ class _ServiciosVState extends State<ServiciosV> {
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    getProdcutoStream();
+    getServicioStream();
   }
 
   @override
@@ -56,7 +56,7 @@ class _ServiciosVState extends State<ServiciosV> {
     });
   }
 
-  getProdcutoStream() async {
+  getServicioStream() async {
     var data = await FirebaseFirestore.instance
         .collection('vendedores')
         .doc(widget.correo)
@@ -74,11 +74,8 @@ class _ServiciosVState extends State<ServiciosV> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+        borderRadius: BorderRadius.circular(30),
+        color: AppMaterial().getColorAtIndex(6),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -250,7 +247,7 @@ class _ServiciosVState extends State<ServiciosV> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 18),
-                                      child: Text(' \$${servicio['precio']} COP',
+                                      child: Text(' \$${servicio['precioTotal']} COP',
                                         style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w500,

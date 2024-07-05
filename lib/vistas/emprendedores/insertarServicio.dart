@@ -16,19 +16,16 @@ class FormServicio extends StatefulWidget {
 class _FormServicioState extends State<FormServicio> {
   final InsertarDatosServicio insertarDatos = InsertarDatosServicio();
 
-  String? categoriaElegida;
-
-  List<String> listCategoria = [
-    "Accesorios", "Comida", "Ropa", "Manualidades", "Plantas", "Cuidado Personal", "Servicios", "Venta de Garaje"
-  ];
-
   io.File? imagen;
   final picker = ImagePicker();
   final form = GlobalKey<FormState>();
-  late String _categoria;
   late String _descripcion;
   late String _nombre;
   late int _precio;
+  late int _precioTotal = 0;
+  final TextEditingController _precioTotalController = TextEditingController();
+  String? ofertaElegida;
+  int _descuento = 0;
 
   Future<void> selImagen(int op) async {
     final pickedFile = await picker.getImage(
@@ -125,6 +122,26 @@ class _FormServicioState extends State<FormServicio> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _descuento = 0;
+    _precioTotal = 0;
+    _precioTotalController.text = _precioTotal.toString();
+    ofertaElegida = null;
+  }
+
+  void calcularPrecioTotal() {
+    setState(() {
+      if (ofertaElegida == 'Sí' && _descuento > 0) {
+        _precioTotal = _precio - ((_precio * _descuento) ~/ 100);
+      } else {
+        _precioTotal = _precio;
+      }
+      _precioTotalController.text = _precioTotal.toString();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -158,7 +175,7 @@ class _FormServicioState extends State<FormServicio> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 40),
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 35, bottom: 35),
                     child: TextFormField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.inventory_2_outlined),
@@ -184,7 +201,7 @@ class _FormServicioState extends State<FormServicio> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 35),
                     child: TextFormField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.description_outlined),
@@ -210,49 +227,7 @@ class _FormServicioState extends State<FormServicio> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    child: Container(
-                      padding: EdgeInsets.only(right: 16),
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: DropdownButtonFormField<String>(
-                        hint: Text("Selecciona una Categoría: "),
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 30,
-                        isExpanded: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.label_outlined),
-                        ),
-                        dropdownColor: Colors.grey[200],
-                        value: categoriaElegida,
-                        onChanged: (newValue) {
-                          setState(() {
-                            categoriaElegida = newValue;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Seleccione una categoría';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _categoria = value!;
-                        },
-                        items: listCategoria.map((valueItem) {
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
                     child: TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -273,9 +248,114 @@ class _FormServicioState extends State<FormServicio> {
                             return null;
                           }
                         },
+                        onChanged: (value) {
+                          _precio = int.tryParse(value) ?? 0;
+                          calcularPrecioTotal();
+                        },
                         onSaved: (value){
-                          _precio=int.parse(value!);
+                          _precio = int.tryParse(value!) ?? 0;
+                          calcularPrecioTotal();
                         }
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    child: Container(
+                      padding: EdgeInsets.only(right: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        hint: Text("¿Servicio en oferta?"),
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 30,
+                        isExpanded: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.local_offer_outlined),
+                        ),
+                        dropdownColor: Colors.grey[200],
+                        value: ofertaElegida,
+                        onChanged: (newValue) {
+                          setState(() {
+                            ofertaElegida = newValue ?? 'No';
+                            if (ofertaElegida == 'No') {
+                              _descuento = 0;
+                              calcularPrecioTotal();
+                            } else if (ofertaElegida == 'Sí') {
+                              _descuento = 0;
+                            }
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Seleccione si el servicio está en oferta';
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (value) {
+                          _descuento = (value == 'Sí') ? _descuento : 0;
+                        },
+                        items: ["Sí", "No"].map((valueItem) {
+                          return DropdownMenuItem(
+                            value: valueItem,
+                            child: Text(valueItem),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  if (ofertaElegida == "Sí")
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.percent),
+                          labelText: "Descuento",
+                          hintText: "Ingrese el descuento (%)",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(25)
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Ingrese el descuento";
+                          } else{
+                            return null;
+                          }
+                        },
+                        onChanged: (value) {
+                          _descuento = int.tryParse(value) ?? 0;
+                          calcularPrecioTotal();
+                        },
+                        onSaved: (value) {
+                          _descuento = int.tryParse(value!) ?? 0;
+                          calcularPrecioTotal();
+                        },
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 35, top: 15),
+                    child: TextFormField(
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.attach_money_outlined),
+                        labelText: "Precio Total",
+                        hintText: "Precio total con descuento",
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(25)
+                        ),
+                      ),
+                      controller: _precioTotalController,
                     ),
                   ),
                   ElevatedButton(onPressed: (){
@@ -283,12 +363,14 @@ class _FormServicioState extends State<FormServicio> {
                       form.currentState!.save();
                       insertarDatos.guardarServicioDatos (
                           imagen: imagen!,
-                          categoria: _categoria,
                           descripcion: _descripcion,
                           nombre: _nombre,
                           precio: _precio,
                           correo: widget.correo,
-                          context: context
+                          context: context,
+                          descuento: _descuento,
+                          precioTotal: _precioTotal,
+                          oferta: ofertaElegida!,
                       );
                     }
                   },

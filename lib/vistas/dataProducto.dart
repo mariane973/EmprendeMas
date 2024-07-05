@@ -16,12 +16,15 @@ class InsertarDatosProducto{
     required int stock,
     required String correo,
     required BuildContext context,
+    required int descuento,
+    required int precioTotal,
+    required String oferta,
   }) async {
     Reference ref = _storage.ref().child('imgproductos/${DateTime.now().toString()}');
     UploadTask uploadTask = ref.putFile(imagen);
     TaskSnapshot snapshot = await uploadTask;
     String img = await snapshot.ref.getDownloadURL();
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('vendedores')
         .doc(correo)
         .collection('productos')
@@ -32,6 +35,9 @@ class InsertarDatosProducto{
       'descripcion': descripcion,
       'precio': precio,
       'stock': stock,
+      'descuento': descuento,
+      'precioTotal': precioTotal,
+      'oferta': oferta,
     }).then((value){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

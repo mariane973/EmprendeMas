@@ -157,7 +157,7 @@ class DetalleProductoC extends StatelessWidget {
                         fontWeight: FontWeight.normal
                     ),
                     children: <TextSpan>[
-                      TextSpan(text: '\$${producto['precio']}',style: TextStyle(
+                      TextSpan(text: '\$${producto['precioTotal']}',style: TextStyle(
                           fontWeight: FontWeight.bold, height: 1.6,
                           fontSize: 19
                       ),
@@ -474,7 +474,7 @@ class DetalleProductoC extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 18),
                                                   child: Text(
-                                                    ' \$${producto['precio']} COP',
+                                                    ' \$${producto['precioTotals']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,

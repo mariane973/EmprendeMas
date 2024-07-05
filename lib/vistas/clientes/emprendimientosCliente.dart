@@ -1,5 +1,5 @@
 import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
-import 'package:EmprendeMas/vistas/clientes/subproductos.dart';
+import 'package:EmprendeMas/vistas/clientes/detallesEmprendimiento.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
@@ -70,6 +70,24 @@ class _EmprendimientosCState extends State<EmprendimientosC> {
     _resultados = await getVendedorStream();
     searchResultList();
     super.didChangeDependencies();
+  }
+
+  Future<double> _obtenerCalificacion(String uidEmprendimiento) async {
+    DocumentSnapshot clienteDoc = await FirebaseFirestore.instance.collection('usuarios').doc(widget.correo).get();
+    if (clienteDoc.exists) {
+      DocumentSnapshot ratingDoc = await clienteDoc.reference.collection('calificaciones').doc(uidEmprendimiento).get();
+      if (ratingDoc.exists) {
+        return ratingDoc['calificacion'].toDouble();
+      }
+    }
+    return 0.0;
+  }
+
+  void _guardarCalificacion(String uidEmprendimiento, double rating) async {
+    DocumentReference clienteRef = FirebaseFirestore.instance.collection('usuarios').doc(widget.correo);
+    await clienteRef.collection('calificaciones').doc(uidEmprendimiento).set({
+      'calificacion': rating,
+    });
   }
 
   @override
@@ -159,11 +177,16 @@ class _EmprendimientosCState extends State<EmprendimientosC> {
                     onTap: () async {
                       DocumentSnapshot emprendedorSnapshot = _resultadosList[index];
                       DocumentReference emprendedorRef = emprendedorSnapshot.reference;
-                      CollectionReference subcoleccionRef = emprendedorRef.collection('productos');
-                      QuerySnapshot subcoleccionSnapshot = await subcoleccionRef.get();
-                      List<Map<String, dynamic>> subcoleccionData = subcoleccionSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+                      CollectionReference productosRef = emprendedorRef.collection('productos');
+                      QuerySnapshot productosSnapshot = await productosRef.get();
+                      List<Map<String, dynamic>> productosData = productosSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+                      CollectionReference serviciosRef = emprendedorRef.collection('servicios');
+                      QuerySnapshot serviciosSnapshot = await serviciosRef.get();
+                      List<Map<String, dynamic>> serviciosData = serviciosSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context)=> SubProductosC(data: subcoleccionData, correo: widget.correo)),
+                        MaterialPageRoute(builder: (context)=> SubDetallesC(productosdata: productosData, serviciosData: serviciosData, correo: widget.correo)),
                       );
                     },
                     child: Padding(
@@ -212,20 +235,26 @@ class _EmprendimientosCState extends State<EmprendimientosC> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 10),
-                                        child: RatingBar.builder(
-                                          initialRating: 0,
-                                          minRating: 1,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: false,
-                                          itemCount: 5,
-                                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                          itemSize: 28.0,
-                                          itemBuilder: (context, _) => Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
+                                        child: FutureBuilder<double>(
+                                          future: _obtenerCalificacion(vendedor.id),
+                                          builder: (context, snapshot) {
+                                            double initialRating = snapshot.data ?? 0.0;
+                                            return RatingBar.builder(
+                                              initialRating: initialRating,
+                                              minRating: 1,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                              itemSize: 28.0,
+                                              itemBuilder: (context, _) => Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: (rating) {
+                                                _guardarCalificacion(vendedor.id, rating);
+                                              },
+                                            );
                                           },
                                         ),
                                       ),

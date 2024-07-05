@@ -1,30 +1,33 @@
 import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
 import 'package:EmprendeMas/vistas/clientes/subDetalleProdC.dart';
-import 'package:EmprendeMas/vistas/clientes/subDetalleProdC.dart';
-import 'package:EmprendeMas/vistas/subDetalleProducto.dart';
+import 'package:EmprendeMas/vistas/clientes/subDetalleServC.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 
-class SubProductosC extends StatefulWidget {
+class SubDetallesC extends StatefulWidget {
   final String correo;
-  final List<Map<String, dynamic>> data;
+  final List<Map<String, dynamic>> productosdata;
+  final List<Map<String, dynamic>> serviciosData;
 
-  SubProductosC({required this.data, required this.correo});
+  SubDetallesC({required this.productosdata, required this.serviciosData, required this.correo});
 
   @override
-  State<SubProductosC> createState() => _SubProductosCState();
+  State<SubDetallesC> createState() => _SubDetallesCState();
 }
 
-class _SubProductosCState extends State<SubProductosC> {
-  List<Map<String, dynamic>> _resultadosList = [];
+class _SubDetallesCState extends State<SubDetallesC> {
+  List<Map<String, dynamic>> _productosList = [];
+  List<Map<String, dynamic>> _serviciosList = [];
+
   final TextEditingController _searchController = TextEditingController();
 
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    _resultadosList = widget.data;
+    _productosList = widget.productosdata;
+    _serviciosList = widget.serviciosData;
   }
 
   @override
@@ -40,19 +43,29 @@ class _SubProductosCState extends State<SubProductosC> {
   }
 
   void searchResultList() {
-    List<Map<String, dynamic>> showResults = [];
+    List<Map<String, dynamic>> productosResults = [];
+    List<Map<String, dynamic>> serviciosResults = [];
     if (_searchController.text != "") {
-      for (var productoSnapshot in widget.data) {
+      for (var productoSnapshot in widget.productosdata) {
         var nombre = productoSnapshot['nombre'].toString().toLowerCase();
         if (nombre.contains(_searchController.text.toLowerCase())) {
-          showResults.add(productoSnapshot);
+          productosResults.add(productoSnapshot);
+        }
+      }
+      for (var servicioSnapshot in widget.serviciosData) {
+        var nombre = servicioSnapshot['nombre'].toString().toLowerCase();
+        if (nombre.contains(_searchController.text.toLowerCase())) {
+          serviciosResults.add(servicioSnapshot);
         }
       }
     } else {
-      showResults = List.from(widget.data);
+      productosResults = List.from(widget.productosdata);
+      serviciosResults = List.from(widget.serviciosData);
     }
+
     setState(() {
-      _resultadosList = showResults;
+      _productosList = productosResults;
+      _serviciosList = serviciosResults;
     });
   }
 
@@ -131,12 +144,28 @@ class _SubProductosCState extends State<SubProductosC> {
                   ),
                 ),
               ),
-              ListView.builder(
+              _productosList.isEmpty
+                  ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text(
+                    _searchController.text.isEmpty
+                        ? "El emprendimiento no ofrece productos."
+                        : "No se encontraron coincidencias.",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: AppMaterial().getColorAtIndex(2),
+                    ),
+                  ),
+                ),
+              )
+              : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: _resultadosList.length,
+                itemCount: _productosList.length,
                 itemBuilder: (context, index) {
-                  final producto = _resultadosList[index];
+                  final producto = _productosList[index];
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
@@ -194,6 +223,113 @@ class _SubProductosCState extends State<SubProductosC> {
                                       Padding(
                                         padding: const EdgeInsets.only(top: 18),
                                         child: Text(' \$${producto['precio']} COP',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppMaterial().getColorAtIndex(2)
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 20),
+                child: Text("SERVICIOS",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _serviciosList.isEmpty
+                  ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text(
+                    _searchController.text.isEmpty
+                        ? "El emprendimiento no ofrece servicios."
+                        : "No se encontraron coincidencias.",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: AppMaterial().getColorAtIndex(2),
+                    ),
+                  ),
+                ),
+              )
+                  : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _serviciosList.length,
+                itemBuilder: (context, index) {
+                  final servicio = _serviciosList[index];
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SubDetalleServicioC(servicio: servicio, correo: widget.correo)
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(18),
+                              child: Image.network(
+                                servicio['imagen'],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          SingleChildScrollView(
+                            child: Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.56,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(servicio['nombre'],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                      Text(servicio['descripcion'],
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Text(' \$${servicio['precio']} COP',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,

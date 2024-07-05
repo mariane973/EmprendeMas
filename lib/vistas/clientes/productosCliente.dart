@@ -1,9 +1,7 @@
 import 'package:EmprendeMas/vistas/clientes/detalleProductoV.dart';
-import 'package:EmprendeMas/vistas/emprendedores/detalleProductoV.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:EmprendeMas/vistas/detalleProducto.dart';
 import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
 import 'package:EmprendeMas/material.dart';
 import 'dart:io' as io;

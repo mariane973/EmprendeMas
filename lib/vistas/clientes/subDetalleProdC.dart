@@ -155,7 +155,7 @@ class SubDetalleProductoC extends StatelessWidget {
                         fontWeight: FontWeight.normal
                     ),
                     children: <TextSpan>[
-                      TextSpan(text: '\$${producto['precio']}',style: TextStyle(
+                      TextSpan(text: '\$${producto['precioTotal']}',style: TextStyle(
                           fontWeight: FontWeight.bold, height: 1.6,
                           fontSize: 19
                       ),
@@ -219,6 +219,22 @@ class SubDetalleProductoC extends StatelessWidget {
                   ]
               ),
             ),
+            if (producto['oferta'] == 'Sí') ...[
+              RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                      TextSpan(text: '${producto['descuento']}%'),
+                    ]
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -402,7 +418,7 @@ class SubDetalleProductoC extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    ' \$${producto['precio']} COP',
+                                                    ' \$${producto['precioTotal']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,
@@ -472,7 +488,7 @@ class SubDetalleProductoC extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 18),
                                                   child: Text(
-                                                    ' \$${producto['precio']} COP',
+                                                    ' \$${producto['precioTotal']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,

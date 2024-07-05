@@ -21,46 +21,49 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nombreController;
   late TextEditingController _descripcionController;
-  late TextEditingController _categoriaController;
   late TextEditingController _precioController;
+  late TextEditingController _descuentoController;
+  late TextEditingController _precioFinalController;
   io.File? imagen;
   String? imageUrl;
   final picker = ImagePicker();
-
-  String? categoriaElegida;
-  List<String> listCategoria = [
-    "Accesorios", "Comida", "Ropa", "Manualidades", "Plantas", "Cuidado Personal", "Servicios", "Venta de Garaje"
-  ];
+  String? ofertaElegida;
+  int _descuento = 0;
 
   @override
   void initState(){
     super.initState();
     _nombreController = TextEditingController();
     _descripcionController = TextEditingController();
-    _categoriaController = TextEditingController();
     _precioController = TextEditingController();
-    _cargarDatosProductoV();
+    _descuentoController = TextEditingController();
+    _precioFinalController = TextEditingController();
+    _cargarDatosServicioV();
   }
 
-  Future<void> _cargarDatosProductoV() async {
+  Future<void> _cargarDatosServicioV() async {
     try {
-      DocumentSnapshot productoSnapshot = await FirebaseFirestore.instance
+      DocumentSnapshot servicioSnapshot = await FirebaseFirestore.instance
           .collection('vendedores')
           .doc(widget.correo)
           .collection('servicios')
           .doc(widget.uidServicio)
           .get();
-      if(productoSnapshot.exists){
-        Map<String, dynamic>? datosServicioV = productoSnapshot.data() as Map<String, dynamic>?;
+      if(servicioSnapshot.exists){
+        Map<String, dynamic>? datosServicioV = servicioSnapshot.data() as Map<String, dynamic>?;
 
         if(datosServicioV != null){
           setState(() {
             _nombreController.text = datosServicioV['nombre'] ?? '';
             _descripcionController.text = datosServicioV['descripcion'] ?? '';
-            _categoriaController.text = datosServicioV['categoria'] ?? '';
-            categoriaElegida = datosServicioV['categoria'] ?? '';
             _precioController.text = (datosServicioV['precio'] != null) ? datosServicioV['precio'].toString() : '';
             imageUrl = datosServicioV['imagen'];
+            ofertaElegida = datosServicioV['oferta'] ?? 'No';
+            _descuento = datosServicioV['descuento'] ?? 0;
+            _descuentoController.text = _descuento.toString();
+            _precioFinalController.text = (datosServicioV['precioTotal'] != null)
+                ? datosServicioV['precioTotal'].toString()
+                : '';
           });
         }else{
           print('No se encontraron datos para el servicio con el UID: ${widget.uidServicio}');
@@ -167,7 +170,17 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
     );
   }
 
-  Future<void> actualizarVendedor() async {
+  void _calcularPrecioFinal() {
+    final precio = int.tryParse(_precioController.text.trim()) ?? 0;
+    final descuento = int.tryParse(_descuentoController.text.trim()) ?? 0;
+    final precioFinal = precio - (precio * descuento / 100);
+
+    setState(() {
+      _precioFinalController.text = precioFinal.toStringAsFixed(0);
+    });
+  }
+
+  Future<void> actualizarServicio() async {
     if(_formKey.currentState!.validate()) {
       try {
         String? newImageUrl;
@@ -185,8 +198,10 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
             .update({
           'nombre': _nombreController.text.trim(),
           'descripcion': _descripcionController.text.trim(),
-          'categoria': categoriaElegida,
           'precio': _precioController.text.trim(),
+          'oferta': ofertaElegida,
+          'descuento': _descuento,
+          'precioTotal': int.tryParse(_precioFinalController.text.trim()) ?? 0,
           if (newImageUrl != null) 'imagen': newImageUrl,
         });
 
@@ -208,8 +223,9 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
   void dispose(){
     _nombreController.dispose();
     _descripcionController.dispose();
-    _categoriaController.dispose();
+    _descuentoController.dispose();
     _precioController.dispose();
+    _precioFinalController.dispose();
     super.dispose();
   }
 
@@ -303,7 +319,7 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 20, right: 20, bottom: 40),
+                      left: 20, right: 20, bottom: 35),
                   child: TextFormField(
                     controller: _descripcionController,
                     decoration: InputDecoration(
@@ -326,42 +342,8 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
-                  child: DropdownButtonFormField<String>(
-                    value: categoriaElegida,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.category),
-                      labelText: "Categoría",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    dropdownColor: Colors.grey[200],
-                    items: listCategoria.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        categoriaElegida = newValue;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, selecciona una categoría';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 5, bottom: 40),
+                      left: 20, right: 20, top: 5, bottom: 35),
                   child: TextFormField(
                     controller: _precioController,
                     keyboardType: TextInputType.number,
@@ -381,10 +363,104 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
                       }
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {
+                        _calcularPrecioFinal();
+                      });
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
+                  child: DropdownButtonFormField<String>(
+                    value: ofertaElegida,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.local_offer),
+                      labelText: "Oferta",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    dropdownColor: Colors.grey[200],
+                    items: ['Sí', 'No'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        ofertaElegida = newValue;
+                        if (ofertaElegida == 'No') {
+                          _descuento = 0;
+                          _descuentoController.clear();
+                        }
+                        _calcularPrecioFinal();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, selecciona una opción';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                if (ofertaElegida == 'Sí')
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 35),
+                    child: TextFormField(
+                      controller: _descuentoController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.percent),
+                        labelText: "Descuento (%)",
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Introduce el porcentaje de descuento';
+                        }
+                        if (int.tryParse(value) == null || int.parse(value) < 0 || int.parse(value) > 100) {
+                          return 'Introduce un descuento válido entre 0 y 100';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          _descuento = int.tryParse(value) ?? 0;
+                          _calcularPrecioFinal();
+                        });
+                      },
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
+                  child: TextFormField(
+                    controller: _precioFinalController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.price_check),
+                      labelText: "Precio Final",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: actualizarVendedor,
+                  onPressed: actualizarServicio,
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
                       backgroundColor: AppMaterial().getColorAtIndex(1)

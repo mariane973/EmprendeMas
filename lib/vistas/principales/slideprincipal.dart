@@ -4,6 +4,7 @@ import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
 import 'package:EmprendeMas/vistas/principales/productos.dart';
 import 'package:EmprendeMas/vistas/principales/emprendimientos.dart';
 import 'package:EmprendeMas/vistas/clientes/login.dart';
+import 'package:EmprendeMas/vistas/principales/servicios.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,7 +34,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
   @override
   void initState() {
     super.initState();
-    _futureData = getData(['vendedores', 'productos']);
+    _futureData = getData(['vendedores', 'productos','servicios']);
   }
 
   Future<List<QuerySnapshot>> getData(List<String> collections) async {
@@ -55,6 +56,7 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
           } else{
             final vendedoresData = snapshot.data![0].docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
             final productosData = snapshot.data![1].docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+            final serviciosData = snapshot.data![2].docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
             return ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
@@ -206,7 +208,29 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                       ),
                       onTap: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => DatosProductos(productosData: productosData),
+                          MaterialPageRoute(builder: (context) => DatosProductos(productosData: productosData)
+                          ),
+                        );
+                      }
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 15),
+                  child: ListTile(
+                      title: Text("Servicios",
+                        style:TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                      leading: FaIcon(FontAwesomeIcons.layerGroup,
+                        color: AppMaterial().getColorAtIndex(0),
+                        size: 30.0,
+                      ),
+                      onTap: () {
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => DatosServicios(serviciosData: serviciosData)
                           ),
                         );
                       }

@@ -1,4 +1,4 @@
-import 'package:EmprendeMas/vistas/principales/subproductos.dart';
+import 'package:EmprendeMas/vistas/principales/subDetalles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
@@ -161,11 +161,16 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                     onTap: () async {
                       DocumentSnapshot emprendedorSnapshot = _resultadosList[index];
                       DocumentReference emprendedorRef = emprendedorSnapshot.reference;
-                      CollectionReference subcoleccionRef = emprendedorRef.collection('productos');
-                      QuerySnapshot subcoleccionSnapshot = await subcoleccionRef.get();
-                      List<Map<String, dynamic>> subcoleccionData = subcoleccionSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+                      CollectionReference productoRef = emprendedorRef.collection('productos');
+                      QuerySnapshot productosSnapshot = await productoRef.get();
+                      List<Map<String, dynamic>> productoData = productosSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+                      CollectionReference servicioRef = emprendedorRef.collection('servicios');
+                      QuerySnapshot serviciosSnapshot = await servicioRef.get();
+                      List<Map<String, dynamic>> servicioData = serviciosSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context)=> SubProductos(data: subcoleccionData)),
+                        MaterialPageRoute(builder: (context)=> SubDetalles(productoData: productoData, servicioData: servicioData)),
                       );
                     },
                     child: Padding(

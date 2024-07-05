@@ -74,11 +74,8 @@ class _ProductosVState extends State<ProductosV> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, AppMaterial().getColorAtIndex(0)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-        ),
+        borderRadius: BorderRadius.circular(30),
+        color: AppMaterial().getColorAtIndex(6),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -251,7 +248,7 @@ class _ProductosVState extends State<ProductosV> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 18),
-                                        child: Text(' \$${producto['precio']} COP',
+                                        child: Text(' \$${producto['precioTotal']} COP',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,

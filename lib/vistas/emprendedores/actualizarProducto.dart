@@ -24,11 +24,15 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
   late TextEditingController _categoriaController;
   late TextEditingController _stockController;
   late TextEditingController _precioController;
+  late TextEditingController _descuentoController;
+  late TextEditingController _precioFinalController;
   io.File? imagen;
   String? imageUrl;
   final picker = ImagePicker();
-
+  String? ofertaElegida;
+  int _descuento = 0;
   String? categoriaElegida;
+
   List<String> listCategoria = [
     "Accesorios", "Comida", "Ropa", "Manualidades", "Plantas", "Cuidado Personal", "Servicios", "Venta de Garaje"
   ];
@@ -41,6 +45,8 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
     _categoriaController = TextEditingController();
     _stockController = TextEditingController();
     _precioController = TextEditingController();
+    _descuentoController = TextEditingController();
+    _precioFinalController = TextEditingController();
     _cargarDatosProductoV();
   }
 
@@ -64,6 +70,12 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
             _stockController.text = (datosProductoV['stock'] != null) ? datosProductoV['stock'].toString() : '';
             _precioController.text = (datosProductoV['precio'] != null) ? datosProductoV['precio'].toString() : '';
             imageUrl = datosProductoV['imagen'];
+            ofertaElegida = datosProductoV['oferta'] ?? 'No';
+            _descuento = datosProductoV['descuento'] ?? 0;
+            _descuentoController.text = _descuento.toString();
+            _precioFinalController.text = (datosProductoV['precioTotal'] != null)
+                ? datosProductoV['precioTotal'].toString()
+                : '';
           });
         }else{
           print('No se encontraron datos para el producto con el UID: ${widget.uidProducto}');
@@ -170,7 +182,17 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
     );
   }
 
-  Future<void> actualizarVendedor() async {
+  void _calcularPrecioFinal() {
+    final precio = int.tryParse(_precioController.text.trim()) ?? 0;
+    final descuento = int.tryParse(_descuentoController.text.trim()) ?? 0;
+    final precioFinal = precio - (precio * descuento / 100);
+
+    setState(() {
+      _precioFinalController.text = precioFinal.toStringAsFixed(0);
+    });
+  }
+
+  Future<void> actualizarProducto() async {
     if(_formKey.currentState!.validate()) {
       try {
         String? newImageUrl;
@@ -191,6 +213,9 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
           'categoria': categoriaElegida,
           'precio': _precioController.text.trim(),
           'stock': _stockController.text.trim(),
+          'oferta': ofertaElegida,
+          'descuento': _descuento,
+          'precioTotal': int.tryParse(_precioFinalController.text.trim()) ?? 0,
           if (newImageUrl != null) 'imagen': newImageUrl,
         });
 
@@ -214,7 +239,9 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
     _descripcionController.dispose();
     _categoriaController.dispose();
     _stockController.dispose();
+    _descuentoController.dispose();
     _precioController.dispose();
+    _precioFinalController.dispose();
     super.dispose();
   }
 
@@ -357,7 +384,7 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
                       });
                     },
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null) {
                         return 'Por favor, selecciona una categoría';
                       }
                       return null;
@@ -386,6 +413,11 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
                       }
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {
+                        _calcularPrecioFinal();
+                      });
+                    },
                   ),
                 ),
                 Padding(
@@ -412,8 +444,97 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
+                  child: DropdownButtonFormField<String>(
+                    value: ofertaElegida,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.local_offer),
+                      labelText: "Oferta",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    dropdownColor: Colors.grey[200],
+                    items: ['Sí', 'No'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        ofertaElegida = newValue;
+                        if (ofertaElegida == 'No') {
+                          _descuento = 0;
+                          _descuentoController.clear();
+                        }
+                        _calcularPrecioFinal();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, selecciona una opción';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                if (ofertaElegida == 'Sí')
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 35),
+                    child: TextFormField(
+                      controller: _descuentoController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.percent),
+                        labelText: "Descuento (%)",
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Introduce el porcentaje de descuento';
+                        }
+                        if (int.tryParse(value) == null || int.parse(value) < 0 || int.parse(value) > 100) {
+                          return 'Introduce un descuento válido entre 0 y 100';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          _descuento = int.tryParse(value) ?? 0;
+                          _calcularPrecioFinal();
+                        });
+                      },
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
+                  child: TextFormField(
+                    controller: _precioFinalController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.price_check),
+                      labelText: "Precio Final",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                  ),
+                ),
                 ElevatedButton(
-                  onPressed: actualizarVendedor,
+                  onPressed: actualizarProducto,
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
                       backgroundColor: AppMaterial().getColorAtIndex(1)

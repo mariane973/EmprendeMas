@@ -62,67 +62,104 @@ class _DetalleProductoVState extends State<DetalleProductoV> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppMaterial().getColorAtIndex(0),AppMaterial().getColorAtIndex(0),Colors.white, Colors.white ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomLeft,
-        ),
+          color: Colors.white
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(widget.producto['nombre'],
             style: TextStyle(
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500,
+                color: Colors.white
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(0),
+          backgroundColor: AppMaterial().getColorAtIndex(2),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40, left: 10, right: 10, bottom: 50),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(widget.producto['imagen'],
-                        width: 200, height: 200)
-                ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 130),
+              child: Row(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: AppMaterial().getColorAtIndex(2),
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Detalles del producto',style: TextStyle(fontWeight: FontWeight.w500)),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 22),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          color: AppMaterial().getColorAtIndex(2),
+                          size: 17,
+                        ),
+                        onPressed: () {
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              RichText(
+            ),
+            Padding(
+              padding: const EdgeInsets.only( left: 10, right: 10, bottom: 10, top: 10),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(widget.producto['imagen'],
+                      width: 200, height: 200)
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 19,
+                      fontWeight: FontWeight.normal
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: '${widget.producto['nombre']} ',style: TextStyle(fontWeight: FontWeight.bold)),
+                  ]
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: RichText(
                 text: TextSpan(
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
+                        color: AppMaterial().getColorAtIndex(1),
+                        fontSize: 22,
                         fontWeight: FontWeight.normal
                     ),
                     children: <TextSpan>[
-                      TextSpan(text: '${widget.producto['nombre']} ',style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: '\$${widget.producto['precioTotal']}',style: TextStyle(
+                          fontWeight: FontWeight.bold, height: 1.6,
+                          fontSize: 19
+                      ),
+                      ),
                     ]
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 18),
-                child: RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.normal
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(text: '\$${widget.producto['precio']}',style: TextStyle(
-                            fontWeight: FontWeight.bold, height: 1.6,
-                            fontSize: 19
-                        ),
-                        ),
-                      ]
-                  ),
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Divider(
+                color: Colors.grey,
+                thickness: 1,
+                height: 20,
               ),
-
-              Column(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 150),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
@@ -130,11 +167,11 @@ class _DetalleProductoVState extends State<DetalleProductoV> {
                     text: TextSpan(
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.normal,
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                          TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
                           TextSpan(text: '${widget.producto['descripcion']}'),
                         ]
                     ),
@@ -143,7 +180,7 @@ class _DetalleProductoVState extends State<DetalleProductoV> {
                     text: TextSpan(
                         style: TextStyle(
                             color: Colors.black,
-                            fontSize: 18,
+                            fontSize: 17,
                             fontWeight: FontWeight.normal
                         ),
                         children: <TextSpan>[
@@ -152,89 +189,104 @@ class _DetalleProductoVState extends State<DetalleProductoV> {
                         ]
                     ),
                   ),
-
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
                             color: Colors.black,
-                            fontSize: 18,
+                            fontSize: 17,
                             fontWeight: FontWeight.normal
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Stock: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                          TextSpan(text: 'Stock: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
                           TextSpan(text: '${widget.producto['stock']}'),
                         ]
                     ),
                   ),
-                ],
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                                onPressed: (){
-                                  Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => EditarProductoVendedor(uidProducto: widget.uidProducto, correo: widget.correo))
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit, color: Colors.white),
-                                    SizedBox(width: 25),
-                                    Text(
-                                      "Editar",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white
-                                      ),
-                                    ),
-                                  ],
-                                )
-                            ),
+                  if (widget.producto['oferta'] == 'Sí') ...[
+                    RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                                onPressed: (){
-                                    ShowAlert();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.delete, color: Colors.white),
-                                    SizedBox(width: 20),
-                                    Text(
-                                      "Eliminar",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white
-                                      ),
-                                    ),
-                                  ],
-                                )
-                            ),
-                          ),
-                        ),
-                      ],
+                          children: <TextSpan>[
+                            TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                            TextSpan(text: '${widget.producto['descuento']}%'),
+                          ]
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
-            ],
-          ),
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 30, left: 20, right: 25),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: ElevatedButton(
+                              onPressed: (){
+                                Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => EditarProductoVendedor(uidProducto: widget.uidProducto, correo: widget.correo))
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit, color: Colors.white),
+                                  SizedBox(width: 25),
+                                  Text(
+                                    "Editar",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                              onPressed: (){
+                                  ShowAlert();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete, color: Colors.white),
+                                  SizedBox(width: 20),
+                                  Text(
+                                    "Eliminar",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

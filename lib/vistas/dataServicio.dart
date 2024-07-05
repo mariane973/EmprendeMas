@@ -9,12 +9,14 @@ class InsertarDatosServicio{
 
   void guardarServicioDatos({
     required io.File imagen,
-    required String categoria,
     required String descripcion,
     required String nombre,
     required int precio,
     required String correo,
     required BuildContext context,
+    required int descuento,
+    required int precioTotal,
+    required String oferta,
   }) async {
     Reference ref = _storage.ref().child('imgservicios/${DateTime.now().toString()}');
     UploadTask uploadTask = ref.putFile(imagen);
@@ -26,10 +28,12 @@ class InsertarDatosServicio{
         .collection('servicios')
         .add({
       'nombre': nombre,
-      'categoria': categoria,
       'imagen': img,
       'descripcion': descripcion,
       'precio': precio,
+      'descuento': descuento,
+      'precioTotal': precioTotal,
+      'oferta': oferta,
     }).then((value){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
