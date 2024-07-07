@@ -173,8 +173,7 @@ class _ServiciosCState extends State<ServiciosC> {
                     itemCount: _resultadosList.length,
                     itemBuilder: (context, index) {
                       final servicio = _resultadosList[index];
-                      final servicioData =
-                      servicio.productosdata() as Map<String, dynamic>;
+                      final servicioData = servicio.data() as Map<String, dynamic>;
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(

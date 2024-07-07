@@ -201,7 +201,7 @@ class Ofertas extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 10),
                         width: 180,
-                        height: 300, // Ajustar la altura para dar espacio a los textos
+                        height: 300,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),

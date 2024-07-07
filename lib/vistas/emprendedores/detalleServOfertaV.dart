@@ -1,12 +1,64 @@
+import 'package:EmprendeMas/vistas/emprendedores/actualizarServicio.dart';
+import 'package:EmprendeMas/vistas/emprendedores/servicioOfertaV.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quickalert/quickalert.dart';
 
-class DetalleProducto extends StatelessWidget {
-  final Map<String, dynamic> producto;
+class DetalleServOfertaV extends StatefulWidget {
+  final Map<String, dynamic> servicio;
+  final String uidServicio;
+  final String correo;
 
-  DetalleProducto ({required this.producto});
+  DetalleServOfertaV({required this.servicio,required this.uidServicio, required this.correo});
+
+  @override
+  State<DetalleServOfertaV> createState() => _DetalleServOfertaVState();
+}
+
+class _DetalleServOfertaVState extends State<DetalleServOfertaV> {
+
+  void ShowAlert(){
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        title: "Confirmar eliminación",
+        text: "¿Estás seguro de que deseas eliminar este servicio?",
+        confirmBtnText: "Eliminar",
+        cancelBtnText: "Cancelar",
+        onConfirmBtnTap: () {
+          _eliminarServicio(widget.correo, widget.uidServicio, context);
+        }
+    );
+  }
+
+  Future<void> _eliminarServicio (String correo, String uidProducto, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('vendedores')
+          .doc(correo)
+          .collection('servicios')
+          .doc(uidProducto)
+          .delete();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('El servicio ha sido eliminado exitosamente'),
+            backgroundColor: AppMaterial().getColorAtIndex(2)
+        ),
+      );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => ServiciosOfertaV(correo: correo)),
+      );
+
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al eliminar el servicio: $error')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +69,12 @@ class DetalleProducto extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text(producto['nombre'],
+          title: Text(widget.servicio['nombre'],
             style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white
+              fontWeight: FontWeight.w500,
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(0),
+          backgroundColor: AppMaterial().getColorAtIndex(1),
         ),
         body: Column(
           children: [
@@ -34,12 +85,12 @@ class DetalleProducto extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(0),
+                            color: AppMaterial().getColorAtIndex(1),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Detalles del producto',style: TextStyle(fontWeight: FontWeight.w500)),
+                          TextSpan(text: 'Detalles del servicio',style: TextStyle(fontWeight: FontWeight.w500)),
                         ]
                     ),
                   ),
@@ -50,7 +101,7 @@ class DetalleProducto extends StatelessWidget {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(0),
+                              .getColorAtIndex(1),
                           size: 17,
                         ),
                         onPressed: () {
@@ -62,12 +113,11 @@ class DetalleProducto extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only( left: 10, right: 10, bottom: 10, top: 10),
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 20),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.network(producto['imagen'],
-                      width: 200, height: 200)
-              ),
+                  child: Image.network(widget.servicio['imagen'],
+                    width: 200, height: 200,)),
             ),
             RichText(
               text: TextSpan(
@@ -77,7 +127,7 @@ class DetalleProducto extends StatelessWidget {
                       fontWeight: FontWeight.normal
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: '${producto['nombre']} ',style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${widget.servicio['nombre']} ',style: TextStyle(fontWeight: FontWeight.bold)),
                   ]
               ),
             ),
@@ -91,7 +141,7 @@ class DetalleProducto extends StatelessWidget {
                         fontWeight: FontWeight.normal
                     ),
                     children: <TextSpan>[
-                      TextSpan(text: '\$${producto['precioTotal']}',style: TextStyle(
+                      TextSpan(text: '\$${widget.servicio['precioTotal']}',style: TextStyle(
                           fontWeight: FontWeight.bold, height: 1.6,
                           fontSize: 19
                       ),
@@ -123,33 +173,21 @@ class DetalleProducto extends StatelessWidget {
                         ),
                         children: <TextSpan>[
                           TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                          TextSpan(text: '${producto['descripcion']}'),
+                          TextSpan(text: '${widget.servicio['descripcion']}'),
                         ]
                     ),
                   ),
                   RichText(
+                    textAlign: TextAlign.left,
                     text: TextSpan(
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.normal,
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Categoría: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
-                          TextSpan(text: '${producto['categoria']}'),
-                        ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(text: 'Stock: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
-                          TextSpan(text: '${producto['stock']}'),
+                          TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                          TextSpan(text: '${widget.servicio['descuento']}%'),
                         ]
                     ),
                   ),
@@ -159,46 +197,64 @@ class DetalleProducto extends StatelessWidget {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 7, horizontal:130),
-                    child: ElevatedButton(
-                      onPressed: (){},
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<
-                            Color>(AppMaterial().getColorAtIndex(4)),
-                        shape: MaterialStateProperty.all<
-                            RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+                  padding: const EdgeInsets.only(top: 30, left: 20, right: 25),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: ElevatedButton(
+                              onPressed: (){
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => EditarServicioVendedor(uidServicio: widget.uidServicio, correo: widget.correo))
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit, color: Colors.white),
+                                  SizedBox(width: 25),
+                                  Text(
+                                    "Editar",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white
+                                    ),
+                                  ),
+                                ],
+                              )
                           ),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Emprendedor",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 15),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.work_history_rounded,
-                                  color: Colors.white,
-                                  size: 25,
-                                ),
-                                onPressed: () {},
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                              onPressed: (){
+                                ShowAlert();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
                               ),
-                            ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete, color: Colors.white),
+                                  SizedBox(width: 20),
+                                  Text(
+                                    "Eliminar",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white
+                                    ),
+                                  ),
+                                ],
+                              )
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
@@ -211,7 +267,7 @@ class DetalleProducto extends StatelessWidget {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(0),
+                          color: AppMaterial().getColorAtIndex(1),
                         ),
                         child: SingleChildScrollView(
                           child: Column(
@@ -248,9 +304,9 @@ class DetalleProducto extends StatelessWidget {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(18),
-                                            child: producto['imagen'] != null
+                                            child: widget.servicio['imagen'] != null
                                                 ? Image.network(
-                                              producto['imagen'],
+                                              widget.servicio['imagen'],
                                               fit: BoxFit.cover,
                                             )
                                                 : Placeholder(),
@@ -266,7 +322,7 @@ class DetalleProducto extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  producto['nombre'],
+                                                  widget.servicio['nombre'],
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 20,
@@ -274,7 +330,7 @@ class DetalleProducto extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Text(
-                                                  producto['descripcion'],
+                                                  widget.servicio['descripcion'],
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.bold,
@@ -285,7 +341,7 @@ class DetalleProducto extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    ' \$${producto['precioTotal']} COP',
+                                                    ' \$${widget.servicio['precioTotal']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,
@@ -321,9 +377,9 @@ class DetalleProducto extends StatelessWidget {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(18),
-                                            child: producto['imagen'] != null
+                                            child: widget.servicio['imagen'] != null
                                                 ? Image.network(
-                                              producto['imagen'],
+                                              widget.servicio['imagen'],
                                               fit: BoxFit.cover,
                                             )
                                                 : Placeholder(),
@@ -339,14 +395,14 @@ class DetalleProducto extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  producto['nombre'],
+                                                  widget.servicio['nombre'],
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
                                                 ),
                                                 Text(
-                                                  producto['descripcion'],
+                                                  widget.servicio['descripcion'],
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                   ),
@@ -355,7 +411,7 @@ class DetalleProducto extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 18),
                                                   child: Text(
-                                                    ' \$${producto['precioTotal']} COP',
+                                                    ' \$${widget.servicio['precioTotal']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,

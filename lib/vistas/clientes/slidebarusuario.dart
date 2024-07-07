@@ -4,7 +4,9 @@ import 'package:EmprendeMas/vistas/clientes/actualizarperfil.dart';
 import 'package:EmprendeMas/vistas/clientes/carrito.dart';
 import 'package:EmprendeMas/vistas/clientes/emprendimientosCliente.dart';
 import 'package:EmprendeMas/vistas/clientes/homeusuario.dart';
+import 'package:EmprendeMas/vistas/clientes/productoOfertaC.dart';
 import 'package:EmprendeMas/vistas/clientes/productosCliente.dart';
+import 'package:EmprendeMas/vistas/clientes/servicioOfertaC.dart';
 import 'package:EmprendeMas/vistas/clientes/serviciosCliente.dart';
 import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
 import 'package:EmprendeMas/vistas/clientes/login.dart';
@@ -304,25 +306,62 @@ class _SlidebarUsuarioState extends State<SlidebarUsuario> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 15),
-                    child: ListTile(
+                      padding: const EdgeInsets.only(bottom: 10, top: 10, left: 25),
+                      child: ExpansionTile(
                         title: Text("Ofertas",
-                          style:TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                         leading: FaIcon(FontAwesomeIcons.moneyBillWave,
                           color: AppMaterial().getColorAtIndex(1),
                           size: 30.0,
                         ),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Login())
-                          );
-                        }
-                    ),
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30, bottom: 5),
+                            child: ListTile(
+                              title: Text('Ofertas Productos',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppMaterial().getColorAtIndex(0)),
+                              ),
+                              leading: FaIcon(FontAwesomeIcons.shirt,
+                                color: AppMaterial().getColorAtIndex(1),
+                                size: 25.0,
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => ProductosOfertaC(correo: widget.correo))
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30, top: 5, bottom: 15),
+                            child: ListTile(
+                              title: Text('Ofertas Servicios',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppMaterial().getColorAtIndex(0)),
+                              ),
+                              leading: FaIcon(FontAwesomeIcons.birthdayCake,
+                                color: AppMaterial().getColorAtIndex(1),
+                                size: 25.0,
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => ServiciosOfertaC(correo: widget.correo))
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      )
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, top: 8),

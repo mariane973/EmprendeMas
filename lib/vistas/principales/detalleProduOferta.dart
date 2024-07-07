@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DetalleProducto extends StatelessWidget {
+class DetalleProduOferta extends StatelessWidget {
   final Map<String, dynamic> producto;
 
-  DetalleProducto ({required this.producto});
+  DetalleProduOferta ({required this.producto});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,10 @@ class DetalleProducto extends StatelessWidget {
         appBar: AppBar(
           title: Text(producto['nombre'],
             style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white
+              fontWeight: FontWeight.w500,
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(0),
+          backgroundColor: AppMaterial().getColorAtIndex(1),
         ),
         body: Column(
           children: [
@@ -34,7 +33,7 @@ class DetalleProducto extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(0),
+                            color: AppMaterial().getColorAtIndex(1),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
@@ -50,7 +49,7 @@ class DetalleProducto extends StatelessWidget {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(0),
+                              .getColorAtIndex(1),
                           size: 17,
                         ),
                         onPressed: () {
@@ -62,12 +61,11 @@ class DetalleProducto extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only( left: 10, right: 10, bottom: 10, top: 10),
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 20),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.network(producto['imagen'],
-                      width: 200, height: 200)
-              ),
+                    width: 200, height: 200,)),
             ),
             RichText(
               text: TextSpan(
@@ -108,6 +106,7 @@ class DetalleProducto extends StatelessWidget {
                 height: 20,
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.only(right: 150),
               child: Column(
@@ -135,7 +134,7 @@ class DetalleProducto extends StatelessWidget {
                             fontWeight: FontWeight.normal
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Categoría: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                          TextSpan(text: 'Categoría: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
                           TextSpan(text: '${producto['categoria']}'),
                         ]
                     ),
@@ -148,11 +147,27 @@ class DetalleProducto extends StatelessWidget {
                             fontWeight: FontWeight.normal
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Stock: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                          TextSpan(text: 'Stock: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
                           TextSpan(text: '${producto['stock']}'),
                         ]
                     ),
                   ),
+                  if (producto['oferta'] == 'Sí') ...[
+                    RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                            TextSpan(text: '${producto['descuento']}%'),
+                          ]
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -211,7 +226,7 @@ class DetalleProducto extends StatelessWidget {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(0),
+                          color: AppMaterial().getColorAtIndex(1),
                         ),
                         child: SingleChildScrollView(
                           child: Column(

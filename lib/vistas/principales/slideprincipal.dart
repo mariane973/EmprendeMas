@@ -1,9 +1,11 @@
 import 'package:EmprendeMas/home.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
+import 'package:EmprendeMas/vistas/principales/productoOferta.dart';
 import 'package:EmprendeMas/vistas/principales/productos.dart';
 import 'package:EmprendeMas/vistas/principales/emprendimientos.dart';
 import 'package:EmprendeMas/vistas/clientes/login.dart';
+import 'package:EmprendeMas/vistas/principales/servicioOferta.dart';
 import 'package:EmprendeMas/vistas/principales/servicios.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -258,25 +260,62 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: ListTile(
+                    padding: const EdgeInsets.only(bottom: 10, top: 10, left: 25),
+                    child: ExpansionTile(
                       title: Text("Ofertas",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       leading: FaIcon(FontAwesomeIcons.moneyBillWave,
                         color: AppMaterial().getColorAtIndex(0),
                         size: 30.0,
                       ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login())
-                        );
-                      }
-                  ),
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, bottom: 5),
+                          child: ListTile(
+                            title: Text('Ofertas Productos',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppMaterial().getColorAtIndex(0)),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.shirt,
+                              color: AppMaterial().getColorAtIndex(1),
+                              size: 25.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProductosOferta())
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, top: 5, bottom: 15),
+                          child: ListTile(
+                            title: Text('Ofertas Servicios',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppMaterial().getColorAtIndex(0)),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.birthdayCake,
+                              color: AppMaterial().getColorAtIndex(1),
+                              size: 25.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ServiciosOferta())
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
                 ),
               ],
             );

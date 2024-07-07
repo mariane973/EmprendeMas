@@ -148,7 +148,6 @@ class _DatosProductosState extends State<DatosProductos> {
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
-
                 ),
               ),
               _resultadosList.isEmpty
@@ -256,4 +255,3 @@ class _DatosProductosState extends State<DatosProductos> {
     );
   }
 }
-

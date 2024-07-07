@@ -28,6 +28,7 @@ class InsertarDatosServicio{
         .collection('servicios')
         .add({
       'nombre': nombre,
+      'correoV': correo,
       'imagen': img,
       'descripcion': descripcion,
       'precio': precio,

@@ -30,6 +30,7 @@ class InsertarDatosProducto{
         .collection('productos')
         .add({
       'nombre': nombre,
+      'correoV':correo,
       'categoria': categoria,
       'imagen': img,
       'descripcion': descripcion,

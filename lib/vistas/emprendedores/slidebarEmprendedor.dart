@@ -5,7 +5,9 @@ import 'package:EmprendeMas/vistas/emprendedores/emprendimientosVendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/homevendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
 import 'package:EmprendeMas/vistas/clientes/login.dart';
+import 'package:EmprendeMas/vistas/emprendedores/productoOfertaV.dart';
 import 'package:EmprendeMas/vistas/emprendedores/productosVendedor.dart';
+import 'package:EmprendeMas/vistas/emprendedores/servicioOfertaV.dart';
 import 'package:EmprendeMas/vistas/emprendedores/serviciosVendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -290,8 +292,66 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                             }
                         ),
                       ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 10, top: 10, left: 25),
+                          child: ExpansionTile(
+                            title: Text("Mis Ofertas",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.moneyBillWave,
+                              color: AppMaterial().getColorAtIndex(2),
+                              size: 30.0,
+                            ),
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30, bottom: 5),
+                                child: ListTile(
+                                  title: Text('Ofertas Productos',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppMaterial().getColorAtIndex(0)),
+                                  ),
+                                  leading: FaIcon(FontAwesomeIcons.shirt,
+                                    color: AppMaterial().getColorAtIndex(2),
+                                    size: 25.0,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ProductosOfertaV(correo: widget.correo))
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30, top: 5, bottom: 15),
+                                child: ListTile(
+                                  title: Text('Ofertas Servicios',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppMaterial().getColorAtIndex(0)),
+                                  ),
+                                  leading: FaIcon(FontAwesomeIcons.birthdayCake,
+                                    color: AppMaterial().getColorAtIndex(2),
+                                    size: 25.0,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ServiciosOfertaV(correo: widget.correo))
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                      ),
                       SizedBox(
-                        height: 180,
+                        height: 130,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 25, top:20),

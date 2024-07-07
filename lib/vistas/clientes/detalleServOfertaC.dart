@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DetalleProducto extends StatelessWidget {
-  final Map<String, dynamic> producto;
+class DetalleServOfertaC extends StatelessWidget {
+  final Map<String, dynamic> servicio;
 
-  DetalleProducto ({required this.producto});
+  DetalleServOfertaC({required this.servicio});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +17,12 @@ class DetalleProducto extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text(producto['nombre'],
+          title: Text(servicio['nombre'],
             style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white
+              fontWeight: FontWeight.w500,
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(0),
+          backgroundColor: AppMaterial().getColorAtIndex(1),
         ),
         body: Column(
           children: [
@@ -34,12 +33,12 @@ class DetalleProducto extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(0),
+                            color: AppMaterial().getColorAtIndex(1),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Detalles del producto',style: TextStyle(fontWeight: FontWeight.w500)),
+                          TextSpan(text: 'Detalles del servicio',style: TextStyle(fontWeight: FontWeight.w500)),
                         ]
                     ),
                   ),
@@ -50,7 +49,7 @@ class DetalleProducto extends StatelessWidget {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(0),
+                              .getColorAtIndex(1),
                           size: 17,
                         ),
                         onPressed: () {
@@ -62,12 +61,11 @@ class DetalleProducto extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only( left: 10, right: 10, bottom: 10, top: 10),
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 20),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.network(producto['imagen'],
-                      width: 200, height: 200)
-              ),
+                  child: Image.network(servicio['imagen'],
+                    width: 200, height: 200,)),
             ),
             RichText(
               text: TextSpan(
@@ -77,7 +75,7 @@ class DetalleProducto extends StatelessWidget {
                       fontWeight: FontWeight.normal
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: '${producto['nombre']} ',style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${servicio['nombre']} ',style: TextStyle(fontWeight: FontWeight.bold)),
                   ]
               ),
             ),
@@ -91,7 +89,7 @@ class DetalleProducto extends StatelessWidget {
                         fontWeight: FontWeight.normal
                     ),
                     children: <TextSpan>[
-                      TextSpan(text: '\$${producto['precioTotal']}',style: TextStyle(
+                      TextSpan(text: '\$${servicio['precioTotal']}',style: TextStyle(
                           fontWeight: FontWeight.bold, height: 1.6,
                           fontSize: 19
                       ),
@@ -123,33 +121,21 @@ class DetalleProducto extends StatelessWidget {
                         ),
                         children: <TextSpan>[
                           TextSpan(text: 'Descripción: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                          TextSpan(text: '${producto['descripcion']}'),
+                          TextSpan(text: '${servicio['descripcion']}'),
                         ]
                     ),
                   ),
                   RichText(
+                    textAlign: TextAlign.left,
                     text: TextSpan(
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.normal,
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Categoría: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
-                          TextSpan(text: '${producto['categoria']}'),
-                        ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(text: 'Stock: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
-                          TextSpan(text: '${producto['stock']}'),
+                          TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                          TextSpan(text: '${servicio['descuento']}%'),
                         ]
                     ),
                   ),
@@ -211,7 +197,7 @@ class DetalleProducto extends StatelessWidget {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(0),
+                          color: AppMaterial().getColorAtIndex(1),
                         ),
                         child: SingleChildScrollView(
                           child: Column(
@@ -248,9 +234,9 @@ class DetalleProducto extends StatelessWidget {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(18),
-                                            child: producto['imagen'] != null
+                                            child: servicio['imagen'] != null
                                                 ? Image.network(
-                                              producto['imagen'],
+                                              servicio['imagen'],
                                               fit: BoxFit.cover,
                                             )
                                                 : Placeholder(),
@@ -266,7 +252,7 @@ class DetalleProducto extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  producto['nombre'],
+                                                  servicio['nombre'],
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 20,
@@ -274,7 +260,7 @@ class DetalleProducto extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Text(
-                                                  producto['descripcion'],
+                                                  servicio['descripcion'],
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.bold,
@@ -285,7 +271,7 @@ class DetalleProducto extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    ' \$${producto['precioTotal']} COP',
+                                                    ' \$${servicio['precioTotal']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,
@@ -321,9 +307,9 @@ class DetalleProducto extends StatelessWidget {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(18),
-                                            child: producto['imagen'] != null
+                                            child: servicio['imagen'] != null
                                                 ? Image.network(
-                                              producto['imagen'],
+                                              servicio['imagen'],
                                               fit: BoxFit.cover,
                                             )
                                                 : Placeholder(),
@@ -339,14 +325,14 @@ class DetalleProducto extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  producto['nombre'],
+                                                  servicio['nombre'],
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                   ),
                                                 ),
                                                 Text(
-                                                  producto['descripcion'],
+                                                  servicio['descripcion'],
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                   ),
@@ -355,7 +341,7 @@ class DetalleProducto extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 18),
                                                   child: Text(
-                                                    ' \$${producto['precioTotal']} COP',
+                                                    ' \$${servicio['precioTotal']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,

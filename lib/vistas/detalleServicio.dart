@@ -1,4 +1,3 @@
-import 'package:EmprendeMas/vistas/clientes/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
@@ -153,97 +152,46 @@ class DetalleServicio extends StatelessWidget {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 20, right: 25),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: ElevatedButton(
-                              onPressed: (){
-                                Login();
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<
-                                    Color>(AppMaterial().getColorAtIndex(0)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Añadir al carrito",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 15),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.shopping_cart,
-                                          color: Colors.white,
-                                          size: 25,
-                                        ),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 7, horizontal:130),
+                    child: ElevatedButton(
+                      onPressed: (){},
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<
+                            Color>(AppMaterial().getColorAtIndex(4)),
+                        shape: MaterialStateProperty.all<
+                            RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: (){},
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<
-                                  Color>(AppMaterial().getColorAtIndex(4)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Emprendedor",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.work_history_rounded,
+                                  color: Colors.white,
+                                  size: 25,
                                 ),
+                                onPressed: () {},
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Emprendedor",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.work_history_rounded,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],
