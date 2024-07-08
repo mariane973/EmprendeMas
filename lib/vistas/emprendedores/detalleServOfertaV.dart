@@ -72,9 +72,10 @@ class _DetalleServOfertaVState extends State<DetalleServOfertaV> {
           title: Text(widget.servicio['nombre'],
             style: TextStyle(
               fontWeight: FontWeight.w500,
+              color: Colors.white
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(1),
+          backgroundColor: AppMaterial().getColorAtIndex(2),
         ),
         body: Column(
           children: [
@@ -85,7 +86,7 @@ class _DetalleServOfertaVState extends State<DetalleServOfertaV> {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(1),
+                            color: AppMaterial().getColorAtIndex(2),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
@@ -101,7 +102,7 @@ class _DetalleServOfertaVState extends State<DetalleServOfertaV> {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(1),
+                              .getColorAtIndex(2),
                           size: 17,
                         ),
                         onPressed: () {
@@ -267,7 +268,7 @@ class _DetalleServOfertaVState extends State<DetalleServOfertaV> {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(1),
+                          color: AppMaterial().getColorAtIndex(2),
                         ),
                         child: SingleChildScrollView(
                           child: Column(

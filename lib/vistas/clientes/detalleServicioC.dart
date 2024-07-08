@@ -4,11 +4,11 @@ import 'package:EmprendeMas/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DetalleServOfertaC extends StatelessWidget {
-  final Map<String, dynamic> servicio;
+class DetalleServicioC extends StatelessWidget {
   final String correo;
+  final Map<String, dynamic> servicio;
 
-  DetalleServOfertaC({required this.servicio, required this.correo});
+  DetalleServicioC ({required this.servicio, required this.correo});
 
   void agregarAlCarrito(BuildContext context) async {
     try {
@@ -84,7 +84,8 @@ class DetalleServOfertaC extends StatelessWidget {
         appBar: AppBar(
           title: Text(servicio['nombre'],
             style: TextStyle(
-              fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w500,
+                color: Colors.white
             ),
           ),
           backgroundColor: AppMaterial().getColorAtIndex(1),
@@ -126,11 +127,12 @@ class DetalleServOfertaC extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 20),
+              padding: const EdgeInsets.only( left: 10, right: 10, bottom: 10, top: 10),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.network(servicio['imagen'],
-                    width: 200, height: 200,)),
+                      width: 200, height: 200)
+              ),
             ),
             RichText(
               text: TextSpan(
@@ -190,20 +192,22 @@ class DetalleServOfertaC extends StatelessWidget {
                         ]
                     ),
                   ),
-                  RichText(
-                    textAlign: TextAlign.left,
-                    text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                          TextSpan(text: '${servicio['descuento']}%'),
-                        ]
+                  if (servicio['oferta'] == 'Sí') ...[
+                    RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                            TextSpan(text: '${servicio['descuento']}%'),
+                          ]
+                      ),
                     ),
-                  ),
+                  ]
                 ],
               ),
             ),
@@ -387,7 +391,7 @@ class DetalleServOfertaC extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    ' \$${servicio['precioTotal']} COP',
+                                                    ' \$${servicio['precio']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,
@@ -457,7 +461,7 @@ class DetalleServOfertaC extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.only(top: 18),
                                                   child: Text(
-                                                    ' \$${servicio['precioTotal']} COP',
+                                                    ' \$${servicio['precioTotals']} COP',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,

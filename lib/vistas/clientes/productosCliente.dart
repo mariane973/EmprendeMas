@@ -1,4 +1,4 @@
-import 'package:EmprendeMas/vistas/clientes/detalleProductoV.dart';
+import 'package:EmprendeMas/vistas/clientes/detalleProductoC.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +34,6 @@ class _ProductosCState extends State<ProductosC> {
   }
 
   _onSearchChanged(){
-    print(_searchController.text);
     searchResultList();
   }
 
@@ -55,7 +54,7 @@ class _ProductosCState extends State<ProductosC> {
     });
   }
 
-  getProdcutoStream() async {
+  getProductoStream() async {
     var vendedoresData = await FirebaseFirestore.instance.collection('vendedores').get();
 
     List<DocumentSnapshot> allProductos = [];
@@ -70,7 +69,7 @@ class _ProductosCState extends State<ProductosC> {
   }
   @override
   void didChangeDependencies() {
-    getProdcutoStream();
+    getProductoStream();
     super.didChangeDependencies();
   }
 
@@ -151,14 +150,29 @@ class _ProductosCState extends State<ProductosC> {
                   ),
                 ),
               ),
-              ListView.builder(
+              _resultadosList.isEmpty
+                  ? Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                      child: Center(
+                        child: Text(
+                          _searchController.text.isEmpty
+                              ? "No se encuentran productos."
+                              : "No se encontraron coincidencias.",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w500,
+                            color: AppMaterial().getColorAtIndex(2),
+                          ),
+                        ),
+                      ),
+                  )
+                :ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: _resultadosList.length,
                 itemBuilder: (context, index) {
                   final producto = _resultadosList[index];
-                  final productoData =
-                  producto.data() as Map<String, dynamic>;
+                  final productoData = producto.data() as Map<String, dynamic>;
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(

@@ -272,7 +272,7 @@ class _ProductosOfertaCState extends State<ProductosOfertaC> {
                                             child: ElevatedButton.icon(
                                               onPressed: () {
                                                 Navigator.push(context,
-                                                    MaterialPageRoute(builder: (context)=>DetalleProduOfertaC(producto: producto)));
+                                                    MaterialPageRoute(builder: (context)=>DetalleProduOfertaC(producto: producto, correo: widget.correo)));
                                               },
                                               icon: Icon(
                                                 Icons.remove_red_eye,

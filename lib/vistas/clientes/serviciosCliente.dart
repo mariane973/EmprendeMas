@@ -1,4 +1,5 @@
-import 'package:EmprendeMas/vistas/clientes/detalleProductoV.dart';
+import 'package:EmprendeMas/vistas/clientes/detalleProductoC.dart';
+import 'package:EmprendeMas/vistas/clientes/detalleServicioC.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,8 +61,8 @@ class _ServiciosCState extends State<ServiciosC> {
 
     List<DocumentSnapshot> allServicios = [];
     for (var vendedorSnapshot in vendedoresData.docs) {
-      var productosSnapshot = await vendedorSnapshot.reference.collection('servicios').orderBy('nombre').get();
-      allServicios.addAll(productosSnapshot.docs);
+      var servicioSnapshot = await vendedorSnapshot.reference.collection('servicios').orderBy('nombre').get();
+      allServicios.addAll(servicioSnapshot.docs);
     }
     setState(() {
       _resultados = allServicios;
@@ -179,7 +180,7 @@ class _ServiciosCState extends State<ServiciosC> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DetalleProductoC(producto: servicioData, correo: widget.correo)),
+                                builder: (context) => DetalleServicioC(servicio: servicioData, correo: widget.correo)),
                           );
                         },
                         child: Padding(

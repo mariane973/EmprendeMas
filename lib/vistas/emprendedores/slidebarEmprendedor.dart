@@ -313,7 +313,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                                   title: Text('Ofertas Productos',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: AppMaterial().getColorAtIndex(0)),
+                                        color: Colors.black),
                                   ),
                                   leading: FaIcon(FontAwesomeIcons.shirt,
                                     color: AppMaterial().getColorAtIndex(2),
@@ -333,7 +333,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                                   title: Text('Ofertas Servicios',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: AppMaterial().getColorAtIndex(0)),
+                                        color: Colors.black),
                                   ),
                                   leading: FaIcon(FontAwesomeIcons.birthdayCake,
                                     color: AppMaterial().getColorAtIndex(2),

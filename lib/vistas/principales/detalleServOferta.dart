@@ -22,7 +22,7 @@ class DetalleServOferta extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(1),
+          backgroundColor: AppMaterial().getColorAtIndex(0),
         ),
         body: Column(
           children: [
@@ -33,7 +33,7 @@ class DetalleServOferta extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(1),
+                            color: AppMaterial().getColorAtIndex(0),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
@@ -49,7 +49,7 @@ class DetalleServOferta extends StatelessWidget {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(1),
+                              .getColorAtIndex(0),
                           size: 17,
                         ),
                         onPressed: () {
@@ -106,7 +106,6 @@ class DetalleServOferta extends StatelessWidget {
                 height: 20,
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(right: 150),
               child: Column(
@@ -198,7 +197,7 @@ class DetalleServOferta extends StatelessWidget {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(1),
+                          color: AppMaterial().getColorAtIndex(0),
                         ),
                         child: SingleChildScrollView(
                           child: Column(

@@ -272,7 +272,7 @@ class _ServiciosOfertaCState extends State<ServiciosOfertaC> {
                                             child: ElevatedButton.icon(
                                               onPressed: () {
                                                 Navigator.push(context,
-                                                    MaterialPageRoute(builder: (context)=>DetalleServOfertaC(servicio: servicio)));
+                                                    MaterialPageRoute(builder: (context)=>DetalleServOfertaC(servicio: servicio, correo: widget.correo)));
                                               },
                                               icon: Icon(
                                                 Icons.remove_red_eye,

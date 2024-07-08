@@ -22,7 +22,7 @@ class DetalleProduOferta extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          backgroundColor: AppMaterial().getColorAtIndex(1),
+          backgroundColor: AppMaterial().getColorAtIndex(0),
         ),
         body: Column(
           children: [
@@ -33,7 +33,7 @@ class DetalleProduOferta extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            color: AppMaterial().getColorAtIndex(1),
+                            color: AppMaterial().getColorAtIndex(0),
                             fontSize: 16,
                             fontWeight: FontWeight.normal
                         ),
@@ -49,7 +49,7 @@ class DetalleProduOferta extends StatelessWidget {
                         icon: Icon(
                           Icons.search,
                           color: AppMaterial()
-                              .getColorAtIndex(1),
+                              .getColorAtIndex(0),
                           size: 17,
                         ),
                         onPressed: () {
@@ -106,7 +106,6 @@ class DetalleProduOferta extends StatelessWidget {
                 height: 20,
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(right: 150),
               child: Column(
@@ -152,22 +151,20 @@ class DetalleProduOferta extends StatelessWidget {
                         ]
                     ),
                   ),
-                  if (producto['oferta'] == 'Sí') ...[
-                    RichText(
-                      textAlign: TextAlign.left,
-                      text: TextSpan(
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                            TextSpan(text: '${producto['descuento']}%'),
-                          ]
-                      ),
+                  RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                          TextSpan(text: '${producto['descuento']}%'),
+                        ]
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
@@ -226,7 +223,7 @@ class DetalleProduOferta extends StatelessWidget {
                         height: 700,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppMaterial().getColorAtIndex(1),
+                          color: AppMaterial().getColorAtIndex(0),
                         ),
                         child: SingleChildScrollView(
                           child: Column(

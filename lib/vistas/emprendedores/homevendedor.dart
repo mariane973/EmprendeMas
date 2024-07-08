@@ -137,7 +137,6 @@ class _ProductosVendedorState extends State<ProductosVendedor> {
               ),
               buildCarouselInidcator(),
               Categorias(),
-              Ofertas()
             ],
           ),
         ),

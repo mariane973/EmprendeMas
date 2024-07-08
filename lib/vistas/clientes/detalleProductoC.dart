@@ -30,7 +30,7 @@ class DetalleProductoC extends StatelessWidget {
             .add({
           'nombre': producto['nombre'],
           'imagen': producto['imagen'],
-          'precio': producto['precio'],
+          'precio': producto['precioTotal'],
           'descripcion': producto['descripcion'],
           'categoria': producto['categoria'],
           'cantidad': 1,
@@ -221,6 +221,22 @@ class DetalleProductoC extends StatelessWidget {
                         ]
                     ),
                   ),
+                  if (producto['oferta'] == 'Sí') ...[
+                    RichText(
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                            TextSpan(text: '${producto['descuento']}%'),
+                          ]
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ),

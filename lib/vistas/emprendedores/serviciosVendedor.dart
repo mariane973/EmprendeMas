@@ -189,7 +189,23 @@ class _ServiciosVState extends State<ServiciosV> {
                   ),
                 ),
               ),
-              ListView.builder(
+              _resultadosList.isEmpty
+                  ? Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                      child: Center(
+                        child: Text(
+                          _searchController.text.isEmpty
+                              ? "No se encuentran servicios."
+                              : "No se encontraron coincidencias.",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w500,
+                            color: AppMaterial().getColorAtIndex(2),
+                          ),
+                        ),
+                      ),
+                  )
+              : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: _resultadosList.length,
