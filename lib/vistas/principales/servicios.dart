@@ -186,27 +186,54 @@ class _DatosServiciosState extends State<DatosServicios> {
                           padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
                           child: Row(
                             children: [
-                              Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(18),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      spreadRadius: 4,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3),
+                              Stack(
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(18),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 4,
+                                          blurRadius: 7,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(18),
-                                  child: Image.network(servicioData['imagen'],
-                                    fit: BoxFit.cover,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(18),
+                                      child: Image.network(servicioData['imagen'],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  if (servicioData['oferta'] == 'Sí') ...[
+                                    Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                                        decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                            )
+                                        ),
+                                        child: Text('${servicioData['descuento'].toString()}% OFF',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ]
+                                ]
                               ),
                               SingleChildScrollView(
                                 child: Expanded(

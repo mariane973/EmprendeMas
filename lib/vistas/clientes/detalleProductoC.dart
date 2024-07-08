@@ -1,3 +1,5 @@
+import 'package:EmprendeMas/vistas/clientes/detallesEmprendimiento.dart';
+import 'package:EmprendeMas/vistas/obtenerProduServ.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
@@ -294,7 +296,17 @@ class DetalleProductoC extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
-                            onPressed: (){},
+                            onPressed: () async{
+                              final String idVendedor = producto['correoV'];
+                              List<Map<String, dynamic>> productos = await obtenerProductosDelVendedor(idVendedor);
+                              List<Map<String, dynamic>> servicios = await obtenerServiciosDelVendedor(idVendedor);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SubDetallesC(productosdata: productos, serviciosData: servicios, correo: correo)
+                                ),
+                              );
+                            },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<
                                   Color>(AppMaterial().getColorAtIndex(3)),

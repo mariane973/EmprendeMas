@@ -177,28 +177,55 @@ class _SubDetallesCState extends State<SubDetallesC> {
                       padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
                       child: Row(
                         children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3),
+                          Stack(
+                            children: [
+                              Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      spreadRadius: 4,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(18),
-                              child: Image.network(
-                                producto['imagen'],
-                                fit: BoxFit.cover,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
+                                  child: Image.network(
+                                    producto['imagen'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
+                              if (producto['oferta'] == 'Sí') ...[
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                        )
+                                    ),
+                                    child: Text('${producto['descuento'].toString()}% OFF',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ]
+                            ]
                           ),
                           SingleChildScrollView(
                             child: Expanded(
@@ -268,15 +295,15 @@ class _SubDetallesCState extends State<SubDetallesC> {
                 ),
               )
                   : ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _serviciosList.length,
-                itemBuilder: (context, index) {
-                  final servicio = _serviciosList[index];
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SubDetalleServicioC(servicio: servicio, correo: widget.correo)
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _serviciosList.length,
+                  itemBuilder: (context, index) {
+                    final servicio = _serviciosList[index];
+                    return GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SubDetalleServicioC(servicio: servicio, correo: widget.correo)
                         ),
                       );
                     },
@@ -284,28 +311,55 @@ class _SubDetallesCState extends State<SubDetallesC> {
                       padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
                       child: Row(
                         children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 4,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3),
+                          Stack(
+                            children: [
+                              Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      spreadRadius: 4,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(18),
-                              child: Image.network(
-                                servicio['imagen'],
-                                fit: BoxFit.cover,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
+                                  child: Image.network(
+                                    servicio['imagen'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
+                              if (servicio['oferta'] == 'Sí') ...[
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                        )
+                                    ),
+                                    child: Text('${servicio['descuento'].toString()}% OFF',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ]
+                            ]
                           ),
                           SingleChildScrollView(
                             child: Expanded(

@@ -30,7 +30,7 @@ class SubDetalleProductoC extends StatelessWidget {
             .add({
           'nombre': producto['nombre'],
           'imagen': producto['imagen'],
-          'precio': producto['precio'],
+          'precio': producto['precioTotal'],
           'descripcion': producto['descripcion'],
           'categoria': producto['categoria'],
           'cantidad': 1,
@@ -86,6 +86,7 @@ class SubDetalleProductoC extends StatelessWidget {
           title: Text(producto['nombre'],
             style: TextStyle(
                 fontWeight: FontWeight.w500,
+                color: Colors.white
             ),
           ),
           backgroundColor: AppMaterial().getColorAtIndex(1),
@@ -241,97 +242,48 @@ class SubDetalleProductoC extends StatelessWidget {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 20, right: 25),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: ElevatedButton(
-                              onPressed: (){
-                                agregarAlCarrito(context);
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<
-                                    Color>(AppMaterial().getColorAtIndex(1)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Añadir al carrito",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 15),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.shopping_cart,
-                                          color: Colors.white,
-                                          size: 25,
-                                        ),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 7, horizontal:120),
+                    child: ElevatedButton(
+                        onPressed: (){
+                          agregarAlCarrito(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<
+                              Color>(AppMaterial().getColorAtIndex(1)),
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: (){},
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<
-                                  Color>(AppMaterial().getColorAtIndex(3)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Añadir al carrito",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.shopping_cart,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                  onPressed: () {},
                                 ),
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Emprendedor",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.work_history_rounded,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          ),
-                        ),
-                      ),
-                    ],
+                          ],
+                        )
+                    ),
                   ),
                 ),
               ],
