@@ -134,10 +134,10 @@ class _SubDetallesState extends State<SubDetalles> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 20),
+                padding: const EdgeInsets.only(top: 30, bottom: 25),
                 child: Text("PRODUCTOS",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -263,10 +263,10 @@ class _SubDetallesState extends State<SubDetalles> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 20),
+                padding: const EdgeInsets.only(top: 30, bottom: 25),
                 child: Text("SERVICIOS",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

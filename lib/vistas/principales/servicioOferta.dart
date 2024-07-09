@@ -170,7 +170,7 @@ class _ServiciosOfertaState extends State<ServiciosOferta> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 15.0,
                       mainAxisSpacing: 25.0,
-                      childAspectRatio: 0.65,
+                      childAspectRatio: 0.63,
                     ),
                     itemCount: _resultadosList.length,
                     itemBuilder: (context, index) {

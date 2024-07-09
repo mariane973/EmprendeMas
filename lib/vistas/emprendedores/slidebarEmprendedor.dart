@@ -9,6 +9,7 @@ import 'package:EmprendeMas/vistas/emprendedores/productoOfertaV.dart';
 import 'package:EmprendeMas/vistas/emprendedores/productosVendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/servicioOfertaV.dart';
 import 'package:EmprendeMas/vistas/emprendedores/serviciosVendedor.dart';
+import 'package:EmprendeMas/vistas/emprendedores/pedidosV.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -260,13 +261,13 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                                 fontWeight: FontWeight.w400
                             ),
                           ),
-                          leading: FaIcon(FontAwesomeIcons.moneyBillWave,
+                          leading: FaIcon(FontAwesomeIcons.listCheck,
                             color: AppMaterial().getColorAtIndex(2),
                             size: 30.0,
                           ),
                           onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => Login())
+                                MaterialPageRoute(builder: (context) => PedidosVendedor(correo: widget.correo))
                             );
                           },
                         ),

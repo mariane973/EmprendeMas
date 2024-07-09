@@ -195,48 +195,60 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: ListTile(
-                      title: Text("Productos",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
+                    padding: const EdgeInsets.only( top: 10, left:22),
+                    child: ExpansionTile(
+                      title: Text("Conocer",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       leading: FaIcon(FontAwesomeIcons.layerGroup,
                         color: AppMaterial().getColorAtIndex(0),
                         size: 30.0,
                       ),
-                      onTap: () {
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => DatosProductos(productosData: productosData)
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, bottom: 5),
+                          child: ListTile(
+                            title: Text('Productos',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppMaterial().getColorAtIndex(9)),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.shirt,
+                              color: AppMaterial().getColorAtIndex(0),
+                              size: 25.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => DatosProductos(productosData: productosData)));
+                            },
                           ),
-                        );
-                      }
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: ListTile(
-                      title: Text("Servicios",
-                        style:TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400
                         ),
-                      ),
-                      leading: FaIcon(FontAwesomeIcons.layerGroup,
-                        color: AppMaterial().getColorAtIndex(0),
-                        size: 30.0,
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => DatosServicios(serviciosData: serviciosData)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 35, top: 5, bottom: 15),
+                          child: ListTile(
+                            title: Text('Servicios',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppMaterial().getColorAtIndex(9)),
+                            ),
+                            leading: FaIcon(FontAwesomeIcons.birthdayCake,
+                              color: AppMaterial().getColorAtIndex(0),
+                              size: 25.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => DatosServicios(serviciosData: serviciosData)
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      }
-                  ),
+                        ),
+                      ],
+                    )
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, top: 15),
@@ -280,10 +292,10 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                             title: Text('Ofertas Productos',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppMaterial().getColorAtIndex(0)),
+                                  color: AppMaterial().getColorAtIndex(9)),
                             ),
                             leading: FaIcon(FontAwesomeIcons.shirt,
-                              color: AppMaterial().getColorAtIndex(1),
+                              color: AppMaterial().getColorAtIndex(0),
                               size: 25.0,
                             ),
                             onTap: () {
@@ -295,15 +307,15 @@ class _PrincipalDrawerState extends State<PrincipalDrawer> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 30, top: 5, bottom: 15),
+                          padding: const EdgeInsets.only(left: 35, top: 5, bottom: 15),
                           child: ListTile(
                             title: Text('Ofertas Servicios',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppMaterial().getColorAtIndex(0)),
+                                  color: AppMaterial().getColorAtIndex(9)),
                             ),
                             leading: FaIcon(FontAwesomeIcons.birthdayCake,
-                              color: AppMaterial().getColorAtIndex(1),
+                              color: AppMaterial().getColorAtIndex(0),
                               size: 25.0,
                             ),
                             onTap: () {

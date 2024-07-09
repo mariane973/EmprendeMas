@@ -246,9 +246,9 @@ class _OfertasCState extends State<OfertasC> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 30),
+            padding: const EdgeInsets.only(top: 50, bottom: 30),
             child: Container(
-              child: Text("OFERTAS PRODUCTOS",
+              child: Text("OPRODUCTOS EN OFERTA",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -273,7 +273,7 @@ class _OfertasCState extends State<OfertasC> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15.0,
                   mainAxisSpacing: 25.0,
-                  childAspectRatio: 0.65,
+                  childAspectRatio: 0.63,
                 ),
                 itemCount: _allResults.length,
                 itemBuilder: (context, index) {
@@ -450,7 +450,7 @@ class _OfertasCState extends State<OfertasC> {
           Padding(
             padding: const EdgeInsets.only(top: 30, bottom: 30),
             child: Container(
-              child: Text("OFERTAS SERVICIOS",
+              child: Text("SERVICIOS EN OFERTA",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -473,7 +473,7 @@ class _OfertasCState extends State<OfertasC> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15.0,
                   mainAxisSpacing: 25.0,
-                  childAspectRatio: 0.65,
+                  childAspectRatio: 0.63,
                 ),
                 itemCount: _allResultsServ.length,
                 itemBuilder: (context, index) {

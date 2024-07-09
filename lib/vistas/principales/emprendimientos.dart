@@ -181,10 +181,16 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                             width: 120,
                             height: 120,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 0.2,
-                                )
+                              shape: BoxShape.circle,
+
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: ClipOval(
                               child: Image.network(vendedor['logo_emprendimiento'],

@@ -1,13 +1,17 @@
 import 'package:EmprendeMas/home.dart';
+import 'package:EmprendeMas/vistas/clientes/pedidosC.dart';
 import 'package:EmprendeMas/vistas/clientes/productosCliente.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+
 
 class ProductosCarrito extends StatefulWidget {
   final String correo;
+
 
   const ProductosCarrito({required this.correo});
 
@@ -43,6 +47,106 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
     }
   }
 
+  Future<void> _finalizarCompra(BuildContext context) async {
+    try {
+      var userDocRef = FirebaseFirestore.instance.collection('usuarios').doc(widget.correo);
+      var carritoCollection = userDocRef.collection('carrito');
+      var carritoSnapshot = await carritoCollection.get();
+
+      if (carritoSnapshot.docs.isNotEmpty) {
+        var pedidoId = FirebaseFirestore.instance.collection('pedidos').doc().id;
+        var pedidoDocRef = userDocRef.collection('pedidos').doc(pedidoId);
+
+        await pedidoDocRef.set({
+          'pedidoId': pedidoId,
+          'fecha': FieldValue.serverTimestamp(),
+          'total': _calcularTotal(),
+          'usuarioId': widget.correo,
+          'estado': 'Pedido solicitado'
+        });
+
+        List<Map<String, dynamic>> productos = carritoSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+        for (var producto in productos) {
+          print('Producto del carrito: $producto');
+
+          if (producto.containsKey('correoV') && producto['correoV'] != null) {
+            String correoVendedor = producto['correoV'];
+
+            var vendedorQuerySnapshot = await FirebaseFirestore.instance.collection('vendedores')
+                .where('correo', isEqualTo: correoVendedor)
+                .get();
+
+            if (vendedorQuerySnapshot.docs.isNotEmpty) {
+              var vendedorDoc = vendedorQuerySnapshot.docs[0];
+              var vendedorId = vendedorDoc.id;
+
+              await pedidoDocRef.collection('productos').doc(producto['nombre']).set({
+                'nombre': producto['nombre'],
+                'descripcion': producto['descripcion'],
+                'precio': producto['precio'],
+                'cantidad': producto['cantidad'],
+                'imagen': producto['imagen'],
+                'vendedorId': vendedorId,
+              });
+
+              print('Producto agregado a la subcolección de productos del cliente: ${producto['nombre']}');
+
+              var vendedorPedidosCollection = FirebaseFirestore.instance.collection('vendedores').doc(vendedorId).collection('pedidos');
+              var pedidoVendedorDocRef = vendedorPedidosCollection.doc(pedidoId);
+
+              await pedidoVendedorDocRef.set({
+                'pedidoId': pedidoId,
+                'fecha': FieldValue.serverTimestamp(),
+                'total': producto['precio'] * producto['cantidad'],
+                'usuarioId': widget.correo,
+                'producto': {
+                  'nombre': producto['nombre'],
+                  'descripcion': producto['descripcion'],
+                  'precio': producto['precio'],
+                  'cantidad': producto['cantidad'],
+                  'imagen': producto['imagen'],
+                },
+                'estado': 'Pedido aceptado'
+              });
+
+              print('Pedido agregado a la subcolección de pedidos del vendedor: ${producto['nombre']}');
+            } else {
+              print('No se encontró el vendedor con correo: $correoVendedor');
+            }
+          } else {
+            print('Correo del vendedor es nulo o no está definido en el producto.');
+          }
+        }
+        for (var doc in carritoSnapshot.docs) {
+          await carritoCollection.doc(doc.id).delete();
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Pedido realizado correctamente')),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PedidosCliente(correo: widget.correo),
+          ),
+        );
+      } else {
+        print('El carrito está vacío.');
+      }
+    } catch (e) {
+      print('Error al finalizar la compra: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al finalizar la compra')),
+      );
+    }
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,74 +159,74 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
       ),
       body: _productos.isEmpty
           ? Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: Text(
-                  '¡Tu carrito está vacío!',
-                  style: TextStyle(
-                    color: AppMaterial().getColorAtIndex(2),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Text(
+              '¡Tu carrito está vacío!',
+              style: TextStyle(
+                color: AppMaterial().getColorAtIndex(2),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 20, horizontal: 30),
+              child: ElevatedButton(
+                onPressed: () {
+                  //Navigator.push(context, MaterialPageRoute(builder: (context)=> Productos()));
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<
+                      Color>(AppMaterial().getColorAtIndex(1)),
+                  shape: MaterialStateProperty.all<
+                      RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 20, horizontal: 30),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=> Productos()));
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<
-                          Color>(AppMaterial().getColorAtIndex(1)),
-                      shape: MaterialStateProperty.all<
-                          RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        'Agrega productos al carrito',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: Colors.white
                         ),
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: Text(
-                            'Agrega productos al carrito',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: Colors.white
-                            ),
-                          ),
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.card_travel,
+                          color: Colors.white,
+                          size: 30,
                         ),
-                        Expanded(
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.card_travel,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    ),),
-                ),
-              )
-            ],
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                ),),
+            ),
           )
+        ],
+      )
           : Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 20, left: 70, right: 70),
+              padding: const EdgeInsets.only(bottom: 20, left: 110, right: 110),
               child: Row(
                 children: [
-                  Text('Productos en el carrito',
+                  Text('Revisa tu carrito',
                     style: TextStyle(
                         color: AppMaterial().getColorAtIndex(1),
                         fontWeight: FontWeight.bold,
@@ -147,6 +251,12 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
               child: ListView.builder(
                 itemCount: _productos.length,
                 itemBuilder: (context, index) {
+                // Formatea el precio usando NumberFormat
+                String precioFormateado = NumberFormat.currency(
+                locale: 'es_CO', // Define el locale para usar comas como separador
+                symbol: '\$', // Símbolo de la moneda
+                decimalDigits: 0, // Cantidad de decimales (0 para redondear a enteros)
+                ).format(_productos[index]['precio']);
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 20, bottom: 18, top: 15, right: 20),
@@ -168,7 +278,8 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
                         children: [
                           Container(
                             width: 120,
-                            height: 120,
+                            height: 130,
+                            margin: EdgeInsets.only(left: 10),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
                               child: Image.network(
@@ -208,7 +319,7 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
                                       Padding(
                                         padding: const EdgeInsets.only(top: 6),
                                         child: Text(
-                                          ' \$${_productos[index]['precio']} COP',
+                                          ' \$$precioFormateado COP',
                                           style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w500,
@@ -394,7 +505,7 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 20, horizontal: 65),
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => _finalizarCompra(context),
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all<
                                       Color>(Colors.white),
