@@ -3,9 +3,10 @@ import 'package:EmprendeMas/vistas/clientes/detalleProducOfertaC.dart';
 import 'package:EmprendeMas/vistas/clientes/detalleServOfertaC.dart';
 import 'package:EmprendeMas/vistas/clientes/productoOfertaC.dart';
 import 'package:EmprendeMas/vistas/clientes/servicioOfertaC.dart';
+import 'package:EmprendeMas/vistas/clientes/serviciosCliente.dart';
+import 'package:EmprendeMas/vistas/clientes/productosCategoriaC.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:EmprendeMas/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
 import 'dart:math';
@@ -119,6 +120,7 @@ class _ProductosClienteState extends State<ProductosCliente> {
           ],
         ),
         drawer: SlidebarUsuario(correo: widget.correo),
+
         //Body//
         body: SingleChildScrollView(
           child: Column(
@@ -154,7 +156,7 @@ class _ProductosClienteState extends State<ProductosCliente> {
                 ),
               ),
               buildCarouselInidcator(),
-              Categorias(),
+              CategoriasV(correo: widget.correo),
               OfertasC(correo: widget.correo)
             ],
           ),
@@ -646,6 +648,639 @@ class _OfertasCState extends State<OfertasC> {
                   )
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CategoriasV extends StatelessWidget {
+  final String correo;
+  CategoriasV({required this.correo});
+  
+  Future<List<Map<String, dynamic>>> _obtenerServicios() async {
+    var vendedoresData = await FirebaseFirestore.instance.collection('vendedores').get();
+    List<Map<String, dynamic>> allServicios = [];
+    for (var vendedorSnapshot in vendedoresData.docs) {
+      var serviciosSnapshot = await vendedorSnapshot.reference.collection('servicios').orderBy('nombre').get();
+      for (var servicioDoc in serviciosSnapshot.docs) {
+        allServicios.add(servicioDoc.data() as Map<String, dynamic>);
+      }
+    }
+    return allServicios;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 10),
+            child: Container(
+              child: Text("CATEGORIAS",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 22,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 5.0,
+                        color: Colors.black,
+                        offset: Offset(0.5, 0.5),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Accesorios', correo: correo)));
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.2),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/accesorios0.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Accesorios',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Comida', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/postres0.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Comida',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Ropa', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/ropa.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Ropa',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Artesanías', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/artesanias.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Artesanías',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Plantas', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/plantas.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Plantas',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Cuidado Personal', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/personal.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Cuidado Personal',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: () async {
+                        var serviciosData = await _obtenerServicios();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ServiciosC(correo: correo, serviciosData: serviciosData),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/servicios.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Servicios',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaC(categoriaSeleccionada: 'Venta de Garaje', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/garaje.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Venta de Garaje',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
           ),
         ],
       ),

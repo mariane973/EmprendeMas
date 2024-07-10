@@ -1,10 +1,10 @@
 import 'package:EmprendeMas/material.dart';
+import 'package:EmprendeMas/vistas/emprendedores/productosCategoriaV.dart';
+import 'package:EmprendeMas/vistas/emprendedores/serviciosVendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/slidebarEmprendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:EmprendeMas/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:io' as io;
 
 class HomeVendedor extends StatelessWidget {
   final String correo;
@@ -136,7 +136,7 @@ class _ProductosVendedorState extends State<ProductosVendedor> {
                 ),
               ),
               buildCarouselInidcator(),
-              Categorias(),
+              CategoriasV(correo: widget.correo),
             ],
           ),
         ),
@@ -159,6 +159,626 @@ class _ProductosVendedorState extends State<ProductosVendedor> {
             ),
           )
       ],
+    );
+  }
+}
+
+class CategoriasV extends StatelessWidget {
+  final String correo;
+  CategoriasV({required this.correo});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 10),
+            child: Container(
+              child: Text("CATEGORIAS",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 22,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 5.0,
+                        color: Colors.black,
+                        offset: Offset(0.5, 0.5),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Accesorios', correo: correo)));
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.2),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/accesorios0.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Accesorios',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Comida', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/postres0.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Comida',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Ropa', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/ropa.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Ropa',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Artesanías', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/artesanias.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Artesanías',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Plantas', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/plantas.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Plantas',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Cuidado Personal', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/personal.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Cuidado Personal',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                      onTap: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ServiciosV(correo: correo),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 20, right: 10),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/servicios.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Servicios',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+              Expanded(
+                  child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ProductosCategoriaV(categoriaSeleccionada: 'Venta de Garaje', correo: correo))
+                        );
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+                          child: Expanded(
+                            child: Row(
+                                children: [
+                                  Container(
+                                      width: 180,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.1),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                "img/garaje.jpg",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: Colors.black.withOpacity(0.2),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10,
+                                                  left: 10,
+                                                  child: Text(
+                                                    'Venta de Garaje',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                      )
+                                  ),
+                                ]
+                            ),
+                          )
+                      )
+                  )
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -21,7 +21,7 @@ class _FormProductoState extends State<FormProducto> {
   int _descuento = 0;
 
   List<String> listCategoria = [
-    "Accesorios", "Comida", "Ropa", "Manualidades", "Plantas", "Cuidado Personal", "Servicios", "Venta de Garaje"
+    "Accesorios", "Comida", "Ropa", "Artesanías", "Plantas", "Cuidado Personal", "Venta de Garaje"
   ];
 
   io.File? imagen;

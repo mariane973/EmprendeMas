@@ -1,5 +1,4 @@
-import 'package:EmprendeMas/vistas/obtenerProduServ.dart';
-import 'package:EmprendeMas/vistas/principales/subDetalles.dart';
+import 'package:EmprendeMas/vistas/principales/detalleServOferta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
@@ -172,83 +171,23 @@ class DetalleServicio extends StatelessWidget {
                       ),
                     ),
                     if (servicio['oferta'] == 'Sí') ...[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              children: <TextSpan>[
-                                TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                                TextSpan(text: '${servicio['descuento']}% dcto', style: TextStyle(color:  Colors.red, fontWeight: FontWeight.w500)),
-                              ]
-                          ),
+                      RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                              TextSpan(text: '${servicio['descuento']}% dcto', style: TextStyle(color:  Colors.red, fontWeight: FontWeight.w500)),
+                            ]
                         ),
                       ),
                     ],
                   ],
                 ),
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 7, horizontal:130),
-                      child: ElevatedButton(
-                        onPressed: () async{
-                          final String idVendedor = servicio['correoV'];
-                          List<Map<String, dynamic>> productos = await obtenerProductosDelVendedor(idVendedor);
-                          List<Map<String, dynamic>> servicios = await obtenerServiciosDelVendedor(idVendedor);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SubDetalles(productoData: productos, servicioData: servicios)
-                            ),
-                          );
-                      },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<
-                              Color>(AppMaterial().getColorAtIndex(4)),
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Emprendedor",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.work_history_rounded,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 25),
@@ -304,7 +243,7 @@ class DetalleServicio extends StatelessWidget {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => DetalleServicio(
+                                              builder: (context) => DetalleServOferta(
                                                 servicio: servicioSimilar.data() as Map<String, dynamic>,
                                               ),
                                             ),

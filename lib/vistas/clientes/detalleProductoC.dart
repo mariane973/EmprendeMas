@@ -306,7 +306,7 @@ class DetalleProductoC extends StatelessWidget {
                               fontWeight: FontWeight.normal,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
+                              TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
                               TextSpan(text: '${producto['descuento']}% dcto', style: TextStyle(fontWeight: FontWeight.w500, color: Colors.red) ),
                             ]
                         ),

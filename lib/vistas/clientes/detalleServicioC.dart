@@ -1,7 +1,5 @@
 import 'package:EmprendeMas/vistas/clientes/detallesEmprendimiento.dart';
 import 'package:EmprendeMas/vistas/clientes/homeusuario.dart';
-import 'package:EmprendeMas/vistas/clientes/productosCliente.dart';
-import 'package:EmprendeMas/vistas/clientes/serviciosCliente.dart';
 import 'package:EmprendeMas/vistas/obtenerProduServ.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

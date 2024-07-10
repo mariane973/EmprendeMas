@@ -200,20 +200,22 @@ class DetalleProduOferta extends StatelessWidget {
                           ]
                       ),
                     ),
-                    RichText(
-                      textAlign: TextAlign.left,
-                      text: TextSpan(
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.2)),
-                            TextSpan(text: '${producto['descuento']}% dcto', style: TextStyle(color:  Colors.red, fontWeight: FontWeight.w500)),
-                          ]
+                    if (producto['oferta'] == 'Sí') ...[
+                      RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: 'Descuento: ',  style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                              TextSpan(text: '${producto['descuento']}% dcto', style: TextStyle(color:  Colors.red, fontWeight: FontWeight.w500)),
+                            ]
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),

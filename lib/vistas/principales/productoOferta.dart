@@ -162,7 +162,7 @@ class _ProductosOfertaState extends State<ProductosOferta> {
                 ),
               )
                   : Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12),
+                padding: const EdgeInsets.only(left: 12, right: 12, bottom: 15),
                 child: GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

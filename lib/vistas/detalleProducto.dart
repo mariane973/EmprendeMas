@@ -1,11 +1,9 @@
-import 'package:EmprendeMas/vistas/principales/subDetalles.dart';
+import 'package:EmprendeMas/vistas/principales/detalleProduOferta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:EmprendeMas/vistas/obtenerProduServ.dart';
 
 class DetalleProducto extends StatelessWidget {
   final Map<String, dynamic> producto;
@@ -130,7 +128,7 @@ class DetalleProducto extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 1),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: RichText(
                   text: TextSpan(
                       style: TextStyle(
@@ -201,10 +199,25 @@ class DetalleProducto extends StatelessWidget {
                           ]
                       ),
                     ),
+                    if (producto['oferta'] == 'Sí') ...[
+                      RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: 'Descuento: ', style: TextStyle(fontWeight: FontWeight.bold, height: 1.6)),
+                              TextSpan(text: '${producto['descuento']}% dcto', style: TextStyle(color:  Colors.red, fontWeight: FontWeight.w500)),
+                            ]
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: SingleChildScrollView(
@@ -259,7 +272,7 @@ class DetalleProducto extends StatelessWidget {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => DetalleProducto(
+                                              builder: (context) => DetalleProduOferta(
                                                 producto: productoSimilar.data() as Map<String, dynamic>,
                                               ),
                                             ),

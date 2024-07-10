@@ -1,22 +1,23 @@
-import 'package:EmprendeMas/vistas/detalleProducto.dart';
+import 'package:EmprendeMas/vistas/clientes/detalleProductoC.dart';
+import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
 import 'package:EmprendeMas/vistas/principales/detalleProduOferta.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:EmprendeMas/vistas/principales/slideprincipal.dart';
 
-class DatosProductos extends StatefulWidget {
-  final List<Map<String, dynamic>> productosData;
+class ProductosCategoriaC extends StatefulWidget {
+  final String categoriaSeleccionada;
+  final String correo;
 
-  DatosProductos({required this.productosData});
+  ProductosCategoriaC({required this.categoriaSeleccionada, required this.correo});
 
   @override
-  State<DatosProductos> createState() => _DatosProductosState();
+  State<ProductosCategoriaC> createState() => _ProductosCategoriaCState();
 }
 
-class _DatosProductosState extends State<DatosProductos> {
+class _ProductosCategoriaCState extends State<ProductosCategoriaC> {
   List _resultados = [];
   List _resultadosList = [];
   final TextEditingController _searchController = TextEditingController();
@@ -24,6 +25,7 @@ class _DatosProductosState extends State<DatosProductos> {
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    getProductoStream();
   }
 
   @override
@@ -34,7 +36,6 @@ class _DatosProductosState extends State<DatosProductos> {
   }
 
   _onSearchChanged(){
-    print(_searchController.text);
     searchResultList();
   }
 
@@ -55,7 +56,7 @@ class _DatosProductosState extends State<DatosProductos> {
     });
   }
 
-  getProductoStream() async {
+  Future<void> getProductoStream() async {
     var vendedoresData = await FirebaseFirestore.instance.collection('vendedores').get();
 
     List<DocumentSnapshot> allProductos = [];
@@ -63,6 +64,11 @@ class _DatosProductosState extends State<DatosProductos> {
       var productosSnapshot = await vendedorSnapshot.reference.collection('productos').orderBy('nombre').get();
       allProductos.addAll(productosSnapshot.docs);
     }
+    allProductos = allProductos.where((productoSnapshot) {
+      var productoData = productoSnapshot.data() as Map<String, dynamic>;
+      return productoData['categoria'] == widget.categoriaSeleccionada;
+    }).toList();
+
     setState(() {
       _resultados = allProductos;
     });
@@ -70,16 +76,10 @@ class _DatosProductosState extends State<DatosProductos> {
   }
 
   @override
-  void didChangeDependencies() {
-    getProductoStream();
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppMaterial().getColorAtIndex(6)
+          color: AppMaterial().getColorAtIndex(6)
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -138,13 +138,13 @@ class _DatosProductosState extends State<DatosProductos> {
               ],
             ),
           ],
-        ),drawer: PrincipalDrawer(),
+        ),drawer: SlidebarUsuario(correo: widget.correo),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text("PRODUCTOS",
+                child: Text("PRODUCTOS - ${widget.categoriaSeleccionada.toUpperCase()}",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -153,31 +153,31 @@ class _DatosProductosState extends State<DatosProductos> {
               ),
               _resultadosList.isEmpty
                   ? Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                      child: Center(
-                        child: Text(
-                          _searchController.text.isEmpty
-                              ? "No se encuentran productos."
-                              : "No se encontraron coincidencias.",
-                          style: TextStyle(
-                            fontSize: 23,
-                            fontWeight: FontWeight.w500,
-                            color: AppMaterial().getColorAtIndex(2),
-                          ),
-                        ),
-                      ),
-                  )
-              : ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _resultadosList.length,
-                itemBuilder: (context, index) {
+                padding: const EdgeInsets.only(top: 50),
+                child: Center(
+                  child: Text(
+                    _searchController.text.isEmpty
+                        ? "No se encuentran productos."
+                        : "No se encontraron coincidencias.",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: AppMaterial().getColorAtIndex(2),
+                    ),
+                  ),
+                ),
+              )
+                  : ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _resultadosList.length,
+                  itemBuilder: (context, index) {
                   final productoSnapshot = _resultadosList[index];
                   final productoData = productoSnapshot.data() as Map<String, dynamic>;
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetalleProduOferta(producto: productoData)
+                        MaterialPageRoute(builder: (context) => DetalleProductoC(producto: productoData, correo: widget.correo)
                         ),
                       );
                     },
@@ -186,53 +186,53 @@ class _DatosProductosState extends State<DatosProductos> {
                       child: Row(
                         children: [
                           Stack(
-                            children: [
-                              Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(18),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      spreadRadius: 4,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3),
+                              children: [
+                                Container(
+                                  width: 120,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(18),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        spreadRadius: 4,
+                                        blurRadius: 7,
+                                        offset: Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(18),
+                                    child: Image.network(productoData['imagen'],
+                                      fit: BoxFit.cover,
                                     ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(18),
-                                  child: Image.network(productoData['imagen'],
-                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
-                              if (productoData['oferta'] == 'Sí') ...[
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-                                    decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                        )
-                                    ),
-                                    child: Text('${productoData['descuento'].toString()}% OFF',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
+                                if (productoData['oferta'] == 'Sí') ...[
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                          )
+                                      ),
+                                      child: Text('${productoData['descuento'].toString()}% OFF',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
+                                  )
+                                ]
                               ]
-                            ]
                           ),
                           SingleChildScrollView(
                             child: Expanded(
@@ -260,7 +260,7 @@ class _DatosProductosState extends State<DatosProductos> {
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
-                                            color: AppMaterial().getColorAtIndex(2)
+                                              color: AppMaterial().getColorAtIndex(2)
                                           ),
                                         ),
                                       ),

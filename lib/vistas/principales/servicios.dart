@@ -1,5 +1,6 @@
 import 'package:EmprendeMas/vistas/detalleProducto.dart';
 import 'package:EmprendeMas/vistas/detalleServicio.dart';
+import 'package:EmprendeMas/vistas/principales/detalleServOferta.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -178,7 +179,7 @@ class _DatosServiciosState extends State<DatosServicios> {
                         onTap: (){
                           Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (context) => DetalleServicio(servicio: servicioData)
+                                builder: (context) => DetalleServOferta(servicio: servicioData)
                             ),
                           );
                         },
