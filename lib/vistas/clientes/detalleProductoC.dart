@@ -56,6 +56,7 @@ class DetalleProductoC extends StatelessWidget {
             .collection('carrito')
             .add({
           'nombre': producto['nombre'],
+          'correoV': producto['correoV'],
           'imagen': producto['imagen'],
           'precio': producto['precioTotal'],
           'descripcion': producto['descripcion'],

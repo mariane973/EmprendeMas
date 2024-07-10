@@ -264,7 +264,7 @@ class _OfertasState extends State<Ofertas> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15.0,
                   mainAxisSpacing: 25.0,
-                  childAspectRatio: 0.65,
+                  childAspectRatio: 0.63,
                 ),
                 itemCount: _allResults.length,
                 itemBuilder: (context, index) {
@@ -464,7 +464,7 @@ class _OfertasState extends State<Ofertas> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15.0,
                   mainAxisSpacing: 25.0,
-                  childAspectRatio: 0.65,
+                  childAspectRatio: 0.63,
                 ),
                 itemCount: _allResultsServ.length,
                 itemBuilder: (context, index) {

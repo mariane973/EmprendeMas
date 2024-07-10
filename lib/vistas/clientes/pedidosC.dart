@@ -18,14 +18,20 @@ class PedidosCliente extends StatelessWidget {
       final usuarioSnapshot = await FirebaseFirestore.instance.collection('usuarios').doc(correo).get();
       final usuarioData = usuarioSnapshot.data();
 
+      List<Map<String, dynamic>> productos = [];
       for (var productoDoc in productosSnapshot.docs) {
         final productoData = productoDoc.data();
-        productoData['direccion'] = usuarioData!['direccion'];
-        productoData['telefono'] = usuarioData['telefono'];
-        productoData['estado'] = pedidoDoc.data()['estado'];
-        productoData['producto'] = productoDoc.data();
-        pedidos.add(productoData);
+        productos.add(productoData);
       }
+
+      pedidos.add({
+        'pedidoId': pedidoDoc.id,
+        'cliente': correo,
+        'direccion': usuarioData!['direccion'],
+        'telefono': usuarioData['telefono'],
+        'estado': pedidoDoc.data()['estado'],
+        'productos': productos,
+      });
     }
 
     return pedidos;
@@ -178,198 +184,120 @@ class PedidosCliente extends StatelessWidget {
             drawer: SlidebarUsuario(correo: correo),
             body: SingleChildScrollView(
               child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30, bottom: 20),
-                    child: Text(
-                      "PEDIDOS",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: listaPedidos.length,
-                    itemBuilder: (context, index) {
-                      final producto = listaPedidos[index]['producto'] ?? {};
-                      final imagenUrl = producto['imagen'] ?? '';
-
-                      if (imagenUrl.isEmpty || !imagenUrl.startsWith('http')) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Pedido hecho por: $correo",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Producto: ${listaPedidos[index]['nombre']}",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Cantidad: ${listaPedidos[index]['cantidad']}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Precio unitario: \$${listaPedidos[index]['precio']}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Dirección: ${listaPedidos[index]['direccion'] ?? 'No disponible'}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Teléfono: ${listaPedidos[index]['telefono'] ?? 'No disponible'}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Estado: ${listaPedidos[index]['estado'] ?? 'No disponible'}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blue[700],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
+                children:
+                listaPedidos.map((pedido) {
+                  return
+                    Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  image: NetworkImage(imagenUrl),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Cliente: $correo",
-                                    style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Dirección: ${listaPedidos[index]['direccion'] ?? 'No disponible'}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
-                                  Text(
-                                    "Teléfono: ${listaPedidos[index]['telefono'] ?? 'No disponible'}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    "Producto/Servicio: ${listaPedidos[index]['nombre']}",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  Text(
-                                    "Cantidad: ${listaPedidos[index]['cantidad']}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
-                                  Text(
-                                    "Precio c/u: \$${listaPedidos[index]['precio']}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Pedido realizado por: ${pedido['cliente']}",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Dirección: ${pedido['direccion']}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        Text(
+                          "Teléfono: ${pedido['telefono']}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Estado del pedido: ${pedido['estado']}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: _getEstadoColor(pedido['estado']),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: pedido['productos'].length,
+                          itemBuilder: (context, index) {
+                            final producto = pedido['productos'][index];
+                            final imagenUrl = producto['imagen'] ?? '';
 
-                                  SizedBox(height: 10),
-                                  Text(
-                                    "Estado: ${listaPedidos[index]['estado'] ?? 'No disponible'}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: _getEstadoColor(listaPedidos[index]['estado']),
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        image: NetworkImage(imagenUrl),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Producto/Servicio: ${producto['nombre']}",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Cantidad: ${producto['cantidad']}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                        Text(
+                                          "Precio unitario: \$${producto['precio']}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ],
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ),
@@ -377,6 +305,7 @@ class PedidosCliente extends StatelessWidget {
       },
     );
   }
+
   Color _getEstadoColor(String estado) {
     switch (estado) {
       case 'Pedido Aceptado':

@@ -40,24 +40,32 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
             .get();
         final clienteData = clienteSnapshot.data();
 
-        final productoData = pedidoDoc['producto'];
+        final productosSnapshot = await pedidoDoc.reference.collection('productos').get();
+        List<Map<String, dynamic>> productos = [];
+
+        productosSnapshot.docs.forEach((productoDoc) {
+          productos.add({
+            'nombre': productoDoc['nombre'],
+            'descripcion': productoDoc['descripcion'],
+            'precio': productoDoc['precio'],
+            'cantidad': productoDoc['cantidad'],
+            'imagen': productoDoc['imagen'],
+          });
+        });
 
         final pedidoData = pedidoDoc.data();
         pedidoData['pedidoId'] = pedidoDoc.id;
-        pedidoData['cliente'] = pedidoDoc['usuarioId'];
-        pedidoData['nombre'] = productoData['nombre'];
-        pedidoData['cantidad'] = productoData['cantidad'];
-        pedidoData['precio'] = productoData['precio'];
+        pedidoData['cliente'] = clienteId;
+        pedidoData['productos'] = productos;
         pedidoData['direccion'] = clienteData!['direccion'];
         pedidoData['telefono'] = clienteData['telefono'];
-        pedidoData['producto'] = productoData;
-        pedidoData['usuarioId'] = clienteId;
         pedidos.add(pedidoData);
       }
 
       setState(() {
         listaPedidos = pedidos;
       });
+
     } catch (e) {
       print('Error al cargar pedidos: $e');
     }
@@ -150,23 +158,13 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
             ),
           ],
         ),
-        drawer: SlidebarUsuario(correo: widget.correo),
-        body: Container(
-          child: Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Text(
-                    'No hay pedidos para mostrar',
-                    style: TextStyle(
-                      color: AppMaterial().getColorAtIndex(2),
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+        drawer: SlidebarVendedor(correo: widget.correo),
+        body: Center(
+          child: Text(
+            'No hay pedidos para mostrar',
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -242,8 +240,8 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: listaPedidos.length,
               itemBuilder: (context, index) {
-                final producto = listaPedidos[index]['producto'] ?? {};
-                final imagenUrl = producto['imagen'] ?? '';
+                final pedido = listaPedidos[index];
+                final productos = pedido['productos'] ?? [];
 
                 return GestureDetector(
                   onTap: () {
@@ -328,7 +326,7 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                              image: NetworkImage(imagenUrl),
+                              image: NetworkImage(productos.isNotEmpty ? productos[0]['imagen'] ?? '' : ''),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -339,55 +337,62 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Cliente: ${listaPedidos[index]['cliente']}',
+                                'Cliente: ${pedido['cliente']}',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                'Dirección: ${listaPedidos[index]['direccion']}',
+                                'Dirección: ${pedido['direccion']}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[600],
                                 ),
                               ),
                               Text(
-                                'Teléfono: ${listaPedidos[index]['telefono']}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'Producto/Servicio: ${producto['nombre']}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Cantidad: ${producto['cantidad']}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              Text(
-                                'Precio c/u: ${producto['precio']}',
+                                'Teléfono: ${pedido['telefono']}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[600],
                                 ),
                               ),
                               SizedBox(height: 10),
+                              for (var producto in productos)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Producto/Servicio: ${producto['nombre']}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Cantidad: ${producto['cantidad']}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    Text(
+                                      'Precio c/u: ${producto['precio']}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                  ],
+                                ),
+                              SizedBox(height: 10),
                               Text(
-                                'Estado: ${listaPedidos[index]['estado']}',
+                                'Estado: ${pedido['estado']}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: _getEstadoColor(listaPedidos[index]['estado']),
+                                  color: _getEstadoColor(pedido['estado']),
                                 ),
                               ),
                               Text(
@@ -413,6 +418,20 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
     );
   }
 
+  Widget _buildEstadoPedidoOption(String label, String currentSelection, VoidCallback onTap) {
+    return ListTile(
+      title: Text(label),
+      leading: Radio(
+        value: label,
+        groupValue: currentSelection,
+        onChanged: (value) {
+          onTap();
+        },
+      ),
+      onTap: onTap,
+    );
+  }
+
   Color _getEstadoColor(String estado) {
     switch (estado) {
       case 'Pedido Aceptado':
@@ -422,29 +441,9 @@ class _PedidosVendedorState extends State<PedidosVendedor> {
       case 'Pedido Enviado':
         return Colors.green;
       case 'Pedido Entregado':
-        return Colors.purple;
+        return Colors.grey;
       default:
         return Colors.black;
     }
   }
-
-  Widget _buildEstadoPedidoOption(String estado, String currentSelection, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Row(
-        children: [
-          Radio(
-            value: estado,
-            groupValue: currentSelection,
-            onChanged: (value) {},
-          ),
-          Text(
-            estado,
-            style: TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-    );
-  }
 }
-

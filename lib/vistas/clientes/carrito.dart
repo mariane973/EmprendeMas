@@ -57,6 +57,9 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
         var pedidoId = FirebaseFirestore.instance.collection('pedidos').doc().id;
         var pedidoDocRef = userDocRef.collection('pedidos').doc(pedidoId);
 
+        List<Map<String, dynamic>> productos = carritoSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+        // Crear el pedido en la colección del cliente una sola vez
         await pedidoDocRef.set({
           'pedidoId': pedidoId,
           'fecha': FieldValue.serverTimestamp(),
@@ -65,10 +68,16 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
           'estado': 'Pedido solicitado'
         });
 
-        List<Map<String, dynamic>> productos = carritoSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
+        // Guardar cada producto en la subcolección de productos del pedido del cliente
         for (var producto in productos) {
-          print('Producto del carrito: $producto');
+          await pedidoDocRef.collection('productos').add({
+            'nombre': producto['nombre'],
+            'descripcion': producto['descripcion'],
+            'precio': producto['precio'],
+            'cantidad': producto['cantidad'],
+            'imagen': producto['imagen'],
+            'vendedorId': producto['correoV'],
+          });
 
           if (producto.containsKey('correoV') && producto['correoV'] != null) {
             String correoVendedor = producto['correoV'];
@@ -81,43 +90,42 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
               var vendedorDoc = vendedorQuerySnapshot.docs[0];
               var vendedorId = vendedorDoc.id;
 
-              await pedidoDocRef.collection('productos').doc(producto['nombre']).set({
+              // Crear el pedido en la colección del vendedor si no existe
+              var vendedorPedidosCollection = FirebaseFirestore.instance.collection('vendedores').doc(vendedorId).collection('pedidos');
+              var pedidoVendedorDocRef = vendedorPedidosCollection.doc(pedidoId);
+
+              if (!(await pedidoVendedorDocRef.get()).exists) {
+                await pedidoVendedorDocRef.set({
+                  'pedidoId': pedidoId,
+                  'fecha': FieldValue.serverTimestamp(),
+                  'total': _calcularTotal(),
+                  'usuarioId': widget.correo,
+                  'estado': 'Pedido aceptado'
+                });
+              }
+
+              // Guardar cada producto en la subcolección de productos del pedido del vendedor
+              await pedidoVendedorDocRef.collection('productos').add({
                 'nombre': producto['nombre'],
                 'descripcion': producto['descripcion'],
                 'precio': producto['precio'],
                 'cantidad': producto['cantidad'],
                 'imagen': producto['imagen'],
-                'vendedorId': vendedorId,
+                'clienteId': widget.correo, // Puedes añadir el ID del cliente si es necesario
               });
 
               print('Producto agregado a la subcolección de productos del cliente: ${producto['nombre']}');
-
-              var vendedorPedidosCollection = FirebaseFirestore.instance.collection('vendedores').doc(vendedorId).collection('pedidos');
-              var pedidoVendedorDocRef = vendedorPedidosCollection.doc(pedidoId);
-
-              await pedidoVendedorDocRef.set({
-                'pedidoId': pedidoId,
-                'fecha': FieldValue.serverTimestamp(),
-                'total': producto['precio'] * producto['cantidad'],
-                'usuarioId': widget.correo,
-                'producto': {
-                  'nombre': producto['nombre'],
-                  'descripcion': producto['descripcion'],
-                  'precio': producto['precio'],
-                  'cantidad': producto['cantidad'],
-                  'imagen': producto['imagen'],
-                },
-                'estado': 'Pedido aceptado'
-              });
-
               print('Pedido agregado a la subcolección de pedidos del vendedor: ${producto['nombre']}');
             } else {
               print('No se encontró el vendedor con correo: $correoVendedor');
             }
           } else {
             print('Correo del vendedor es nulo o no está definido en el producto.');
+            // Manejar este caso según sea necesario
           }
         }
+
+        // Vaciar el carrito
         for (var doc in carritoSnapshot.docs) {
           await carritoCollection.doc(doc.id).delete();
         }
@@ -142,9 +150,6 @@ class _ProductosCarritoState extends State<ProductosCarrito> {
       );
     }
   }
-
-
-
 
 
   @override
