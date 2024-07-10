@@ -252,7 +252,7 @@ class DetalleServOferta extends StatelessWidget {
               child: Expanded(
                 child: Container(
                   width: double.infinity,
-                  height: 2000,
+                  height: 340,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: AppMaterial().getColorAtIndex(0),

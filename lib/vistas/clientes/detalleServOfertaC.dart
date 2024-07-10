@@ -74,7 +74,6 @@ class DetalleServOfertaC extends StatelessWidget {
           backgroundColor: AppMaterial().getColorAtIndex(2),
         ));
       } else {
-
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -381,7 +380,6 @@ class DetalleServOfertaC extends StatelessWidget {
                                   ),
                                 ],
                               ),
-
                             ),
                           ),
                         ),
@@ -396,7 +394,7 @@ class DetalleServOfertaC extends StatelessWidget {
                   child: Expanded(
                     child: Container(
                       width: double.infinity,
-                      height: 2000,
+                      height: 290,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: AppMaterial().getColorAtIndex(1),

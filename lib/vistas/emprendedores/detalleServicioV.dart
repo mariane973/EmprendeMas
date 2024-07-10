@@ -43,7 +43,13 @@ class _DetalleServicioVState extends State<DetalleServicioV> {
           .delete();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('El servicio ha sido eliminado exitosamente'),
+        SnackBar(content: Text('El servicio ha sido eliminado exitosamente',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          ),
+        ),
             backgroundColor: AppMaterial().getColorAtIndex(2)
         ),
       );

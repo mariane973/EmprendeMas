@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io' as io;
+import 'package:EmprendeMas/material.dart';
 
 class InsertarDatosServicio{
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -38,9 +39,14 @@ class InsertarDatosServicio{
     }).then((value){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Servicio Agregado'),
-          backgroundColor: Colors.green,
-        ),
+          content: Text('Servicio Agregado',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
+            backgroundColor: AppMaterial().getColorAtIndex(2)),
       );
       Navigator.pushReplacement(
         context,
@@ -49,7 +55,13 @@ class InsertarDatosServicio{
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Servicio no Agregado'),
+          content: Text('Servicio no Agregado',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
           backgroundColor: Colors.red,
         ),
       );

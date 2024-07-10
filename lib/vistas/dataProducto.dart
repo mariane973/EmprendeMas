@@ -2,6 +2,7 @@ import 'package:EmprendeMas/vistas/emprendedores/productosVendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:EmprendeMas/material.dart';
 import 'dart:io' as io;
 
 class InsertarDatosProducto{
@@ -42,9 +43,14 @@ class InsertarDatosProducto{
     }).then((value){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Producto Agregado'),
-          backgroundColor: Colors.green,
-        ),
+          content: Text('Producto Agregado',
+            style: TextStyle(
+              fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
+            backgroundColor: AppMaterial().getColorAtIndex(2)),
       );
       Navigator.pushReplacement(
         context,
@@ -53,7 +59,13 @@ class InsertarDatosProducto{
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Producto no Agregado'),
+          content: Text('Producto no Agregado',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
           backgroundColor: Colors.red,
         ),
       );

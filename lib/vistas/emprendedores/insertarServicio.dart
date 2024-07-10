@@ -244,9 +244,12 @@ class _FormServicioState extends State<FormServicio> {
                         validator: (value) {
                           if (value==null || value.isEmpty){
                             return "Ingrese el precio";
-                          }else{
-                            return null;
+                          }else {
+                            if (int.tryParse(value) == null || int.tryParse(value)! <= 0 ) {
+                              return 'Introduce un precio válido.';
+                            }
                           }
+                          return null;
                         },
                         onChanged: (value) {
                           _precio = int.tryParse(value) ?? 0;
@@ -326,9 +329,12 @@ class _FormServicioState extends State<FormServicio> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Ingrese el descuento";
-                          } else{
-                            return null;
+                          } else {
+                            if (int.tryParse(value) == null || int.tryParse(value)! <= 0 || int.parse(value)! >= 100) {
+                              return 'Introduce un descuento válido.';
+                            }
                           }
+                          return null;
                         },
                         onChanged: (value) {
                           _descuento = int.tryParse(value) ?? 0;

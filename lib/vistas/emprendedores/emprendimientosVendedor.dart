@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EmprendimientosV extends StatefulWidget {
   final String correo;

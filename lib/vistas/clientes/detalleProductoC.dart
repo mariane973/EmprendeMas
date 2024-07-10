@@ -430,7 +430,7 @@ class DetalleProductoC extends StatelessWidget {
                   child: Expanded(
                     child: Container(
                       width: double.infinity,
-                      height: 2000,
+                      height: 290,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: AppMaterial().getColorAtIndex(1),

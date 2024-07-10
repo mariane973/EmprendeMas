@@ -2,7 +2,6 @@ import 'package:EmprendeMas/vistas/emprendedores/slidebarEmprendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:EmprendeMas/material.dart';
-import 'package:EmprendeMas/vistas/clientes/slidebarusuario.dart';
 
 class PedidosVendedor extends StatefulWidget {
   final String correo;

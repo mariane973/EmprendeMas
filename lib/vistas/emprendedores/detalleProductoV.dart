@@ -43,7 +43,13 @@ class _DetalleProductoVState extends State<DetalleProductoV> {
           .delete();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('El producto ha sido eliminado exitosamente'),
+        SnackBar(content: Text('El producto ha sido eliminado exitosamente',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          ),
+        ),
             backgroundColor: AppMaterial().getColorAtIndex(2)
         ),
       );

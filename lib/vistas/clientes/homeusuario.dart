@@ -250,7 +250,7 @@ class _OfertasCState extends State<OfertasC> {
           Padding(
             padding: const EdgeInsets.only(top: 50, bottom: 30),
             child: Container(
-              child: Text("OPRODUCTOS EN OFERTA",
+              child: Text("PRODUCTOS EN OFERTA",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

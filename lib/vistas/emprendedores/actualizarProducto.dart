@@ -73,9 +73,7 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
             ofertaElegida = datosProductoV['oferta'] ?? 'No';
             _descuento = datosProductoV['descuento'] ?? 0;
             _descuentoController.text = _descuento.toString();
-            _precioFinalController.text = (datosProductoV['precioTotal'] != null)
-                ? datosProductoV['precioTotal'].toString()
-                : '';
+            _precioFinalController.text = (datosProductoV['precioTotal'] != null) ? datosProductoV['precioTotal'].toString() : '';
           });
         }else{
           print('No se encontraron datos para el producto con el UID: ${widget.uidProducto}');
@@ -220,7 +218,13 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Producto actualizado'),
+          SnackBar(content: Text('Producto actualizado',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
               backgroundColor: AppMaterial().getColorAtIndex(2)),
         );
         Navigator.pushReplacement(context,
@@ -410,6 +414,10 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
                     validator: (value) {
                       if (value==null||value.isEmpty) {
                         return 'Por favor, introduce un precio';
+                      } else {
+                        if (int.tryParse(value) == null || int.tryParse(value)! <= 0 ) {
+                          return 'Introduce un precio válido.';
+                        }
                       }
                       return null;
                     },
@@ -439,6 +447,10 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
                     validator: (value) {
                       if (value==null||value.isEmpty) {
                         return 'Por favor, introduce el stock';
+                      } else {
+                        if (int.tryParse(value) == null || int.tryParse(value)! < 0 ) {
+                          return 'Introduce un stock válido.';
+                        }
                       }
                       return null;
                     },
@@ -503,8 +515,8 @@ class _EditarProductoVendedorState extends State<EditarProductoVendedor> {
                         if (value == null || value.isEmpty) {
                           return 'Introduce el porcentaje de descuento';
                         }
-                        if (int.tryParse(value) == null || int.parse(value) < 0 || int.parse(value) > 100) {
-                          return 'Introduce un descuento válido entre 0 y 100';
+                        if (int.tryParse(value) == null || int.parse(value) <= 0 || int.parse(value) >= 100) {
+                          return 'Introduce un descuento válido.';
                         }
                         return null;
                       },

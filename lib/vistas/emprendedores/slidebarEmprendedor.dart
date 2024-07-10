@@ -4,7 +4,6 @@ import 'package:EmprendeMas/vistas/emprendedores/actualizarperfil.dart';
 import 'package:EmprendeMas/vistas/emprendedores/emprendimientosVendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/homevendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/loginV.dart';
-import 'package:EmprendeMas/vistas/clientes/login.dart';
 import 'package:EmprendeMas/vistas/emprendedores/productoOfertaV.dart';
 import 'package:EmprendeMas/vistas/emprendedores/productosVendedor.dart';
 import 'package:EmprendeMas/vistas/emprendedores/servicioOfertaV.dart';
@@ -273,27 +272,6 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 15),
-                        child: ListTile(
-                            title: Text("Clientes",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400
-                              ),
-                            ),
-                            leading: FaIcon(FontAwesomeIcons.users,
-                              color: AppMaterial().getColorAtIndex(2),
-                              size: 30.0,
-                            ),
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => LoginV())
-                              );
-                            }
-                        ),
-                      ),
-                      Padding(
                           padding: const EdgeInsets.only(bottom: 10, top: 10, left: 25),
                           child: ExpansionTile(
                             title: Text("Mis Ofertas",
@@ -352,7 +330,7 @@ class _SlidebarVendedorState extends State<SlidebarVendedor> {
                           )
                       ),
                       SizedBox(
-                        height: 130,
+                        height: 200,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 25, top:20),

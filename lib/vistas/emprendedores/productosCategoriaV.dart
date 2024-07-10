@@ -1,4 +1,5 @@
 import 'package:EmprendeMas/vistas/clientes/detalleProductoC.dart';
+import 'package:EmprendeMas/vistas/emprendedores/detalleProductoV.dart';
 import 'package:EmprendeMas/vistas/emprendedores/slidebarEmprendedor.dart';
 import 'package:flutter/material.dart';
 import 'package:EmprendeMas/material.dart';
@@ -170,10 +171,11 @@ class _ProductosCategoriaVState extends State<ProductosCategoriaV> {
                 itemBuilder: (context, index) {
                   final productoSnapshot = _resultadosList[index];
                   final productoData = productoSnapshot.data() as Map<String, dynamic>;
+                  final uidProducto = productoSnapshot.id;
                   return GestureDetector(
                     onTap: (){
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DetalleProductoC(producto: productoData, correo: widget.correo)
+                        MaterialPageRoute(builder: (context) => DetalleProductoV(producto: productoData, uidProducto: uidProducto, correo: widget.correo)
                         ),
                       );
                     },

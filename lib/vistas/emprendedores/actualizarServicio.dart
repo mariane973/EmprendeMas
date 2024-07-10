@@ -206,7 +206,13 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Servicio actualizado'),
+          SnackBar(content: Text('Servicio actualizado',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+            ),
+          ),
               backgroundColor: AppMaterial().getColorAtIndex(2)),
         );
         Navigator.pushReplacement(context,
@@ -429,8 +435,8 @@ class _EditarServicioVendedorState extends State<EditarServicioVendedor> {
                         if (value == null || value.isEmpty) {
                           return 'Introduce el porcentaje de descuento';
                         }
-                        if (int.tryParse(value) == null || int.parse(value) < 0 || int.parse(value) > 100) {
-                          return 'Introduce un descuento válido entre 0 y 100';
+                        if (int.tryParse(value) == null || int.parse(value) <= 0 || int.parse(value) >= 100) {
+                          return 'Introduce un descuento válido.';
                         }
                         return null;
                       },
