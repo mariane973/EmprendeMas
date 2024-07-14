@@ -206,7 +206,7 @@ class _DetalleServicioVState extends State<DetalleServicioV> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                 child: Divider(
                   color: Colors.grey,
                   thickness: 1,
@@ -214,7 +214,7 @@ class _DetalleServicioVState extends State<DetalleServicioV> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 150),
+                padding: const EdgeInsets.only(left: 26, right: 26),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

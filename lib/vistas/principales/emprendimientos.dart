@@ -174,7 +174,7 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15),
+                      padding: const EdgeInsets.only(left: 20, bottom: 18, top: 15, right: 10),
                       child: Row(
                         children: [
                           Container(
@@ -182,7 +182,6 @@ class _DatosVendedoresState extends State<DatosVendedores> {
                             height: 120,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),

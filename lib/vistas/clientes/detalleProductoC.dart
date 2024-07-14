@@ -243,7 +243,7 @@ class DetalleProductoC extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Divider(
                   color: Colors.grey,
                   thickness: 1,
@@ -251,7 +251,7 @@ class DetalleProductoC extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 150),
+                padding: const EdgeInsets.only(left: 26, right: 26),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -430,7 +430,7 @@ class DetalleProductoC extends StatelessWidget {
                   child: Expanded(
                     child: Container(
                       width: double.infinity,
-                      height: 290,
+                      height: 335,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: AppMaterial().getColorAtIndex(1),
@@ -467,7 +467,7 @@ class DetalleProductoC extends StatelessWidget {
                   
                                 productosSimilares = productosSimilares.take(10).toList();
                                 return SizedBox(
-                                  height: 215,
+                                  height: 275,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: productosSimilares.length,
@@ -522,7 +522,7 @@ class DetalleProductoC extends StatelessWidget {
                                                     productoSimilar['nombre'],
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 22,
+                                                      fontSize: 19,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -540,12 +540,14 @@ class DetalleProductoC extends StatelessWidget {
                                                 ),
                                                 Padding(
                                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                  child: Text(
-                                                    '\$${productoSimilar['precioTotal']} COP',
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: AppMaterial().getColorAtIndex(2),
-                                                        fontWeight: FontWeight.bold
+                                                  child: Center(
+                                                    child: Text(
+                                                      '\$${productoSimilar['precioTotal']} COP',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: AppMaterial().getColorAtIndex(2),
+                                                          fontWeight: FontWeight.bold
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

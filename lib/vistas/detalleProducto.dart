@@ -147,7 +147,7 @@ class DetalleProducto extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                 child: Divider(
                   color: Colors.grey,
                   thickness: 1,
@@ -155,7 +155,7 @@ class DetalleProducto extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 150),
+                padding: const EdgeInsets.only(left: 26, right: 26),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -224,7 +224,7 @@ class DetalleProducto extends StatelessWidget {
                   child: Expanded(
                     child: Container(
                       width: double.infinity,
-                      height: 360,
+                      height: 340,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: AppMaterial().getColorAtIndex(0),
@@ -261,7 +261,7 @@ class DetalleProducto extends StatelessWidget {
 
                                 productosSimilares = productosSimilares.take(10).toList();
                                 return SizedBox(
-                                  height: 215,
+                                  height: 275,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: productosSimilares.length,
@@ -333,12 +333,14 @@ class DetalleProducto extends StatelessWidget {
                                                 ),
                                                 Padding(
                                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                  child: Text(
-                                                    '\$${productoSimilar['precioTotal']} COP',
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: AppMaterial().getColorAtIndex(2),
-                                                        fontWeight: FontWeight.bold
+                                                  child: Center(
+                                                    child: Text(
+                                                      '\$${productoSimilar['precioTotal']} COP',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: AppMaterial().getColorAtIndex(2),
+                                                          fontWeight: FontWeight.bold
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

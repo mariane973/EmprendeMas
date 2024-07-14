@@ -170,7 +170,7 @@ class _ProductosOfertaState extends State<ProductosOferta> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 15.0,
                       mainAxisSpacing: 15.0,
-                      childAspectRatio: 0.63,
+                      childAspectRatio: 0.62,
                     ),
                     itemCount: _resultadosList.length,
                     itemBuilder: (context, index) {
@@ -210,10 +210,11 @@ class _ProductosOfertaState extends State<ProductosOferta> {
                                           child: Padding(
                                             padding: const EdgeInsets.only(top: 8),
                                             child: Text(producto['nombre'],
+                                              textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
-                                                fontSize: 20,
+                                                fontSize: 18.5,
                                               ),
                                             ),
                                           ),
@@ -221,31 +222,37 @@ class _ProductosOfertaState extends State<ProductosOferta> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(left: 15, top: 10, right: 10),
+                                              padding: const EdgeInsets.only(left: 5, right: 5),
                                               child: Column(
                                                 children: [
-                                                  Text(
-                                                    'Antes:',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.red,
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 22, top: 10),
+                                                    child: Text(
+                                                      'Antes:',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.red,
+                                                      ),
                                                     ),
                                                   ),
-                                                  Text('\$${(producto['precio'])}',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.red,
-                                                      decoration: TextDecoration.lineThrough,
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 17, bottom: 5),
+                                                    child: Text('\$${(producto['precio'])}',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.red,
+                                                        decoration: TextDecoration.lineThrough,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 20, top: 10),
-                                              child: Column(
-                                                children: [
-                                                  Text(
+                                            Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 10, left: 30),
+                                                  child: Text(
                                                     'Ahora:',
                                                     style: TextStyle(
                                                       fontSize: 16,
@@ -253,42 +260,43 @@ class _ProductosOfertaState extends State<ProductosOferta> {
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
-                                                  Text('\$${(producto['precioTotal'])}',
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(bottom: 5, left: 25),
+                                                  child: Text('\$${(producto['precioTotal'])}',
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       color: Colors.green,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 7, horizontal:45),
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                Navigator.push(context, 
-                                                    MaterialPageRoute(builder: (context)=>DetalleProduOferta(producto: producto)));
-                                              },
-                                              icon: Icon(
-                                                Icons.remove_red_eye,
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 5, horizontal:45),
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(builder: (context)=>DetalleProduOferta(producto: producto)));
+                                            },
+                                            icon: Icon(
+                                              Icons.remove_red_eye,
+                                              color: Colors.white,
+                                              size: 25.0,
+                                            ),
+                                            label: Text("Ver",
+                                              style: TextStyle(
                                                 color: Colors.white,
-                                                size: 25.0,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
                                               ),
-                                              label: Text("Ver",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                padding: EdgeInsets.symmetric(vertical: 5, horizontal:10),
-                                                backgroundColor: AppMaterial().getColorAtIndex(1),
-                                              ),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              padding: EdgeInsets.symmetric(vertical: 5, horizontal:10),
+                                              backgroundColor: AppMaterial().getColorAtIndex(1),
                                             ),
                                           ),
                                         )
@@ -314,7 +322,7 @@ class _ProductosOfertaState extends State<ProductosOferta> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),

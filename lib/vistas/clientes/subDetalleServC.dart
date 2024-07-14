@@ -236,7 +236,7 @@ class SubDetalleServicioC extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                 child: Divider(
                   color: Colors.grey,
                   thickness: 1,
@@ -244,7 +244,7 @@ class SubDetalleServicioC extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 150),
+                padding: const EdgeInsets.only(left: 26, right: 26),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -336,7 +336,7 @@ class SubDetalleServicioC extends StatelessWidget {
                     child: Expanded(
                       child: Container(
                           width: double.infinity,
-                          height: 320,
+                          height: 375,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: AppMaterial().getColorAtIndex(1),
@@ -373,7 +373,7 @@ class SubDetalleServicioC extends StatelessWidget {
           
                                       serviciosSimilares =  serviciosSimilares.take(10).toList();
                                       return SizedBox(
-                                        height: 215,
+                                        height: 312,
                                         child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount:  serviciosSimilares.length,
@@ -428,7 +428,7 @@ class SubDetalleServicioC extends StatelessWidget {
                                                           servicioSimilar['nombre'],
                                                           style: TextStyle(
                                                             fontWeight: FontWeight.bold,
-                                                            fontSize: 22,
+                                                            fontSize: 18,
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -446,12 +446,14 @@ class SubDetalleServicioC extends StatelessWidget {
                                                       ),
                                                       Padding(
                                                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                        child: Text(
-                                                          '\$${servicioSimilar['precioTotal']} COP',
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              color: AppMaterial().getColorAtIndex(2),
-                                                              fontWeight: FontWeight.bold
+                                                        child: Center(
+                                                          child: Text(
+                                                            '\$${servicioSimilar['precioTotal']} COP',
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                color: AppMaterial().getColorAtIndex(2),
+                                                                fontWeight: FontWeight.bold
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
